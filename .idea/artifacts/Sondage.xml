@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Sondage">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sondage</output-path>
+    <root id="archive" name="Sondage.war" />
+  </artifact>
+</component>
