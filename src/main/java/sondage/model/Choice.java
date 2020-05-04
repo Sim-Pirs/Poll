@@ -37,4 +37,40 @@ public class Choice {
     @OneToMany(cascade = {CascadeType.REMOVE},
             fetch = FetchType.LAZY, mappedBy = "survey")
     private Collection<Answer> answers;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Survey getSurvey() {
+        return survey;
+    }
+
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
+
+    public Respondent getRespondent() {
+        return respondent;
+    }
+
+    public void setRespondent(Respondent respondent) {
+        this.respondent = respondent;
+    }
+
+    public Collection<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void addAnswer(Answer answer){
+        this.answers.add(answer);
+    }
+
+    public void setAnswers(Collection<Answer> answers) {
+        this.answers = answers;
+    }
 }

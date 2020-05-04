@@ -28,4 +28,33 @@ public class Respondent {
     @ManyToMany(cascade = {CascadeType.REMOVE},
             fetch = FetchType.LAZY, mappedBy = "respondents")
     private Collection<Tag> tags;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Collection<Tag> getTags() {
+        return tags;
+    }
+
+    public void addTag(Tag tag){
+        this.tags.add(tag);
+        tag.addRespondent(this);
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
 }

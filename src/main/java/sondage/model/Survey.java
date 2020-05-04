@@ -50,4 +50,62 @@ public class Survey {
     @ManyToMany(cascade = {CascadeType.REMOVE},
             fetch = FetchType.LAZY, mappedBy = "surveys")
     private Collection<Tag> tags;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Pollster getPollster() {
+        return pollster;
+    }
+
+    public void setPollster(Pollster pollster) {
+        this.pollster = pollster;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Collection<Answer> getPossibleAnswers() {
+        return possibleAnswers;
+    }
+
+    public void addPossibleAnswer(Answer answer){
+        this.possibleAnswers.add(answer);
+        answer.setSurvey(this);
+    }
+
+    public void setPossibleAnswers(Collection<Answer> possibleAnswers) {
+        this.possibleAnswers = possibleAnswers;
+    }
+
+    public Collection<Tag> getTags() {
+        return tags;
+    }
+
+    public void addTag(Tag tag){
+        this.tags.add(tag);
+        tag.addSurvey(this);
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
 }
