@@ -97,6 +97,14 @@ public class Survey implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
+    
+    public Pollster getCurrentPollster() {
+    	return currentPollster;
+    }
+    
+    public void setCurrentPollster(Pollster currentPollster) {
+    	this.currentPollster = currentPollster;
+    }
 /*
     public Collection<Answer> getPossibleAnswers() {
         return possibleAnswers;

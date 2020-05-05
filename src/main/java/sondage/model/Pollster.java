@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -99,5 +98,13 @@ public class Pollster implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public Set<Survey> getSurveys(){
+    	return surveys;
+    }
+    
+    public void setSurveys(Set<Survey> surveys) {
+    	this.surveys = surveys;
     }
 }
