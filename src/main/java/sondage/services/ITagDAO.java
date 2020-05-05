@@ -7,5 +7,5 @@ public interface ITagDAO extends CrudRepository<Tag, Long> {
 
     Tag findById(long id);
 
-    Tag save(Tag s);
+    Tag save(Tag t);
 }

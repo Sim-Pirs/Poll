@@ -1,4 +1,6 @@
+
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -7,9 +9,11 @@ import sondage.Starter;
 import sondage.model.*;
 import sondage.services.*;
 
+import java.util.Date;
+
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Starter.class)
-public class Test {
+public class TestTest {
 
     @Autowired
     IAnswerDAO answerDAO;
@@ -42,6 +46,17 @@ public class Test {
 
     @BeforeAll
     public static void init(){
+        //on crée des tags
+        tag1 = new Tag();
+        tag1.setName("ILD");
+        tag1.setDescription("Description1.");
+        tag2 = new Tag();
+        tag2.setName("GIG");
+        tag2.setDescription("Description2.");
+        tag3 = new Tag();
+        tag3.setName("FSI");
+        tag3.setDescription("Description3.");
+
         //on crée un sondeur
         pollster = new Pollster();
         pollster.setFirstName("Romain");
@@ -52,6 +67,7 @@ public class Test {
         //on crée un sondage
         survey = new Survey();
         survey.setDescription("Une description.");
+        survey.setEndDate(new Date());
 
         //On crée des réponse a se sondage
         answer1 = new Answer();
@@ -75,17 +91,6 @@ public class Test {
         respondent = new Respondent();
         respondent.setEmail("roro@gmail.com");
 
-        //on crée des tags
-        tag1 = new Tag();
-        tag1.setName("ILD");
-        tag1.setDescription("Description1.");
-        tag2 = new Tag();
-        tag2.setName("GIG");
-        tag2.setDescription("Description2.");
-        tag3 = new Tag();
-        tag3.setName("FSI");
-        tag3.setDescription("Description3.");
-
         //on assigne les tags aux sondé et aux sondages
         survey.addTag(tag1);
         survey.addTag(tag2);
@@ -99,6 +104,20 @@ public class Test {
         choice.addAnswer(answer1);
         choice.addAnswer(answer2);
         choice.addAnswer(answer3);
-        choice
     }
+
+    @Test
+    public void testAdd(){
+        pollsterDAO.save(pollster);
+
+        tagDAO.save(tag1);
+        tagDAO.save(tag2);
+        tagDAO.save(tag3);
+
+        respondentDAO.save(respondent);
+        surveyDAO.save(survey);
+
+        choiceDAO.save(choice);
+    }
+
 }

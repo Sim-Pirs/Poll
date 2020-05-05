@@ -2,6 +2,7 @@ package sondage.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Représente la réponse à un sondage par un sondé.
@@ -34,8 +35,7 @@ public class Choice {
      * Liste des réponses du sondé. (doit y avoir autant que réponse que de choix possible
      * car il s'agit d'un classement de ces réponses).
      */
-    @OneToMany(cascade = {CascadeType.REMOVE},
-            fetch = FetchType.LAZY, mappedBy = "survey")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
     private Collection<Answer> answers;
 
     public long getId() {
@@ -67,6 +67,9 @@ public class Choice {
     }
 
     public void addAnswer(Answer answer){
+        if(this.answers == null)
+            this.answers = new HashSet<>();
+
         this.answers.add(answer);
     }
 

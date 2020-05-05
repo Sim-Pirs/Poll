@@ -7,5 +7,5 @@ public interface IAnswerDAO extends CrudRepository<Answer, Long> {
 
     Answer findById(long id);
 
-    Answer save(Answer s);
+    Answer save(Answer a);
 }

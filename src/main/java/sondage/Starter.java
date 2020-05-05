@@ -6,11 +6,13 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import sondage.model.Pollster;
+import sondage.services.IPollsterDAO;
 
 
 @SpringBootApplication
-@EnableJpaRepositories("sondage.services")
-@EntityScan("annuaire.model")
+@EnableJpaRepositories(basePackageClasses = IPollsterDAO.class)
+@EntityScan(basePackageClasses = Pollster.class)
 public class Starter extends SpringBootServletInitializer {
 
 	@Override

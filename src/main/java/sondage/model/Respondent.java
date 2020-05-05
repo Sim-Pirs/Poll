@@ -2,6 +2,7 @@ package sondage.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Représente un sondé.
@@ -25,8 +26,7 @@ public class Respondent {
     /**
      * Liste de tag du sondé.
      */
-    @ManyToMany(cascade = {CascadeType.REMOVE},
-            fetch = FetchType.LAZY, mappedBy = "respondents")
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Tag> tags;
 
     public long getId() {
@@ -50,8 +50,11 @@ public class Respondent {
     }
 
     public void addTag(Tag tag){
+        if(this.tags == null)
+            this.tags = new HashSet<>();
+
         this.tags.add(tag);
-        tag.addRespondent(this);
+        //tag.addRespondent(this);
     }
 
     public void setTags(Collection<Tag> tags) {

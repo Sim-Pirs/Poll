@@ -2,6 +2,7 @@ package sondage.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Représente un sondeur.
@@ -44,8 +45,7 @@ public class Pollster {
     /**
      * Liste de tout les sondages proposés par le sondeur.
      */
-    @OneToMany(cascade = {CascadeType.REMOVE},
-            fetch = FetchType.LAZY, mappedBy = "pollster")
+    @OneToMany(cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY, mappedBy = "pollster")
     private Collection<Survey> surveys;
 
     public long getId() {
@@ -93,6 +93,9 @@ public class Pollster {
     }
 
     public void addSurvey(Survey survey){
+        if(this.surveys == null)
+            this.surveys = new HashSet<>();
+
         this.surveys.add(survey);
         survey.setPollster(this);
 

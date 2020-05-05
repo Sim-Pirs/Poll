@@ -7,5 +7,5 @@ public interface IRespondentDAO extends CrudRepository<Respondent, Long> {
 
     Respondent findById(long id);
 
-    Respondent save(Respondent s);
+    Respondent save(Respondent r);
 }

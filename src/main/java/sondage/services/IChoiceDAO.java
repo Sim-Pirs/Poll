@@ -7,5 +7,5 @@ public interface IChoiceDAO extends CrudRepository<Choice, Long> {
 
     Choice findById(long id);
 
-    Choice save(Choice s);
+    Choice save(Choice c);
 }

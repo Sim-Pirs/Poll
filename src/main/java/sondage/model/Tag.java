@@ -2,6 +2,7 @@ package sondage.model;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Représente un tag
@@ -28,19 +29,21 @@ public class Tag {
     @Column(name = "description", length = 500, nullable = false)
     private String description;
 
+
     /**
      * Liste de sondé possédant le tag.
-     */
+     *
     @ManyToMany(cascade = {CascadeType.REMOVE},
-            fetch = FetchType.LAZY, mappedBy = "tags")
+            fetch = FetchType.LAZY)
     private Collection<Respondent> respondents;
 
     /**
      * Liste de sondage possédant le tag.
-     */
+     *
     @ManyToMany(cascade = {CascadeType.REMOVE},
-            fetch = FetchType.LAZY, mappedBy = "tags")
+            fetch = FetchType.LAZY)
     private Collection<Survey> surveys;
+    */
 
     public long getId() {
         return id;
@@ -66,11 +69,15 @@ public class Tag {
         this.description = description;
     }
 
+    /*
     public Collection<Respondent> getRespondents() {
         return respondents;
     }
 
     public void addRespondent(Respondent respondent){
+        if(this.respondents == null)
+            this.respondents = new HashSet<>();
+
         this.respondents.add(respondent);
     }
 
@@ -83,10 +90,13 @@ public class Tag {
     }
 
     public void addSurvey(Survey survey){
+        if(this.surveys == null)
+            this.surveys = new HashSet<>();
         this.surveys.add(survey);
     }
 
     public void setSurveys(Collection<Survey> surveys) {
         this.surveys = surveys;
     }
+    */
 }
