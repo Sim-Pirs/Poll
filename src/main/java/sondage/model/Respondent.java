@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.HashSet;
@@ -34,8 +35,8 @@ public class Respondent implements Serializable{
     /**
      * Liste de tag du sondé.
      */
-    /*@ManyToMany(fetch = FetchType.LAZY)
-    private Collection<Tag> tags;*/
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<Tag> tags;
 
     public long getId() {
         return id;
@@ -53,7 +54,7 @@ public class Respondent implements Serializable{
         this.email = email;
     }
 
-   /* public Collection<Tag> getTags() {
+    public Collection<Tag> getTags() {
         return tags;
     }
 
@@ -67,5 +68,5 @@ public class Respondent implements Serializable{
 
     public void setTags(Collection<Tag> tags) {
         this.tags = tags;
-    }*/
+    }
 }

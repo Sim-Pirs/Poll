@@ -48,15 +48,15 @@ public class Survey implements Serializable{
 
     /*
      * Liste des réponses possibles.
-     */
-   /* @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "survey")
-    private Collection<Answer> possibleAnswers;*/
+   */
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "survey")
+    private Collection<Answer> possibleAnswers;
 
     /**
      * Liste de tag du sondage.
      */
- /*   @ManyToMany( fetch = FetchType.LAZY)
-    private Collection<Tag> tags;*/
+    @ManyToMany( fetch = FetchType.LAZY)
+    private Collection<Tag> tags;
 
     public long getId() {
         return id;
@@ -105,7 +105,7 @@ public class Survey implements Serializable{
     public void setCurrentPollster(Pollster currentPollster) {
     	this.currentPollster = currentPollster;
     }
-/*
+
     public Collection<Answer> getPossibleAnswers() {
         return possibleAnswers;
     }
@@ -142,11 +142,11 @@ public class Survey implements Serializable{
     public String toString() {
         return "Survey{" +
                 "id=" + id +
-                ", pollster=" + pollster +
+                ", pollster=" + currentPollster +
                 ", endDate=" + endDate +
                 ", description='" + description + '\'' +
                 ", possibleAnswers=" + possibleAnswers +
                 ", tags=" + tags +
                 '}';
-    }*/
+    }
 }

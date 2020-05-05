@@ -107,4 +107,13 @@ public class Pollster implements Serializable{
     public void setSurveys(Set<Survey> surveys) {
     	this.surveys = surveys;
     }
+    
+    public void addSurvey(Survey survey){
+        if(this.surveys == null)
+            this.surveys = new HashSet<>();
+
+        this.surveys.add(survey);
+        survey.setCurrentPollster(this);
+
+    }
 }
