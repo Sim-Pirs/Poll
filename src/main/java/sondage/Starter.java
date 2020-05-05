@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import sondage.model.Pollster;
 import sondage.services.IPollsterDAO;
 
-
 @SpringBootApplication
 @EnableJpaRepositories(basePackageClasses = IPollsterDAO.class)
 @EntityScan(basePackageClasses = Pollster.class)

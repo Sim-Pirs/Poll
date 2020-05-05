@@ -1,54 +1,67 @@
 package sondage.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Représente un sondeur.
  */
 @Entity
-public class Pollster {
+@Table(name = "POLLSTERS")
+public class Pollster implements Serializable{
 
-    /**
-     * Identifiant unique du sondeur.
-     */
-    @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+	private static final long serialVersionUID = 1L;
+	
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO) // à voir si nous remplacons par strategy = GenerationType.IDENTITY (SBGD)
+    private Long id;
 
-    /**
-     * Prénom. La taille max est arbitraire.
-     */
     @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
 
-    /**
-     * Nom de famille. La taille max est arbitraire.
-     */
     @Column(name = "last_name", length = 100, nullable = false)
     private String lastName;
 
     /**
-     * Email. Elle est unique (pas possible d'avoir deux sondeur avec la même adresse).
-     * La taille max viens de la rfc 2821 qui limite les adresses à cette taille.
+     * Email. Elle est unique (pas possible d'avoir deux sondeurs avec la même adresse).
+     * La taille max vient de la rfc 2821 qui limite les adresses à cette taille.
      */
     @Column(name = "email", length = 254, nullable = false, unique = true)
     private String email;
 
-    /**
-     * Mot de passe. La taille max est arbitraire.
-     */
     @Column(name = "password", length = 50, nullable = false)
     private String password;
 
     /**
      * Liste de tout les sondages proposés par le sondeur.
      */
-    @OneToMany(cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY, mappedBy = "pollster")
-    private Collection<Survey> surveys;
+    @OneToMany(mappedBy = "currentPollster", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Survey> surveys;
+    
+    public Pollster() {
+    	super();
+    }
+    
+    public Pollster(String firstName, String lastName, String email, String password) {
+    	this.firstName = firstName;
+    	this.lastName = lastName;
+    	this.email = email;
+    	this.password = password;
+    }
+    
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -86,22 +99,5 @@ public class Pollster {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Collection<Survey> getSurveys() {
-        return surveys;
-    }
-
-    public void addSurvey(Survey survey){
-        if(this.surveys == null)
-            this.surveys = new HashSet<>();
-
-        this.surveys.add(survey);
-        survey.setPollster(this);
-
-    }
-
-    public void setSurveys(Collection<Survey> surveys) {
-        this.surveys = surveys;
     }
 }
