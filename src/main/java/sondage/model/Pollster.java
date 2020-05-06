@@ -17,8 +17,8 @@ import java.util.Set;
  * Représente un sondeur.
  */
 @Entity
-@Table(name = "POLLSTERS")
-public class Pollster implements Serializable{
+@Table(name = "POLLSTER")
+public class Pollster implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -48,15 +48,14 @@ public class Pollster implements Serializable{
     @OneToMany(mappedBy = "currentPollster", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Survey> surveys;
     
-    public Pollster() {
-    	super();
-    }
+    public Pollster() {}
     
     public Pollster(String firstName, String lastName, String email, String password) {
     	this.firstName = firstName;
     	this.lastName = lastName;
     	this.email = email;
     	this.password = password;
+    	this.surveys = new HashSet<>();
     }
     
 
@@ -103,17 +102,16 @@ public class Pollster implements Serializable{
     public Set<Survey> getSurveys(){
     	return surveys;
     }
-    
-    public void setSurveys(Set<Survey> surveys) {
-    	this.surveys = surveys;
-    }
-    
+
     public void addSurvey(Survey survey){
         if(this.surveys == null)
             this.surveys = new HashSet<>();
 
         this.surveys.add(survey);
         survey.setCurrentPollster(this);
-
+    }
+    
+    public void setSurveys(Set<Survey> surveys) {
+    	this.surveys = surveys;
     }
 }

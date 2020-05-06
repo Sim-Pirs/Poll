@@ -46,6 +46,7 @@ public class TestTest {
 
     @BeforeAll
     public static void init(){
+        /*
         //on crée des tags
         tag1 = new Tag();
         tag1.setName("ILD");
@@ -104,10 +105,12 @@ public class TestTest {
         choice.addAnswer(answer1);
         choice.addAnswer(answer2);
         choice.addAnswer(answer3);
+        */
     }
 
     @Test
     public void testAdd(){
+        /*
         pollsterDAO.save(pollster);
 
         tagDAO.save(tag1);
@@ -118,6 +121,7 @@ public class TestTest {
         surveyDAO.save(survey);
 
         choiceDAO.save(choice);
+        */
     }
 
 }

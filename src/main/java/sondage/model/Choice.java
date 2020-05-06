@@ -1,6 +1,7 @@
 package sondage.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -8,7 +9,10 @@ import java.util.HashSet;
  * Représente la réponse à un sondage par un sondé.
  */
 @Entity
-public class Choice {
+@Table(name = "CHOICE")
+public class Choice implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Idendifiant unique de la réponse du sondé.
@@ -16,13 +20,6 @@ public class Choice {
     @Id()
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    /**
-     * Sondage auquel appartient la réponse.
-     */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "survey")
-    private Survey survey;
 
     /**
      * Sondé en question.
@@ -35,8 +32,14 @@ public class Choice {
      * Liste des réponses du sondé. (doit y avoir autant que réponse que de choix possible
      * car il s'agit d'un classement de ces réponses).
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "survey")
-    private Collection<Answer> answers;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "survey")
+    private Answer answers;
+
+    /**
+     * Score attribué à cette réponse. 1 est mieux que 5.
+     */
+    @Column(name = "score", nullable = false)
+    private int score;
 
     public long getId() {
         return id;
@@ -44,14 +47,6 @@ public class Choice {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public Survey getSurvey() {
-        return survey;
-    }
-
-    public void setSurvey(Survey survey) {
-        this.survey = survey;
     }
 
     public Respondent getRespondent() {
@@ -62,18 +57,19 @@ public class Choice {
         this.respondent = respondent;
     }
 
-    public Collection<Answer> getAnswers() {
+    public Answer getAnswers() {
         return answers;
     }
 
-    public void addAnswer(Answer answer){
-        if(this.answers == null)
-            this.answers = new HashSet<>();
-
-        this.answers.add(answer);
+    public void setAnswers(Answer answers) {
+        this.answers = answers;
     }
 
-    public void setAnswers(Collection<Answer> answers) {
-        this.answers = answers;
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

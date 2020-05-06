@@ -20,8 +20,8 @@ import java.util.HashSet;
  * Représente un sondé.
  */
 @Entity
-@Table(name = "RESPONDENTS")
-public class Respondent implements Serializable{
+@Table(name = "RESPONDENT")
+public class Respondent implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -63,7 +63,6 @@ public class Respondent implements Serializable{
             this.tags = new HashSet<>();
 
         this.tags.add(tag);
-        //tag.addRespondent(this);
     }
 
     public void setTags(Collection<Tag> tags) {

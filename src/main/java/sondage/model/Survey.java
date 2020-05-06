@@ -10,53 +10,57 @@ import java.io.Serializable;
  * Représente un sondage
  */
 @Entity
-@Table(name = "SURVEYS")
-public class Survey implements Serializable{
+@Table(name = "SURVEY")
+public class Survey implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+    /**
+     * id du sondage.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    
+
+    /**
+     * Nom du sondage.
+     */
     @Column(name = "name", nullable = false)
     private String name;
-    
-    @Column(name = "access", nullable = false)
-    private boolean access;
-    
+
+    /**
+     * Date de fin du sondage. Passé cette date, on ne peu plus y répondre.
+     */
     @Column(name = "end_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date endDate;
-    
+
+    /**
+     * Description.
+     */
     @Column(name = "description", length =  280, nullable = false)
     private String description;
     
     /**
      * Sondeur auquel appartient ce sondage.
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(
-    	      name = "Survey_Pollster",
+    /* pourquoi joinTable*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinTable(name = "Survey_Pollster",
     	      joinColumns = { @JoinColumn(name = "id_survey") },
     	      inverseJoinColumns = { @JoinColumn(name = "id_pollster") })
-    /* c'est la classe contenant l'annotation JoinTable qui abrite (owning) la relation. 
-     * Toute modification de cette relation doit donc passer par cette classe. 
-     * En d'autres termes, si vous souhaitez ajouter un film à une personne, 
+    /* c'est la classe contenant l'annotation JoinTable qui abrite (owning) la relation.
+     * Toute modification de cette relation doit donc passer par cette classe.
+     * En d'autres termes, si vous souhaitez ajouter un film à une personne,
      * vous devez charger la personne, puis le film et ajouter le film à la personne.*/
     private Pollster currentPollster;
 
-    /*
+    /**
      * Liste des réponses possibles.
-   */
+     */
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "survey")
     private Collection<Answer> possibleAnswers;
 
-    /**
-     * Liste de tag du sondage.
-     */
-    @ManyToMany( fetch = FetchType.LAZY)
-    private Collection<Tag> tags;
 
     public long getId() {
         return id;
@@ -72,14 +76,6 @@ public class Survey implements Serializable{
     
     public void setName(String name) {
     	this.name =  name;
-    }
-    
-    public boolean getAccess() {
-    	return access;
-    }
-    
-    public void setAccess(boolean access) {
-    	this.access =  access;
     }
     
     public Date getEndDate() {
@@ -122,22 +118,6 @@ public class Survey implements Serializable{
         this.possibleAnswers = possibleAnswers;
     }
 
-    public Collection<Tag> getTags() {
-        return tags;
-    }
-
-    public void addTag(Tag tag){
-        if(this.tags == null)
-            this.tags = new HashSet<>();
-
-        this.tags.add(tag);
-        //tag.addSurvey(this);
-    }
-
-    public void setTags(Collection<Tag> tags) {
-        this.tags = tags;
-    }
-
     @Override
     public String toString() {
         return "Survey{" +
@@ -146,7 +126,6 @@ public class Survey implements Serializable{
                 ", endDate=" + endDate +
                 ", description='" + description + '\'' +
                 ", possibleAnswers=" + possibleAnswers +
-                ", tags=" + tags +
                 '}';
     }
 }

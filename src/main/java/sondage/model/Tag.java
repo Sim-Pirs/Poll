@@ -30,21 +30,6 @@ public class Tag {
     private String description;
 
 
-    /**
-     * Liste de sondé possédant le tag.
-     *
-    @ManyToMany(cascade = {CascadeType.REMOVE},
-            fetch = FetchType.LAZY)
-    private Collection<Respondent> respondents;
-
-    /**
-     * Liste de sondage possédant le tag.
-     *
-    @ManyToMany(cascade = {CascadeType.REMOVE},
-            fetch = FetchType.LAZY)
-    private Collection<Survey> surveys;
-    */
-
     public long getId() {
         return id;
     }
@@ -68,35 +53,4 @@ public class Tag {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    /*
-    public Collection<Respondent> getRespondents() {
-        return respondents;
-    }
-
-    public void addRespondent(Respondent respondent){
-        if(this.respondents == null)
-            this.respondents = new HashSet<>();
-
-        this.respondents.add(respondent);
-    }
-
-    public void setRespondents(Collection<Respondent> respondents) {
-        this.respondents = respondents;
-    }
-
-    public Collection<Survey> getSurveys() {
-        return surveys;
-    }
-
-    public void addSurvey(Survey survey){
-        if(this.surveys == null)
-            this.surveys = new HashSet<>();
-        this.surveys.add(survey);
-    }
-
-    public void setSurveys(Collection<Survey> surveys) {
-        this.surveys = surveys;
-    }
-    */
 }

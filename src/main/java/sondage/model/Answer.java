@@ -1,12 +1,18 @@
 package sondage.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Représente une réponse possible a un sondage.
  */
 @Entity
-public class Answer {
+@Table(name = "ANSWER")
+public class Answer implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Idendifiant unique de la réponse.
@@ -29,10 +35,10 @@ public class Answer {
     private String description;
 
     /**
-     * Score attribué à cette réponse. 1 est mieux que 5.
+     * Liste de tag du sondage.
      */
-    @Column(name = "score", nullable = false)
-    private int score;
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<Tag> tags;
 
     public long getId() {
         return id;
@@ -58,11 +64,18 @@ public class Answer {
         this.description = description;
     }
 
-    public int getScore() {
-        return score;
+    public Collection<Tag> getTags() {
+        return tags;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void addTag(Tag tag){
+        if(this.tags == null)
+            this.tags = new HashSet<>();
+
+        this.tags.add(tag);
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
     }
 }

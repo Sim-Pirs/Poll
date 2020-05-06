@@ -12,37 +12,48 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@IdClass(ResultId.class)
 @Table(name = "RESULTS")
 public class Result implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	private String surveyId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private long id;
 	
-	@Id
-	private String respondentId;
+	@OneToOne(optional = false)
+	private Answer answer;
+	
+	@OneToOne(optional = false)
+	private Respondent respondent;
 	
 	@Column
 	private String result;
-	
-	public String getSurveyId() {
-		return surveyId;
-	}
-	
-	public void setSurveyId(String surveyId) {
-		this.surveyId = surveyId;
-	}
-	
-	public String getRespondentId() {
-		return respondentId;
+
+	public long getId() {
+		return id;
 	}
 
-	public void setRespondentId(String respondentId) {
-		this.respondentId = respondentId;
+	public void setId(long id) {
+		this.id = id;
 	}
-	
+
+	public Answer getAnswer() {
+		return answer;
+	}
+
+	public void setAnswer(Answer answer) {
+		this.answer = answer;
+	}
+
+	public Respondent getRespondent() {
+		return respondent;
+	}
+
+	public void setRespondent(Respondent respondent) {
+		this.respondent = respondent;
+	}
+
 	public String getResult() {
 		return result;
 	}
