@@ -20,7 +20,7 @@ public class Result implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	
+
 	@OneToOne(optional = false)
 	private Answer answer;
 	
