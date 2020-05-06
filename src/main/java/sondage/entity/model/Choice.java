@@ -1,9 +1,7 @@
-package sondage.model;
+package sondage.entity.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * Représente la réponse à un sondage par un sondé.

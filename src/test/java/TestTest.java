@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import sondage.Starter;
-import sondage.model.*;
-import sondage.services.*;
-
-import java.util.Date;
+import sondage.entity.model.*;
+import sondage.entity.services.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Starter.class)

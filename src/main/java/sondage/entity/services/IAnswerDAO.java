@@ -1,7 +1,7 @@
-package sondage.services;
+package sondage.entity.services;
 
 import org.springframework.data.repository.CrudRepository;
-import sondage.model.Answer;
+import sondage.entity.model.Answer;
 
 public interface IAnswerDAO extends CrudRepository<Answer, Long> {
 

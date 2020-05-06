@@ -1,18 +1,15 @@
-package sondage.model;
+package sondage.entity.model;
 
 import javax.persistence.*;
-import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "RESULTS")
+@Table(name = "RESULT")
 public class Result implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -26,9 +23,6 @@ public class Result implements Serializable{
 	
 	@OneToOne(optional = false)
 	private Respondent respondent;
-	
-	@Column
-	private String result;
 
 	public long getId() {
 		return id;
@@ -52,13 +46,5 @@ public class Result implements Serializable{
 
 	public void setRespondent(Respondent respondent) {
 		this.respondent = respondent;
-	}
-
-	public String getResult() {
-		return result;
-	}
-	
-	public void setResult(String result) {
-		this.result = result;
 	}
 }

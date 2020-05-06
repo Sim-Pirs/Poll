@@ -1,7 +1,7 @@
-package sondage.services;
+package sondage.entity.services;
 
 import org.springframework.data.repository.CrudRepository;
-import sondage.model.Pollster;
+import sondage.entity.model.Pollster;
 
 public interface IPollsterDAO extends CrudRepository<Pollster, Long> {
 

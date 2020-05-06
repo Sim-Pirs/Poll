@@ -1,4 +1,4 @@
-package sondage.model;
+package sondage.entity.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,8 +45,8 @@ public class Pollster implements Serializable {
     /**
      * Liste de tout les sondages proposés par le sondeur.
      */
-    @OneToMany(mappedBy = "currentPollster", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Survey> surveys;
+    @OneToMany(mappedBy = "currentPollster", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    private Collection<Survey> surveys;
     
     public Pollster() {}
     
@@ -99,7 +99,7 @@ public class Pollster implements Serializable {
         this.password = password;
     }
     
-    public Set<Survey> getSurveys(){
+    public Collection<Survey> getSurveys(){
     	return surveys;
     }
 

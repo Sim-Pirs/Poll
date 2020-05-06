@@ -1,8 +1,6 @@
-package sondage.model;
+package sondage.entity.model;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * Représente un tag

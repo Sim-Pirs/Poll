@@ -1,4 +1,4 @@
-package sondage.model;
+package sondage.entity.model;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -44,11 +44,8 @@ public class Survey implements Serializable {
     /**
      * Sondeur auquel appartient ce sondage.
      */
-    /* pourquoi joinTable*/
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "Survey_Pollster",
-    	      joinColumns = { @JoinColumn(name = "id_survey") },
-    	      inverseJoinColumns = { @JoinColumn(name = "id_pollster") })
+    @JoinTable(name = "currentPollster")
     /* c'est la classe contenant l'annotation JoinTable qui abrite (owning) la relation.
      * Toute modification de cette relation doit donc passer par cette classe.
      * En d'autres termes, si vous souhaitez ajouter un film à une personne,
@@ -60,6 +57,12 @@ public class Survey implements Serializable {
      */
     @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "survey")
     private Collection<Answer> possibleAnswers;
+
+    /**
+     * Liste des personnes visées par le sondage.
+     */
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<Respondent> respondents;
 
 
     public long getId() {

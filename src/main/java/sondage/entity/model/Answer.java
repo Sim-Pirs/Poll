@@ -1,4 +1,4 @@
-package sondage.model;
+package sondage.entity.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,6 +27,18 @@ public class Answer implements Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "survey")
     private Survey survey;
+
+    /**
+     * Nombre de personne max pouvant choisir cette
+     */
+    @Column(name = "nb_pers_min", nullable = false)
+    private int nbPersMin;
+
+    /**
+     * Nombre de personne max pouvant choisir cette
+     */
+    @Column(name = "nb_pers_max", nullable = false)
+    private int nbPersMax;
 
     /**
      * Description. La taille max est arbitraire.
