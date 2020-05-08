@@ -8,4 +8,6 @@ public interface IPollsterDAO extends CrudRepository<Pollster, Long> {
     Pollster findById(long id);
 
     Pollster save(Pollster p);
+
+
 }

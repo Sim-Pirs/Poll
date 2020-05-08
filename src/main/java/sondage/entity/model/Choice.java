@@ -1,50 +1,61 @@
 package sondage.entity.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.Min;
 
 /**
- * Représente la réponse à un sondage par un sondé.
+ * Représente une réponse à un sondage par un sondé.
  */
 @Entity
-@Table(name = "CHOICE")
-public class Choice implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Table(name = "CHOICES")
+public class Choice {
 
     /**
      * Idendifiant unique de la réponse du sondé.
      */
     @Id()
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
-
-    /**
-     * Sondé en question.
-     */
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "respondent")
-    private Respondent respondent;
-
-    /**
-     * Liste des réponses du sondé. (doit y avoir autant que réponse que de choix possible
-     * car il s'agit d'un classement de ces réponses).
-     */
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "survey")
-    private Answer answers;
 
     /**
      * Score attribué à cette réponse. 1 est mieux que 5.
      */
     @Column(name = "score", nullable = false)
+    @Min(1)
     private int score;
+
+
+
+
+
+
+
+    /**
+     * Sondé ayant fais ce choix.
+     */
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "respondent_id")
+    private Respondent respondent;
+
+    /**
+     * Option en question.
+     */
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
+    private SurveyItem item;
+
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public Respondent getRespondent() {
@@ -55,19 +66,21 @@ public class Choice implements Serializable {
         this.respondent = respondent;
     }
 
-    public Answer getAnswers() {
-        return answers;
+    public SurveyItem getItem() {
+        return item;
     }
 
-    public void setAnswers(Answer answers) {
-        this.answers = answers;
+    public void setItem(SurveyItem item) {
+        this.item = item;
     }
 
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
+    @Override
+    public String toString() {
+        return "Choice{" +
+                "id=" + id +
+                ", score=" + score +
+                ", respondent=" + respondent +
+                ", item=" + item +
+                '}';
     }
 }

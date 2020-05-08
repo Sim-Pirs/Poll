@@ -1,70 +1,50 @@
 package sondage.entity.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Représente un sondeur.
  */
 @Entity
-@Table(name = "POLLSTER")
-public class Pollster implements Serializable {
+@Table(name = "POLLSTERS")
+public class Pollster {
 
-	private static final long serialVersionUID = 1L;
-	
+    /**
+     * Identifiant unique du sondeur.
+     */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO) // à voir si nous remplacons par strategy = GenerationType.IDENTITY (SBGD)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private long id;
 
+    /**
+     * Prénom du sondeur.
+     */
     @Column(name = "first_name", length = 50, nullable = false)
     private String firstName;
 
+    /**
+     * Nom de famille du sondeur.
+     */
     @Column(name = "last_name", length = 100, nullable = false)
     private String lastName;
 
     /**
-     * Email. Elle est unique (pas possible d'avoir deux sondeurs avec la même adresse).
-     * La taille max vient de la rfc 2821 qui limite les adresses à cette taille.
+     * Email du sondeur. Elle est unique (pas possible d'avoir deux sondeurs avec la même adresse).
      */
     @Column(name = "email", length = 254, nullable = false, unique = true)
     private String email;
 
+    /**
+     * Mot de passe.
+     */
     @Column(name = "password", length = 50, nullable = false)
     private String password;
 
-    /**
-     * Liste de tout les sondages proposés par le sondeur.
-     */
-    @OneToMany(mappedBy = "currentPollster", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private Collection<Survey> surveys;
-    
-    public Pollster() {}
-    
-    public Pollster(String firstName, String lastName, String email, String password) {
-    	this.firstName = firstName;
-    	this.lastName = lastName;
-    	this.email = email;
-    	this.password = password;
-    	this.surveys = new HashSet<>();
-    }
-    
 
-    public Long getId() {
+
+    public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getFirstName() {
@@ -97,21 +77,5 @@ public class Pollster implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-    
-    public Collection<Survey> getSurveys(){
-    	return surveys;
-    }
-
-    public void addSurvey(Survey survey){
-        if(this.surveys == null)
-            this.surveys = new HashSet<>();
-
-        this.surveys.add(survey);
-        survey.setCurrentPollster(this);
-    }
-    
-    public void setSurveys(Set<Survey> surveys) {
-    	this.surveys = surveys;
     }
 }

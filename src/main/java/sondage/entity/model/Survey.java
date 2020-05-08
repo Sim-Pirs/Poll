@@ -4,29 +4,33 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
-import java.io.Serializable;
 
 /**
  * Représente un sondage
  */
 @Entity
-@Table(name = "SURVEY")
-public class Survey implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
+@Table(name = "SURVEYS")
+public class Survey {
 
     /**
      * id du sondage.
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long id;
 
     /**
      * Nom du sondage.
      */
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
+
+    /**
+     * Description.
+     */
+    @Column(name = "description", length =  500, nullable = false)
+    private String description;
 
     /**
      * Date de fin du sondage. Passé cette date, on ne peu plus y répondre.
@@ -35,58 +39,42 @@ public class Survey implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
-    /**
-     * Description.
-     */
-    @Column(name = "description", length =  280, nullable = false)
-    private String description;
-    
-    /**
-     * Sondeur auquel appartient ce sondage.
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(name = "currentPollster")
-    /* c'est la classe contenant l'annotation JoinTable qui abrite (owning) la relation.
-     * Toute modification de cette relation doit donc passer par cette classe.
-     * En d'autres termes, si vous souhaitez ajouter un film à une personne,
-     * vous devez charger la personne, puis le film et ajouter le film à la personne.*/
-    private Pollster currentPollster;
+
+
+
+
+
+
 
     /**
-     * Liste des réponses possibles.
+     * Proprio du sondage.
      */
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, fetch = FetchType.LAZY, mappedBy = "survey")
-    private Collection<Answer> possibleAnswers;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "pollster_id")
+    private Pollster pollster;
 
     /**
-     * Liste des personnes visées par le sondage.
+     * Liste des options du sondage
      */
-    @ManyToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "surveyParent")
+    private Collection<SurveyItem> items;
+
+    /**
+     * Liste des personnes devant y répondre.
+     */
+    @OneToMany(fetch = FetchType.LAZY)
     private Collection<Respondent> respondents;
-
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getName() {
-    	return name;
-    }
-    
-    public void setName(String name) {
-    	this.name =  name;
-    }
-    
-    public Date getEndDate() {
-        return endDate;
+        return name;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -96,39 +84,52 @@ public class Survey implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    public Pollster getCurrentPollster() {
-    	return currentPollster;
-    }
-    
-    public void setCurrentPollster(Pollster currentPollster) {
-    	this.currentPollster = currentPollster;
+
+    public Date getEndDate() {
+        return endDate;
     }
 
-    public Collection<Answer> getPossibleAnswers() {
-        return possibleAnswers;
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
-    public void addPossibleAnswer(Answer answer){
-        if(this.possibleAnswers == null)
-            this.possibleAnswers = new HashSet<>();
-
-        this.possibleAnswers.add(answer);
-        answer.setSurvey(this);
+    public Pollster getPollster() {
+        return pollster;
     }
 
-    public void setPossibleAnswers(Collection<Answer> possibleAnswers) {
-        this.possibleAnswers = possibleAnswers;
+    public void setPollster(Pollster pollster) {
+        this.pollster = pollster;
     }
 
-    @Override
-    public String toString() {
-        return "Survey{" +
-                "id=" + id +
-                ", pollster=" + currentPollster +
-                ", endDate=" + endDate +
-                ", description='" + description + '\'' +
-                ", possibleAnswers=" + possibleAnswers +
-                '}';
+    public Collection<SurveyItem> getItems() {
+        return items;
+    }
+
+    public void addItem(SurveyItem item){
+        if(this.items == null)
+            this.items = new HashSet<>();
+
+        this.items.add(item);
+        item.setSurvey(this);
+    }
+
+    public void setItems(Collection<SurveyItem> items) {
+        this.items = items;
+    }
+
+    public Collection<Respondent> getRespondents() {
+        return respondents;
+    }
+
+    public void addRespondent(Respondent respondent){
+        if(this.respondents == null)
+            this.respondents = new HashSet<>();
+
+        this.respondents.add(respondent);
+        respondent.setSurvey(this);
+    }
+
+    public void setRespondents(Collection<Respondent> respondents) {
+        this.respondents = respondents;
     }
 }
