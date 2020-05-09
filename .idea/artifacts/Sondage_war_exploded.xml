@@ -72,6 +72,11 @@
           <element id="library" level="project" name="Maven: org.apache.taglibs:taglibs-standard-spec:1.2.5" />
           <element id="library" level="project" name="Maven: org.apache.taglibs:taglibs-standard-impl:1.2.5" />
           <element id="library" level="project" name="Maven: org.hsqldb:hsqldb:2.4.1" />
+          <element id="library" level="project" name="Maven: commons-validator:commons-validator:1.4.1" />
+          <element id="library" level="project" name="Maven: commons-beanutils:commons-beanutils:1.8.3" />
+          <element id="library" level="project" name="Maven: commons-digester:commons-digester:1.8.1" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2.1" />
         </element>
       </element>
       <element id="directory" name="META-INF">
