@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import sondage.entity.model.Pollster;
 import sondage.entity.model.User;
 import sondage.entity.web.IDirectoryManager;
-import sondage.entity.web.PollsterValidator;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,9 +20,6 @@ public class PollsterController {
 
     @Autowired
     IDirectoryManager manager;
-
-    @Autowired
-    PollsterValidator pollsterValidator;
 
     @RequestMapping(value = "/connexion", method = RequestMethod.POST)
     public ModelAndView login(HttpSession session,
@@ -62,7 +58,7 @@ public class PollsterController {
         return mv;
     }
 
-    @RequestMapping("/new")
+    @RequestMapping("/nouveau")
     public ModelAndView showCreatePollster(HttpSession session){
         User user = getUser(session);
         if(!user.isConnected()){
@@ -98,11 +94,14 @@ public class PollsterController {
                                    @RequestParam(value = "lastName", required = false) String lastName,
                                    @RequestParam(value = "email", required = false) String email,
                                    @RequestParam(value = "password", required = false) String password){
+        System.err.println("----------------------------");
         Pollster pollster = new Pollster();
         pollster.setFirstName(firstName);
         pollster.setLastName(lastName);
         pollster.setEmail(email);
         pollster.setPassword(password);
+        System.out.println(pollster);
+        System.err.println("----------------------------");
 
         return pollster;
     }
@@ -118,61 +117,4 @@ public class PollsterController {
 
         return user;
     }
-
-    /*
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ModelAndView editProfil(HttpSession session,
-                                   @RequestParam(value = "firstName", required = false) String firstName,
-                                   @RequestParam(value = "lastName", required = false) String lastName,
-                                   @RequestParam(value = "email", required = false) String email,
-                                   @RequestParam(value = "website", required = false) String website,
-                                   @RequestParam(value = "birthday", required = false) String birthday,
-                                   @RequestParam(value = "password", required = false) String password){
-        if(session.getAttribute("user") == null) {
-            return new ModelAndView("logout");
-        }
-
-        User user = (User) session.getAttribute("user");
-
-        if(!firstName.equals("")) {
-            user.getPerson().setFirstName(firstName);
-        }
-        if(!lastName.equals("")) {
-            user.getPerson().setLastName(lastName);
-        }
-        if(!email.equals("")) {
-            if(EmailValidator.getInstance().isValid(email))
-                user.getPerson().setEmail(email);
-        }
-        if(!website.equals("")) {
-            try {
-                URL url = new URL(website);
-                user.getPerson().setWebsite(website);
-            } catch (MalformedURLException e) {
-                System.err.println("Mauvaise url.");
-            }
-
-        }
-        if(!birthday.equals("")) {
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                Date parsed = format.parse(birthday);
-                user.getPerson().setBirthday(parsed);
-            } catch (ParseException e) {
-                System.err.println("Mauvaise date de naissance.");
-            }
-        }
-        if(!password.equals("")) {
-            user.getPerson().setPassword(password);
-        }
-
-
-        manager.savePerson(user.getPerson());
-        session.setAttribute("user", user);
-
-        ModelAndView mv = new ModelAndView("edit");
-
-        return mv;
-    }
-    */
 }

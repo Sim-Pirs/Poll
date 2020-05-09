@@ -1,5 +1,7 @@
 package sondage.entity.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Date;
@@ -36,7 +38,8 @@ public class Survey {
      * Date de fin du sondage. Passé cette date, on ne peu plus y répondre.
      */
     @Column(name = "end_date", nullable = false)
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date endDate;
 
 

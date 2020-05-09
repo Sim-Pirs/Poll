@@ -1,7 +1,10 @@
 package sondage.entity.web;
 
 import sondage.entity.model.Pollster;
+import sondage.entity.model.Survey;
 import sondage.entity.model.User;
+
+import java.util.Collection;
 
 public interface IDirectoryManager {
 
@@ -16,4 +19,8 @@ public interface IDirectoryManager {
 
 
     void savePollster(Pollster pollster);
+
+    void saveSurvey(Survey survey);
+
+    Collection<Survey> findAllSurvey();
 }

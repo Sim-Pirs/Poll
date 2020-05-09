@@ -34,6 +34,7 @@ public class IndexController {
             aBoolean = true;
         }
 
+        System.err.println("----------------------------------------");
         User user = getUser(session);
 
         ModelAndView mv = new ModelAndView("index");

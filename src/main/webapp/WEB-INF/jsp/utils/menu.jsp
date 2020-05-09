@@ -2,13 +2,14 @@
 
 <c:url var="index" value="/" />
 <c:url var="connectPollster" value="/sondeur/connexion" />
-<c:url var="newPollster" value="/sondeur/new" />
+<c:url var="newPollster" value="/sondeur/nouveau" />
 <c:url var="createPollster" value="/sondeur/creer" />
 <c:url var="profilPollster" value="/sondeur/profile" />
 <c:url var="deconectPollster" value="/sondeur/deconnexion" />
+<c:url var="newSurvey" value="/sondage/nouveau" />
 <c:url var="createSurvey" value="/sondage/creer" />
 <c:url var="listSurvey" value="/sondage/liste" />
-<c:url var="about" value="/about" />
+<c:url var="about" value="/apropos" />
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="<c:url value = "${index}"/>">POLL</a>
@@ -20,22 +21,22 @@
         <ul class="navbar-nav mr-auto">
             <li <c:if test="${path != createSurvey}"> class="nav-item"</c:if>
                 <c:if test="${path == createSurvey}"> class="nav-item active"</c:if>>
-                <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${createSurvey}" </c:if>
-                        <c:if test="${user == null || !user.connected}"> href="${connectPollster}" </c:if>>
+                <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${newSurvey}" </c:if>
+                        <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
                     Créer un sondage
                 </a>
             </li>
             <li <c:if test="${path != newPollster}"> class="nav-item"</c:if>
                 <c:if test="${path == newPollster}"> class="nav-item active"</c:if>>
                 <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${newPollster}" </c:if>
-                        <c:if test="${user == null || !user.connected}"> href="${connectPollster}" </c:if>>
+                        <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
                     Créer un sondeur
                 </a>
             </li>
             <li <c:if test="${path != listSurvey}"> class="nav-item"</c:if>
                 <c:if test="${path == listSurvey}"> class="nav-item active"</c:if>>
                 <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${listSurvey}" </c:if>
-                        <c:if test="${user == null || !user.connected}"> href="${connectPollster}" </c:if>>
+                        <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
                     Sondages
                 </a>
             </li>
