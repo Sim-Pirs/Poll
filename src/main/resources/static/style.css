@@ -1,6 +1,19 @@
 .middle {
     align-content: center;
     margin-top: 15%;
+    margin-left: 15%;
+}
+
+.topShift {
+    margin-top: 1%;
+}
+
+.alignCenter {
+    align-content: center;
+}
+
+.topShiftMd {
+    margin-top: 10%;
 }
 
 .leftShift {

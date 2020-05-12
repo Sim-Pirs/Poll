@@ -3,9 +3,9 @@ package sondage.entity.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Représente un sondage
@@ -59,8 +59,8 @@ public class Survey {
     /**
      * Liste des options du sondage
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "surveyParent")
-    private Collection<SurveyItem> items;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
+    private List<SurveyItem> items;
 
     /**
      * Liste des personnes devant y répondre.
@@ -70,6 +70,10 @@ public class Survey {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -92,6 +96,11 @@ public class Survey {
         return endDate;
     }
 
+    public String getStringEndDate(){
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        return dateFormat.format(endDate);
+    }
+
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
@@ -104,19 +113,19 @@ public class Survey {
         this.pollster = pollster;
     }
 
-    public Collection<SurveyItem> getItems() {
+    public List<SurveyItem> getItems() {
         return items;
     }
 
     public void addItem(SurveyItem item){
         if(this.items == null)
-            this.items = new HashSet<>();
+            this.items = new ArrayList<>();
 
         this.items.add(item);
-        item.setSurvey(this);
+        item.setParent(this);
     }
 
-    public void setItems(Collection<SurveyItem> items) {
+    public void setItems(List<SurveyItem> items) {
         this.items = items;
     }
 
@@ -134,5 +143,18 @@ public class Survey {
 
     public void setRespondents(Collection<Respondent> respondents) {
         this.respondents = respondents;
+    }
+
+    @Override
+    public String toString() {
+        return "Survey{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", endDate=" + endDate +
+                ", pollsterId=" + pollster.getId() +
+                ", items=" + items +
+                ", respondents=" + respondents +
+                '}';
     }
 }

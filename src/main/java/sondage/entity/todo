@@ -1,0 +1,8 @@
+- Système de valiation des entrées:
+    - faire marcher lors de la création/modification d'un sondage (sur les SurveyItem)
+    - récupérer les messages d'erreurs des entrées
+    - compléter les validateurs
+    - après avoir finis la validation remettre la propriété "required" sur toutes les inputs
+- Pouvoir ajouter des options lors de la modifications d'un sondage
+- Ajouter un système de log
+- faire la page À propos

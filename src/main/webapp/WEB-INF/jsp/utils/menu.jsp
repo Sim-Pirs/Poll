@@ -8,7 +8,10 @@
 <c:url var="deconectPollster" value="/sondeur/deconnexion" />
 <c:url var="newSurvey" value="/sondage/nouveau" />
 <c:url var="createSurvey" value="/sondage/creer" />
+<c:url var="finishCreateSurvey" value="/sondage/completer" />
+<c:url var="editSurvey" value="/sondage/edit" />
 <c:url var="listSurvey" value="/sondage/liste" />
+<c:url var="delSurvey" value="/sondage/supprimer" />
 <c:url var="about" value="/apropos" />
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,7 +40,7 @@
                 <c:if test="${path == listSurvey}"> class="nav-item active"</c:if>>
                 <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${listSurvey}" </c:if>
                         <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
-                    Sondages
+                    Mes sondages
                 </a>
             </li>
             <li <c:if test="${path != about}"> class="nav-item"</c:if>

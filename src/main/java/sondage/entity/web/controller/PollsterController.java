@@ -11,8 +11,8 @@ import org.springframework.web.servlet.ModelAndView;
 import sondage.entity.model.Pollster;
 import sondage.entity.model.User;
 import sondage.entity.web.IDirectoryManager;
+import sondage.entity.web.validator.PollsterValidator;
 
-import javax.servlet.http.HttpSession;
 
 @Controller()
 @RequestMapping("/sondeur")
@@ -21,100 +21,82 @@ public class PollsterController {
     @Autowired
     IDirectoryManager manager;
 
+    @Autowired
+    User user;
+
+    @Autowired
+    PollsterValidator pollsterValidator;
+
     @RequestMapping(value = "/connexion", method = RequestMethod.POST)
-    public ModelAndView login(HttpSession session,
-                              @RequestParam(value = "email", required = true) String email,
+    public ModelAndView login(@RequestParam(value = "email", required = true) String email,
                               @RequestParam(value = "password", required = true) String pass) {
-        User user = getUser(session);
         manager.login(user, email, pass);
 
-        ModelAndView mv = new ModelAndView("redirect:/");
-        mv.addObject("user", user);
-
-        return mv;
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping("/deconnexion")
-    public ModelAndView logout(HttpSession session) {
-        User user = getUser(session);
+    public ModelAndView logout() {
         manager.logout(user);
 
-        ModelAndView mv = new ModelAndView("redirect:/");
-        mv.addObject("user", user);
-
-        return mv;
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping("/profile")
-    public ModelAndView showProfil(HttpSession session){
-        User user = getUser(session);
+    public ModelAndView showProfil(){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }
 
-        ModelAndView mv = new ModelAndView("profil");
-        mv.addObject("user", user);
-
-        return mv;
+        return new ModelAndView("profil");
     }
 
     @RequestMapping("/nouveau")
-    public ModelAndView showCreatePollster(HttpSession session){
-        User user = getUser(session);
+    public ModelAndView showCreatePollster(){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }
 
-        ModelAndView mv = new ModelAndView("new_pollster");
-        mv.addObject("user", user);
-
-        return mv;
+        return new ModelAndView("new_pollster");
     }
 
     @RequestMapping("/creer")
-    public ModelAndView createPollster(HttpSession session, @ModelAttribute Pollster pollster, BindingResult result){
-        User user = getUser(session);
+    public ModelAndView createPollster(@ModelAttribute Pollster pollster, BindingResult result){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }
 
-        ModelAndView mv = new ModelAndView("redirect:/sondeur/new");
-        mv.addObject("user", user);
+        pollsterValidator.validate(pollster, result);
 
-        //pollsterValidator.validate(pollster, result);
+        if (!result.hasErrors()) {
+            Pollster p = manager.findPollsterByEmail(pollster.getEmail());
+            if(p == null) {
+                manager.savePollster(pollster);
+                System.err.println("Nouveau sondeur créé: " + pollster);
+            } else {
+                System.err.println("Nouveau sondeur créé: " + pollster);
+            }
+        }
 
-        //if (!result.hasErrors())
-            manager.savePollster(pollster);
+        return new ModelAndView("redirect:/sondeur/nouveau");
+    }
 
-        return mv;
+    @ModelAttribute("user")
+    public User user() {
+        return user;
     }
 
     @ModelAttribute
-    public Pollster createPollster(@RequestParam(value = "firstName", required = false) String firstName,
-                                   @RequestParam(value = "lastName", required = false) String lastName,
-                                   @RequestParam(value = "email", required = false) String email,
-                                   @RequestParam(value = "password", required = false) String password){
-        System.err.println("----------------------------");
+    public Pollster pollster(@RequestParam(value = "firstName", required = false) String firstName,
+                             @RequestParam(value = "lastName", required = false) String lastName,
+                             @RequestParam(value = "email", required = false) String email,
+                             @RequestParam(value = "password", required = false) String password){
         Pollster pollster = new Pollster();
         pollster.setFirstName(firstName);
         pollster.setLastName(lastName);
         pollster.setEmail(email);
         pollster.setPassword(password);
-        System.out.println(pollster);
-        System.err.println("----------------------------");
 
         return pollster;
-    }
-
-    private User getUser(HttpSession session){
-        User user;
-        if(session.getAttribute("user") == null){
-            user = manager.newUser();
-            session.setAttribute("user", user);
-        } else {
-            user = (User) session.getAttribute("user");
-        }
-
-        return user;
     }
 }

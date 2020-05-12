@@ -12,27 +12,47 @@
     <body>
         <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
         <div class="container">
-            <h1 align="center" class="bigTitle">Liste des sondages</h1>
-            <table class="table table-striped">
-                <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Nom</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Date de fin</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${surveys}" var="survey">
-                    <tr>
-                        <td><c:out value="${survey.id}" /></td>
-                        <td><c:out value="${survey.name}" /></td>
-                        <td><c:out value="${survey.description}" /></td>
-                        <td><c:out value="${survey.endDate}" /></td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+            <h1 align="center" class="bigTitle">Mes sondages</h1>
+            <c:choose>
+                <c:when test="${mySurveys.size() < 1}">
+                    <div style="align-self: center;" class="topShiftMd">
+                        <p>Vous ne possédez pas encore de sondages.</p>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Date de fin</th>
+                            <th scope="col">Nombre d'options</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${mySurveys}" var="survey">
+                            <tr>
+                                <td><c:out value="${survey.name}" /></td>
+                                <td><c:out value="${survey.description}" /></td>
+                                <td><c:out value="${survey.stringEndDate}" /></td>
+                                <td><c:out value="${survey.items.size()}" /></td>
+                                <td class="row">
+                                    <form action="${editSurvey}" method="post">
+                                        <input type="hidden" name="id_survey" value="${survey.id}">
+                                        <button type="submit" class="btn btn-light btn-sm">Modifier</button>
+                                    </form>
+                                    <form action="${delSurvey}" method="post">
+                                        <input type="hidden" name="id_survey" value="${survey.id}">
+                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </c:otherwise>
+            </c:choose>
         </div>
     </body>
 </html>

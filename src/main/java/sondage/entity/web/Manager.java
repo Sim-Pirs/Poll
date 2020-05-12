@@ -50,17 +50,32 @@ public class Manager implements IDirectoryManager {
     /* ************************************************************************* */
 
     @Override
+    public Pollster findPollsterByEmail(String email) {
+        return pollsterDAO.findByEmail(email);
+    }
+
+    @Override
     public void savePollster(Pollster pollster) {
         pollsterDAO.save(pollster);
     }
 
     @Override
-    public void saveSurvey(Survey survey) {
-        surveyDAO.save(survey);
+    public Survey saveSurvey(Survey survey) {
+        return surveyDAO.save(survey);
     }
 
     @Override
-    public Collection<Survey> findAllSurvey() {
-        return (Collection<Survey>) surveyDAO.findAll();
+    public Survey findSurveyById(long id) {
+        return surveyDAO.findById(id);
+    }
+
+    @Override
+    public Collection<Survey> findSurveyByPollsterId(long id) {
+        return surveyDAO.findByPollster_Id(id);
+    }
+
+    @Override
+    public void removeSurveyById(long id) {
+        surveyDAO.deleteById(id);
     }
 }

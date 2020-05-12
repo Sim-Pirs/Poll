@@ -17,8 +17,10 @@ import sondage.entity.model.SurveyItem;
 import sondage.entity.services.IPollsterDAO;
 import sondage.entity.services.ISurveyDAO;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +36,7 @@ public class SurveyDAOTest {
     ISurveyDAO surveyDAO;
 
     private static Pollster pollster;
-    private static HashSet<SurveyItem> surveyItems;
+    private static List<SurveyItem> surveyItems;
     private static HashSet<Respondent> respondents;
 
     @BeforeAll
@@ -55,7 +57,7 @@ public class SurveyDAOTest {
         respondent.setEmail("roain@gmail.com");
         respondent.setTags(new HashSet<>());
 
-        surveyItems = new HashSet<>();
+        surveyItems = new ArrayList<>();
         surveyItems.add(surveyItem);
 
         respondents = new HashSet<>();

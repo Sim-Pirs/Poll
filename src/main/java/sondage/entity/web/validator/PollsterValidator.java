@@ -1,4 +1,4 @@
-package sondage.entity.web;
+package sondage.entity.web.validator;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -22,19 +22,19 @@ public class PollsterValidator implements Validator {
         Pollster pollster = (Pollster) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName",
-                "pollster.firstName.empty", "Un prénom est requis.");
+                "pollster.firstName", "Un prénom est requis.");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName",
-                "pollster.lastName.empty", "Un nom de famille est requis.");
+                "pollster.lastName", "Un nom de famille est requis.");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
-                "pollster.email.empty", "Un email est requis.");
+                "pollster.email", "Un email est requis.");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
-                "pollster.password.empty", "un mot de passe est requis.");
+                "pollster.password", "un mot de passe est requis.");
 
         if(!EmailValidator.getInstance().isValid(pollster.getEmail())){
-            errors.rejectValue("pollster.email.invalid", "Adresse mail invalide.");
+            errors.reject("pollster.email", "Adresse mail invalide.");
         }
     }
 

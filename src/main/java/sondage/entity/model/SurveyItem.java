@@ -48,7 +48,7 @@ public class SurveyItem {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "survey_id")
-    private Survey surveyParent;
+    private Survey parent;
 
     /**
      * Liste personnnes sélectionné pour cette option
@@ -92,12 +92,12 @@ public class SurveyItem {
         this.tags = tags;
     }
 
-    public Survey getSurvey() {
-        return surveyParent;
+    public Survey getParent() {
+        return parent;
     }
 
-    public void setSurvey(Survey survey) {
-        this.surveyParent = survey;
+    public void setParent(Survey survey) {
+        this.parent = survey;
     }
 
     public Collection<Respondent> getRespondents() {
@@ -113,5 +113,18 @@ public class SurveyItem {
 
     public void setRespondents(Collection<Respondent> respondents) {
         this.finalRespondents = respondents;
+    }
+
+    @Override
+    public String toString() {
+        return "SurveyItem{" +
+                "id=" + id +
+                ", nbPersMin=" + nbPersMin +
+                ", nbPersMax=" + nbPersMax +
+                ", description='" + description + '\'' +
+                ", tags=" + tags +
+                ", parentId=" + parent.getId() +
+                ", finalRespondents=" + finalRespondents +
+                '}';
     }
 }
