@@ -37,6 +37,11 @@ public class IndexController {
 
         return new ModelAndView("index");
     }
+    
+    @RequestMapping("/about")
+    public ModelAndView about(){
+    		return new  ModelAndView("about");
+    }
 
     @ModelAttribute("user")
     public User user() {
