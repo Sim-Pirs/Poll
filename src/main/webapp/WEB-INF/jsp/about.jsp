@@ -12,7 +12,7 @@
 		<body>
 		<%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
 		<div class="container">
-			<h1 class="title" align="center">À propos</h1>
+			<h1 class="title topShift" align="center">À propos</h1>
 			<h3 class="text" align="center">Version 1.0</h3>
 			<h5 class="text" align="center">-</h5>
            	<h4 class="text" align="center">Poll est une application qui permet de créer des sondages.</h4> 

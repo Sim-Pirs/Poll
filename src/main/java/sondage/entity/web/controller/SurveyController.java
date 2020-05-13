@@ -111,6 +111,8 @@ public class SurveyController {
 
         Survey s = manager.findSurveyById(survey.getId());
 
+        System.err.println(s);
+        //System.err.println(s.getPollster().getId());
         if(s.getPollster().getId() != user.getPollster().getId()){
             return new ModelAndView("redirect:/");
         }

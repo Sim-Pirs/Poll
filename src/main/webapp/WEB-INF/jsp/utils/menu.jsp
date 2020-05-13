@@ -14,8 +14,8 @@
 <c:url var="delSurvey" value="/sondage/supprimer" />
 <c:url var="about" value="/apropos" />
 
-<nav class="navbar navbar-expand-lg" style="background-color: #1a9d01;">
-    <a class="navbar-brand text-white" href="<c:url value = "${index}"/>">POLL </a>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="<c:url value = "${index}"/>">POLL </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -24,28 +24,28 @@
         <ul class="navbar-nav mr-auto">
             <li <c:if test="${path != createSurvey}"> class="nav-item"</c:if>
                 <c:if test="${path == createSurvey}"> class="nav-item active"</c:if>>
-                <a class="nav-link text-white" <c:if test="${user != null && user.connected}"> href="${newSurvey}" </c:if>
+                <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${newSurvey}" </c:if>
                         <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
                     Créer un sondage 
                 </a>
             </li>
             <li <c:if test="${path != newPollster}"> class="nav-item"</c:if>
                 <c:if test="${path == newPollster}"> class="nav-item active"</c:if>>
-                <a class="nav-link text-white" <c:if test="${user != null && user.connected}"> href="${newPollster}" </c:if>
+                <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${newPollster}" </c:if>
                         <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
                     Créer un sondeur 
                 </a>
             </li>
             <li <c:if test="${path != listSurvey}"> class="nav-item"</c:if>
                 <c:if test="${path == listSurvey}"> class="nav-item active"</c:if>>
-                <a class="nav-link text-white" <c:if test="${user != null && user.connected}"> href="${listSurvey}" </c:if>
+                <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${listSurvey}" </c:if>
                         <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
                     Mes sondages 
                 </a>
             </li>
             <li <c:if test="${path != about}"> class="nav-item"</c:if>
                 <c:if test="${path == about}"> class="nav-item active"</c:if>>
-                <a class="nav-link text-white" href="/about">
+                <a class="nav-link" href="${about}">
                     À propos
                 </a>
             </li>
@@ -58,8 +58,8 @@
             </form>
         </c:if>
         <c:if test="${user != null && user.connected}">
-            <a class="btn btn-primary leftShift" href="<c:url value = "${profilPollster}"/>">Mon profil</a>
-            <a class="btn btn-danger" href="<c:url value = "${deconectPollster}"/>">Se deconnecter</a>
+            <a class="btn btn-outline-primary btn-sm leftShift" href="<c:url value = "${profilPollster}"/>">Mon profil</a>
+            <a class="btn btn-outline-danger btn-sm" href="<c:url value = "${deconectPollster}"/>">Se deconnecter</a>
         </c:if>
     </div>
 </nav>

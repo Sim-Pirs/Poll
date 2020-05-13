@@ -12,7 +12,7 @@
 <body>
 <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
 <div class="container">
-    <h1 class="title" align="center">Création d'un sondage</h1>
+    <h1 class="title topShift" align="center">Création d'un sondage</h1>
     <form:form method="POST" modelAttribute="survey" action="${finishCreateSurvey}" cssClass="needs-validation">
         <form:input path="id" type="hidden" value="${survey.id}"/>
         <div class="row">

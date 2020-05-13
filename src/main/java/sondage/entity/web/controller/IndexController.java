@@ -38,7 +38,7 @@ public class IndexController {
         return new ModelAndView("index");
     }
     
-    @RequestMapping("/about")
+    @RequestMapping("/apropos")
     public ModelAndView about(){
     		return new  ModelAndView("about");
     }

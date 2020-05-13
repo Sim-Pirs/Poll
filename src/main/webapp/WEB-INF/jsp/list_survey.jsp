@@ -12,7 +12,7 @@
     <body>
         <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
         <div class="container">
-            <h1 align="center" class="bigTitle">Mes sondages</h1>
+            <h1 align="center" class="bigTitle topShift">Mes sondages</h1>
             <c:choose>
                 <c:when test="${mySurveys.size() < 1}">
                     <div style="align-self: center;" class="topShiftMd">

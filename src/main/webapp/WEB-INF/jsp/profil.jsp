@@ -12,7 +12,7 @@
 <body>
     <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
     <div class="container">
-        <h1 class="title" align="center">Page personnel</h1>
+        <h1 class="title topShift" align="center">Page personnel</h1>
         <form method="POST" modelAttribute="pollster" action="${createPollster}" >
             <fieldset disabled>
                 <div class="form-group">
