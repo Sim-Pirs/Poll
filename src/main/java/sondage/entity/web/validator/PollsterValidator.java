@@ -36,6 +36,22 @@ public class PollsterValidator implements Validator {
         if(!EmailValidator.getInstance().isValid(pollster.getEmail())){
             errors.reject("pollster.email", "Adresse mail invalide.");
         }
+        
+        if(!pollster.getFirstName().matches("[A-Z][a-z]+([-][A-Z]([a-z])+)?")) {
+        	errors.reject("pollster.firstName", "Le format du Prénom n'est pas valable ! Format attendu : Jean ou Jean-Marie");
+        }
+        
+        if(!pollster.getLastName().matches("[A-Z][a-z]+([-][A-Z]([a-z])+)?")) {
+        	errors.reject("pollster.lastName", "Le format de Nom n'est pas valable ! Format attendu : Jean ou Jean-Marie");
+        }
+        
+        if(!pollster.getEmail().matches("([a-z0-9])+([.]([a-z0-9])+)?@([a-z])+(([.]([a-z])+)?|([-]([a-z])+)?)+.([a-z]){2,}")) {
+        	errors.reject("pollster.email", "L'email n'est pas valable !");
+        }
+        
+        if(!pollster.getPassword().matches("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*-_=+])[a-zA-Z0-9!@#$%^&*-_=+](?=\\\\S+$).{8,15}")) {
+        	errors.reject("pollster.email", "Le mot de passe n'es pas valable ! Format attendu : minCharacters=8, maxCharacters=15,/n must include at least a lower case letter, a capital letter, a number and a special character among !@#$%^&*-_=+");
+        }
     }
 
 }
