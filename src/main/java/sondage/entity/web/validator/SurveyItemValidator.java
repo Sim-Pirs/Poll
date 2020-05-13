@@ -28,7 +28,7 @@ public class SurveyItemValidator implements Validator {
                 "surveyItem.nbPersMin.empty", "Un nombre minimum est requis.");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nb_pers_max",
-                "susurveyItemrvey.nbPersMax.empty", "Un nombre maximum est requis.");
+                "surveyItem.nbPersMax.empty", "Un nombre maximum est requis.");
         
         if(!surveyItem.getDescription().matches("")) {
         	errors.reject("surveyItem.description", "Caractères spéciaux non autorisés");
@@ -36,6 +36,10 @@ public class SurveyItemValidator implements Validator {
         
         if(surveyItem.getNbPersMin()>0) {
         	errors.reject("surveyItem.nbPersMin", "Ce nombre ne peut pas être négatif");
+        }
+
+        if(surveyItem.getNbPersMax() < surveyItem.getNbPersMin()){
+            errors.reject("surveyItem.nbPersMax", "Le nombre maximum de personne doit être inférieur ou égale au nombre minimum");
         }
         
         if(surveyItem.getNbPersMax()>0) {
