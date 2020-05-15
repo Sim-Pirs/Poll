@@ -1,5 +1,6 @@
 package sondage.entity.web.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
@@ -7,10 +8,14 @@ import org.springframework.validation.Validator;
 import sondage.entity.model.Pollster;
 
 import org.apache.commons.validator.routines.EmailValidator;
+import sondage.entity.web.Manager;
 
 
 @Service
 public class PollsterValidator implements Validator {
+
+    @Autowired
+    Manager manager;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -33,21 +38,14 @@ public class PollsterValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
                 "pollster.password", "un mot de passe est requis.");
 
+        if(manager.findPollsterByEmail(pollster.getEmail()) != null){
+            errors.reject("pollster.email", "Adresse mail déja utilisé.");
+        }
+
         if(!EmailValidator.getInstance().isValid(pollster.getEmail())){
             errors.reject("pollster.email", "Adresse mail invalide.");
         }
-        
-        if(!pollster.getFirstName().matches("[A-Z][a-z]+([-][A-Z]([a-z])+)?")) {
-        	errors.reject("pollster.firstName", "Le format du Prénom n'est pas valable ! Format attendu : Jean ou Jean-Marie");
-        }
-        
-        if(!pollster.getLastName().matches("[A-Z][a-z]+([-][A-Z]([a-z])+)?")) {
-        	errors.reject("pollster.lastName", "Le format de Nom n'est pas valable ! Format attendu : Jean ou Jean-Marie");
-        }
-        
-        if(!pollster.getPassword().matches("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*-_=+])[a-zA-Z0-9!@#$%^&*-_=+](?=\\\\S+$).{8,15}")) {
-        	errors.reject("pollster.email", "Le mot de passe n'es pas valable ! Format attendu : minCharacters=8, maxCharacters=15,/n must include at least a lower case letter, a capital letter, a number and a special character among !@#$%^&*-_=+");
-        }
+
     }
 
 }

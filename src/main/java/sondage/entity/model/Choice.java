@@ -22,7 +22,7 @@ public class Choice {
      * Score attribué à cette réponse. 1 est mieux que 5.
      */
     @Column(name = "score", nullable = false)
-    @Min(1)
+    @Min(value = 1, message = "Le score minimum est 1.")
     private int score;
 
 

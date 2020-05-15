@@ -15,6 +15,7 @@ import sondage.entity.web.IDirectoryManager;
 import sondage.entity.web.validator.SurveyItemValidator;
 import sondage.entity.web.validator.SurveyValidator;
 
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -71,7 +72,7 @@ public class SurveyController {
 
 
     @RequestMapping(value = "/creer", method = RequestMethod.POST)
-    public ModelAndView createSurvey(@ModelAttribute Survey survey, BindingResult result,
+    public ModelAndView createSurvey(@ModelAttribute @Valid Survey survey, BindingResult result,
                                      @RequestParam(value = "nbOptions", required = true) String nbOptionsString){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
@@ -104,7 +105,7 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/completer", method = RequestMethod.POST)
-    public ModelAndView finishCreateSurvey(@ModelAttribute Survey survey, BindingResult result){
+    public ModelAndView finishCreateSurvey(@ModelAttribute @Valid Survey survey, BindingResult result){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }

@@ -28,12 +28,6 @@ public class SurveyValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description",
                 "survey.description.empty", "Une description est requise.");
 
-        if(survey.getDescription().length() < 1) {
-            errors.reject("survey.description.empty", "Une description est requise.");
-        }
-        /*
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "items[0].nbPersMin",
-                "surveyItem.nbPersMin.empty", "Une description est requise.");
-        */
+
     }
 }

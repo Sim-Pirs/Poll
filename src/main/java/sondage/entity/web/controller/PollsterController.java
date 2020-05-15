@@ -13,6 +13,8 @@ import sondage.entity.model.User;
 import sondage.entity.web.IDirectoryManager;
 import sondage.entity.web.validator.PollsterValidator;
 
+import javax.validation.Valid;
+
 
 @Controller()
 @RequestMapping("/sondeur")
@@ -61,7 +63,7 @@ public class PollsterController {
     }
 
     @RequestMapping("/creer")
-    public ModelAndView createPollster(@ModelAttribute Pollster pollster, BindingResult result){
+    public ModelAndView createPollster(@ModelAttribute @Valid Pollster pollster, BindingResult result){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }

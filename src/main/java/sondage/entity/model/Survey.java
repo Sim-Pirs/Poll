@@ -3,6 +3,9 @@ package sondage.entity.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -26,12 +29,16 @@ public class Survey {
      * Nom du sondage.
      */
     @Column(name = "name", length = 50, nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]+([-][A-Z]([a-z])+)?", message = "Le format du nom n'est pas valable.")
+    @Size(min = 1, max = 50, message = "Le nom doit avoir une taille comprise entre 1 et 50 caractères.")
     private String name;
 
     /**
      * Description.
      */
     @Column(name = "description", length =  500, nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]+([-][A-Z]([a-z])+)?", message = "Le format de la description n'est pas valable.")
+    @Size(min = 1, max = 500, message = "La description doit avoir une taille comprise entre 1 et 500 caractères.")
     private String description;
 
     /**
@@ -60,12 +67,14 @@ public class Survey {
      * Liste des options du sondage
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
+    @Valid
     private List<SurveyItem> items;
 
     /**
      * Liste des personnes devant y répondre.
      */
     @OneToMany(fetch = FetchType.LAZY)
+    @Valid
     private Collection<Respondent> respondents;
 
     public long getId() {

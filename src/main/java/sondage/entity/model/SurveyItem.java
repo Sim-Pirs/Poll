@@ -1,6 +1,9 @@
 package sondage.entity.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -23,24 +26,28 @@ public class SurveyItem {
      * Nombre de personne min pouvant choisir cette option
      */
     @Column(name = "nb_pers_min", nullable = false)
+    @Min(value = 1, message = "Le nombre minimum possible est 1.")
     private int nbPersMin;
 
     /**
      * Nombre de personne max pouvant choisir cette option
      */
     @Column(name = "nb_pers_max", nullable = false)
+    @Min(value = 1, message = "Le nombre minimum possible est 1.")
     private int nbPersMax;
 
     /**
      * Description. La taille max est arbitraire.
      */
     @Column(name = "description", length = 500, nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]+([-][A-Z]([a-z])+)?", message = "Le format de la description n'est pas valable.")
+    @Size(min = 1, max = 500, message = "La description doit avoir une taille comprise entre 1 et 500 caractères.")
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "survey_tags", joinColumns = @JoinColumn(name = "survey_id"))
     @Column(name = "tag")
-    private Collection<String> tags;
+    private Collection<@Pattern(regexp = "", message = "") String> tags;
 
 
 
@@ -50,11 +57,6 @@ public class SurveyItem {
     @JoinColumn(name = "survey_id")
     private Survey parent;
 
-    /**
-     * Liste personnnes sélectionné pour cette option
-     */
-    @OneToMany(fetch = FetchType.LAZY)
-    private Collection<Respondent> finalRespondents;
 
     public long getId() {
         return id;
@@ -100,20 +102,6 @@ public class SurveyItem {
         this.parent = survey;
     }
 
-    public Collection<Respondent> getRespondents() {
-        return finalRespondents;
-    }
-
-    public void addFinalRespondant(Respondent respondent){
-        if(this.finalRespondents == null)
-            this.finalRespondents = new HashSet<>();
-
-        this.finalRespondents.add(respondent);
-    }
-
-    public void setRespondents(Collection<Respondent> respondents) {
-        this.finalRespondents = respondents;
-    }
 
     @Override
     public String toString() {
@@ -124,7 +112,6 @@ public class SurveyItem {
                 ", description='" + description + '\'' +
                 ", tags=" + tags +
                 ", parentId=" + parent.getId() +
-                ", finalRespondents=" + finalRespondents +
                 '}';
     }
 }

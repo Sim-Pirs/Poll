@@ -1,6 +1,8 @@
 package sondage.entity.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -17,12 +19,18 @@ public class Respondent {
     private long id;
 
     @Column(name = "email", length = 254, nullable = false)
+    @Size(min = 5, max = 254, message = "L'email doit avoir une taille comprise en 5 et 254 caractères.")
     private String email;
 
     @ElementCollection
     @CollectionTable(name = "respondent_tags", joinColumns = @JoinColumn(name = "respondent_id"))
     @Column(name = "tag")
-    private Collection<String> tags;
+    private Collection<@Pattern(regexp = "", message = "") String> tags;
+
+    @Column(name = "token", length = 100, nullable = false, unique = true)
+    private String token;
+
+
 
 
 
@@ -60,6 +68,14 @@ public class Respondent {
 
     public void setTags(Collection<String> tags) {
         this.tags = tags;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Survey getSurvey() {

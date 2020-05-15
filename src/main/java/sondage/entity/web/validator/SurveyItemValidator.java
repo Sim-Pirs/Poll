@@ -29,22 +29,11 @@ public class SurveyItemValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nb_pers_max",
                 "surveyItem.nbPersMax.empty", "Un nombre maximum est requis.");
-        
-        if(!surveyItem.getDescription().matches("")) {
-        	errors.reject("surveyItem.description", "Caractères spéciaux non autorisés");
-        }
-        
-        if(surveyItem.getNbPersMin()>0) {
-        	errors.reject("surveyItem.nbPersMin", "Ce nombre ne peut pas être négatif");
-        }
 
         if(surveyItem.getNbPersMax() < surveyItem.getNbPersMin()){
             errors.reject("surveyItem.nbPersMax", "Le nombre maximum de personne doit être inférieur ou égale au nombre minimum");
         }
-        
-        if(surveyItem.getNbPersMax()>0) {
-        	errors.reject("surveyItem.nbPersMax", "Ce nombre ne peut pas être négatif");
-        }
+
         
         /*TODO*/
         /*voir si on vérifie le nombre de tags et si il peut être null*/
