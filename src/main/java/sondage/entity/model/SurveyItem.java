@@ -25,21 +25,21 @@ public class SurveyItem {
     /**
      * Nombre de personne min pouvant choisir cette option
      */
-    @Column(name = "nb_pers_min", nullable = false)
+    @Column(name = "nb_pers_min", nullable = true)
     @Min(value = 1, message = "Le nombre minimum possible est 1.")
     private int nbPersMin;
 
     /**
      * Nombre de personne max pouvant choisir cette option
      */
-    @Column(name = "nb_pers_max", nullable = false)
-    @Min(value = 1, message = "Le nombre minimum possible est 1.")
+    @Column(name = "nb_pers_max", nullable = true)
+    @Min(value = 1, message = "Le nombre minimum de personne maximum est 1.")
     private int nbPersMax;
 
     /**
      * Description. La taille max est arbitraire.
      */
-    @Column(name = "description", length = 500, nullable = false)
+    @Column(name = "description", length = 500, nullable = true)
     @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "Format de la description invalide.")
     @Size(min = 1, max = 500, message = "La description doit avoir une taille comprise entre 1 et 500 caractères.")
     private String description;

@@ -26,8 +26,8 @@ public class IndexController {
     public ModelAndView index(){
         if(!aBoolean) {
             Pollster pollster = new Pollster();
-            pollster.setFirstName("a");
-            pollster.setLastName("a");
+            pollster.setFirstName("Aa");
+            pollster.setLastName("Aa");
             pollster.setEmail("a@a.a");
             pollster.setPassword("a");
 

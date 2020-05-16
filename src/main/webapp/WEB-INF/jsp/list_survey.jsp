@@ -38,12 +38,12 @@
                                 <td><c:out value="${survey.stringEndDate}" /></td>
                                 <td><c:out value="${survey.items.size()}" /></td>
                                 <td class="row">
-                                    <form action="${editSurvey}" method="post">
-                                        <input type="hidden" name="id_survey" value="${survey.id}">
+                                    <form action="${editSurvey}" method="get">
+                                        <input type="hidden" name="id" value="${survey.id}">
                                         <button type="submit" class="btn btn-light btn-sm">Modifier</button>
                                     </form>
-                                    <form action="${delSurvey}" method="post">
-                                        <input type="hidden" name="id_survey" value="${survey.id}">
+                                    <form action="${delSurvey}" method="get">
+                                        <input type="hidden" name="id" value="${survey.id}">
                                         <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
                                     </form>
                                 </td>

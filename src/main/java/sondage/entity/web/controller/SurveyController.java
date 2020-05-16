@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import sondage.entity.model.Pollster;
 import sondage.entity.model.Survey;
 import sondage.entity.model.SurveyItem;
 import sondage.entity.model.User;
@@ -74,6 +73,10 @@ public class SurveyController {
     @RequestMapping(value = "/creer", method = RequestMethod.POST)
     public ModelAndView createSurvey(@ModelAttribute @Valid Survey survey, BindingResult result,
                                      @RequestParam(value = "nbOptions", required = true) String nbOptionsString){
+        if(survey == null){
+            return new ModelAndView("redirect:/");
+        }
+
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }
@@ -85,17 +88,22 @@ public class SurveyController {
             System.err.println("Le nombre d'option n'est pas valide.");
         }
 
+        survey.setItems(null);
+        for(int i = 0; i < nbOptions; ++i){
+            SurveyItem item = new SurveyItem();
+            item.setNbPersMin(1);
+            item.setNbPersMax(1);
+            survey.addItem(item);
+        }
+
         surveyValidator.validate(survey, result);
 
         ModelAndView mv;
         if (!result.hasErrors()) {
             survey.setPollster(user.getPollster());
-
-            mv = new ModelAndView("edit_survey");
-            mv.addObject("survey", survey);
-            mv.addObject("nbOptions", nbOptions);
-
             manager.saveSurvey(survey);
+
+            mv = new ModelAndView("redirect:/sondage/edit?id=" + survey.getId());
         }  else {
             System.err.println("Erreur dans le formulaire du sondage.");
             mv = new ModelAndView("redirect:/sondage/nouveau");
@@ -104,27 +112,59 @@ public class SurveyController {
         return mv;
     }
 
-    @RequestMapping(value = "/completer", method = RequestMethod.POST)
-    public ModelAndView finishCreateSurvey(@ModelAttribute @Valid Survey survey, BindingResult result){
+    @RequestMapping(value = "/edit", method = RequestMethod.GET)
+    public ModelAndView editSurvey(@RequestParam(name = "id", required = true) String idSurveyString){
+        if(!user.isConnected()){
+            return new ModelAndView("redirect:/");
+        }
+
+        long idSurvey = -1;
+        try{
+            idSurvey = Long.parseLong(idSurveyString);
+        } catch (NumberFormatException e){
+            System.err.println("L'id n'est pas valide.");
+            return new ModelAndView("redirect:/");
+        }
+
+        Survey s = manager.findSurveyById(idSurvey);
+
+        if(s == null){
+            return new ModelAndView("redirect:/");
+        }
+
+        if(s.getPollster().getId() != user.getPollster().getId()){
+            return new ModelAndView("redirect:/");
+        }
+
+        ModelAndView mv = new ModelAndView("edit_survey");
+        mv.addObject("survey", s);
+
+        return mv;
+    }
+
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public ModelAndView update(@ModelAttribute @Valid Survey survey, BindingResult result){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }
 
         Survey s = manager.findSurveyById(survey.getId());
 
-        System.err.println(s);
-        //System.err.println(s.getPollster().getId());
+        if(s == null){
+            return new ModelAndView("redirect:/");
+        }
+
         if(s.getPollster().getId() != user.getPollster().getId()){
             return new ModelAndView("redirect:/");
         }
 
         surveyValidator.validate(survey, result);
+        for(SurveyItem item : survey.getItems())
+            surveyItemValidator.validate(item, result);
 
         if(result.hasErrors()){
-            manager.removeSurveyById(survey.getId());
             ModelAndView mv = new ModelAndView("edit_survey");
             mv.addObject("survey", survey);
-            mv.addObject("nbOptions", survey.getItems().size());
             return mv;
         }
 
@@ -140,37 +180,8 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/liste");
     }
 
-
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ModelAndView editSurvey(@RequestParam(name = "id_survey", required = true) String idSurveyString ){
-        if(!user.isConnected()){
-            return new ModelAndView("redirect:/");
-        }
-
-        long idSurvey = -1;
-        try{
-            idSurvey = Long.parseLong(idSurveyString);
-        } catch (NumberFormatException e){
-            System.err.println("L'id n'est pas valide.");
-            return new ModelAndView("redirect:/");
-        }
-
-        Survey s = manager.findSurveyById(idSurvey);
-
-        if(s.getPollster().getId() != user.getPollster().getId()){
-            return new ModelAndView("redirect:/");
-        }
-
-        ModelAndView mv = new ModelAndView("edit_survey");
-        mv.addObject("survey", s);
-        mv.addObject("nbOptions", s.getItems().size());
-
-        return mv;
-    }
-
-
-    @RequestMapping("/supprimer")
-    public ModelAndView deleteSurvey(@RequestParam(value = "id_survey") String idSurvey){
+    @RequestMapping(value = "/supprimer", method = RequestMethod.GET)
+    public ModelAndView deleteSurvey(@RequestParam(value = "id") String idSurvey){
         long id = -1;
         try{
             id = Long.parseLong(idSurvey);
@@ -178,19 +189,53 @@ public class SurveyController {
             System.err.println("L'identifiant n'est pas valide.");
         }
 
-
-
         Survey survey = manager.findSurveyById(id);
 
+        if(survey == null){
+            return new ModelAndView("redirect:/");
+        }
+
         if(!user.isConnected() || survey.getPollster().getId() != user.getPollster().getId()){
-            ModelAndView mv = new ModelAndView("redirect:/");
-            mv.addObject("user", user);
-            return mv;
+            return new ModelAndView("redirect:/");
         }
 
         manager.removeSurveyById(id);
 
         return new ModelAndView("redirect:/sondage/liste");
+    }
+
+    @RequestMapping(value = "/suppritem", method = RequestMethod.GET)
+    public ModelAndView deleteItem(@RequestParam(value = "id", required = true) String idItemString){
+        if(!user.isConnected()){
+            return new ModelAndView("redirect:/");
+        }
+
+        long idItem = -1;
+        try{
+            idItem = Long.parseLong(idItemString);
+        } catch (NumberFormatException e){
+            System.err.println("L'id n'est pas valide.");
+            return new ModelAndView("redirect:/");
+        }
+
+        SurveyItem item = manager.findSurveyItemById(idItem);
+
+        if(item == null){
+            return new ModelAndView("redirect:/");
+        }
+
+        if(item.getParent().getPollster().getId() != user.getPollster().getId()){
+            return new ModelAndView("redirect:/");
+        }
+
+        manager.deleteSurveyItemById(idItem);
+        Survey survey = manager.findSurveyById(item.getParent().getId());
+
+        ModelAndView mv = new ModelAndView("edit_survey");
+        mv.addObject("survey", survey);
+
+        return mv;
+
     }
 
 

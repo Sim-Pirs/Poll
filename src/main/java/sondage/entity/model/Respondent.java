@@ -45,6 +45,13 @@ public class Respondent {
     @JoinColumn(name = "survey_id")
     private Survey survey;
 
+    /**
+     * Assigniation final du sondé.
+     */
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "survey_item_id")
+    private SurveyItem finalItem;
+
     public long getId() {
         return id;
     }
@@ -86,5 +93,13 @@ public class Respondent {
 
     public void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+    public SurveyItem getFinalItem() {
+        return finalItem;
+    }
+
+    public void setFinalItem(SurveyItem finalItem) {
+        this.finalItem = finalItem;
     }
 }

@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 import sondage.entity.model.Pollster;
 import sondage.entity.model.Survey;
+import sondage.entity.model.SurveyItem;
 import sondage.entity.model.User;
 
 import java.util.Collection;
@@ -21,18 +22,26 @@ public interface IDirectoryManager {
     // oublier l'utilisateur
     void logout(User user);
 
+
+    /* ****************** POLLSTER ******************** */
     Pollster findPollsterByEmail(String email);
 
     void savePollster(Pollster pollster);
+    /* ***************** FIN POLLSTER ***************** */
 
-
+    /* ******************* SURVEY ********************* */
     Survey saveSurvey(Survey survey);
 
     Survey findSurveyById(long id);
 
     Collection<Survey> findSurveyByPollsterId(long id);
 
-
-
     void removeSurveyById(long id);
+    /* ***************** FIN SURVEY ******************* */
+
+    /* ****************** SURVEY ITEM ***************** */
+    SurveyItem findSurveyItemById(long id);
+
+    void deleteSurveyItemById(long id);
+    /* *************** FIN SURVEY ITEM **************** */
 }

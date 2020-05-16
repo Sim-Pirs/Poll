@@ -67,14 +67,13 @@ public class Survey {
      * Liste des options du sondage
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
-    @Valid
     private List<@Valid SurveyItem> items;
 
     /**
      * Liste des personnes devant y répondre.
      */
     @OneToMany(fetch = FetchType.LAZY)
-    @Valid
+
     private Collection<Respondent> respondents;
 
     public long getId() {

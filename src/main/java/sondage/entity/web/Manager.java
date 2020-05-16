@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sondage.entity.model.Pollster;
 import sondage.entity.model.Survey;
+import sondage.entity.model.SurveyItem;
 import sondage.entity.model.User;
 import sondage.entity.services.IPollsterDAO;
 import sondage.entity.services.ISurveyDAO;
+import sondage.entity.services.ISurveyItemDAO;
 
 import java.util.Collection;
 
@@ -18,6 +20,9 @@ public class Manager implements IDirectoryManager {
 
     @Autowired
     ISurveyDAO surveyDAO;
+
+    @Autowired
+    ISurveyItemDAO surveyItemDAO;
 
     /* ******************************** SESSION ******************************** */
     @Override
@@ -77,5 +82,15 @@ public class Manager implements IDirectoryManager {
     @Override
     public void removeSurveyById(long id) {
         surveyDAO.deleteById(id);
+    }
+
+    @Override
+    public SurveyItem findSurveyItemById(long id) {
+        return surveyItemDAO.findById(id);
+    }
+
+    @Override
+    public void deleteSurveyItemById(long id) {
+        surveyItemDAO.deleteById(id);
     }
 }

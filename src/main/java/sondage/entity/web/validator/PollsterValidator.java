@@ -27,7 +27,7 @@ public class PollsterValidator implements Validator {
         Pollster pollster = (Pollster) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName",
-                "pollster.firstName", "Un prénom est requis.");
+                "pollster.firstName");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName",
                 "pollster.lastName", "Un nom de famille est requis.");

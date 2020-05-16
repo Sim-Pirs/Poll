@@ -75,8 +75,6 @@ public class PollsterController {
             if(p == null) {
                 manager.savePollster(pollster);
                 System.err.println("Nouveau sondeur créé: " + pollster);
-            } else {
-                System.err.println("Nouveau sondeur créé: " + pollster);
             }
         }
 

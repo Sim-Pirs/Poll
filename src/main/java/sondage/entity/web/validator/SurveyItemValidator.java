@@ -19,23 +19,18 @@ public class SurveyItemValidator implements Validator {
     public void validate(Object target, Errors errors) {
         SurveyItem surveyItem = (SurveyItem) target;
 
-        System.err.println(errors);
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description",
-                "surveyItem.description.empty", "Une description est requise.");
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nb_pers_min",
+        /*
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nbPersMin",
                 "surveyItem.nbPersMin.empty", "Un nombre minimum est requis.");
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nb_pers_max",
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "nbPersMax",
                 "surveyItem.nbPersMax.empty", "Un nombre maximum est requis.");
+
+
+         */
 
         if(surveyItem.getNbPersMax() < surveyItem.getNbPersMin()){
             errors.reject("surveyItem.nbPersMax", "Le nombre maximum de personne doit être inférieur ou égale au nombre minimum");
         }
-
-        
-        /*TODO*/
-        /*voir si on vérifie le nombre de tags et si il peut être null*/
     }
 }

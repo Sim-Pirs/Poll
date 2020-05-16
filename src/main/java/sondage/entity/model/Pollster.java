@@ -46,8 +46,8 @@ public class Pollster {
     /**
      * Mot de passe.
      */
-    @Column(name = "password", length = 50, nullable = false)
-    @Size(min = 8, max = 254, message = "Le mot de passe doit avoir une taille comprise en 8 et 50 caractères.")
+    @Column(name = "password", length = 50, nullable = false) //TODO remettre taille min du mot de passe a 8
+    @Size(min = 1, max = 254, message = "Le mot de passe doit avoir une taille comprise en 8 et 50 caractères.")
     private String password;
 
 

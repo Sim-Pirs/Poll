@@ -13,13 +13,13 @@
 <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
 <div class="container">
     <h1 class="title topShift" align="center">Création d'un sondage</h1>
-    <form:form method="POST" modelAttribute="survey" action="${finishCreateSurvey}" cssClass="needs-validation">
+    <form:form method="POST" modelAttribute="survey" action="${updateSurvey}" cssClass="needs-validation">
         <form:input path="id" type="hidden" value="${survey.id}"/>
         <div class="row">
             <div class="col">
                 <div class="form-group">
                     <label for="name">Nom:</label>
-                    <form:input class="form-control" path="name" required="required"/>
+                    <form:input class="form-control" path="name" />
                     <form:errors path="name" cssClass="alert alert-warning"
                                  element="div" />
                 </div>
@@ -27,7 +27,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for="endDate">Date de fin:</label>
-                    <form:input type="date" class="form-control"  path="endDate" required="required"/>
+                    <form:input type="date" class="form-control"  path="endDate" /> <!--required="required"-->
                     <form:errors path="endDate" cssClass="alert alert-warning"
                                  element="div" />
                 </div>
@@ -35,7 +35,7 @@
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
-            <form:textarea class="form-control" maxlength="500" path="description" rows="2" required="required"/>
+            <form:textarea class="form-control" maxlength="500" path="description" rows="2" />
             <form:errors path="description" cssClass="alert alert-warning"
                          element="div" />
         </div>
@@ -47,7 +47,7 @@
             </div>
             <div id="options">
                 <div class="card-body">
-                    <c:forEach begin="0" end="${nbOptions - 1}" var="cpt">
+                    <c:forEach begin="0" end="${survey.items.size() - 1}" var="cpt">
                         <div class="card topShift">
                             <div class="card-body">
                                 <label for="items[${cpt}].description">Description:</label>
@@ -55,18 +55,22 @@
                                 <form:errors path="items[${cpt}].description" cssClass="alert alert-warning" element="div" />
 
                                 <div class="form-row topShift">
-                                    <div class="input-group col-md-6 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Min</span>
+                                    <div class=" col-md-6">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Min</span>
+                                            </div>
+                                            <form:input type="number" min="0" class="form-control" path="items[${cpt}].nbPersMin" /><!--required="required"-->
                                         </div>
-                                        <form:input type="number" min="0" class="form-control" path="items[${cpt}].nbPersMin" /><!--required="required"-->
                                         <form:errors path="items[${cpt}].nbPersMin" cssClass="alert alert-warning" element="div" />
                                     </div>
-                                    <div class="input-group col-md-6 input-group-sm">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">Max</span>
+                                    <div class=" col-md-6">
+                                        <div class="input-group input-group-sm">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">Max</span>
+                                            </div>
+                                            <form:input type="number" min="0" class="form-control" path="items[${cpt}].nbPersMax" /><!--required="required"-->
                                         </div>
-                                        <form:input type="number" min="1" class="form-control" path="items[${cpt}].nbPersMax" /><!--required="required"-->
                                         <form:errors path="items[${cpt}].nbPersMax" cssClass="alert alert-warning" element="div" />
                                     </div>
                                 </div>
@@ -78,6 +82,7 @@
                                     <form:errors path="items[${cpt}].tags" cssClass="alert alert-warning" element="div" />
                                 </div>
                             </div>
+                            <a class="btn btn-outline-danger btn-sm" href="<c:url value = "/sondage/suppritem?id=${cpt + 1}"/>">Supprimer</a>
                         </div>
                     </c:forEach>
                 </div>

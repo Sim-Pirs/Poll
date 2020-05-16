@@ -8,7 +8,8 @@
 <c:url var="deconectPollster" value="/sondeur/deconnexion" />
 <c:url var="newSurvey" value="/sondage/nouveau" />
 <c:url var="createSurvey" value="/sondage/creer" />
-<c:url var="finishCreateSurvey" value="/sondage/completer" />
+<c:url var="updateSurvey" value="/sondage/update" />
+
 <c:url var="editSurvey" value="/sondage/edit" />
 <c:url var="listSurvey" value="/sondage/liste" />
 <c:url var="delSurvey" value="/sondage/supprimer" />
@@ -52,9 +53,9 @@
         </ul>
         <c:if test="${user == null || !user.connected}">
             <form class="form-inline my-2 my-lg-0 " method="post" action="<c:url value = "${connectPollster}"/>">
-                <input type="email" name="email" class="form-control mr-sm-2" placeholder="Email" aria-label="Search"/>
-                <input type="password" name="password" class="form-control mr-sm-2" placeholder="Password" aria-label="Search"/>
-                <button type="submit" class="btn btn-primary text-white">Se connecter</button>
+                <input type="email" name="email" class="form-control mr-sm-2 btn-sm" placeholder="Email" aria-label="Search"/>
+                <input type="password" name="password" class="form-control mr-sm-2 btn-sm" placeholder="Password" aria-label="Search"/>
+                <button type="submit" class="btn btn-primary text-white btn-sm">Se connecter</button>
             </form>
         </c:if>
         <c:if test="${user != null && user.connected}">
