@@ -43,7 +43,7 @@ public class RespondentDAOTest {
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
         pollster.setEmail("romain@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         survey = new Survey();
         survey.setName("Sondage");

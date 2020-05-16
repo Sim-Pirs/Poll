@@ -28,7 +28,7 @@ public class PollsterDAOTest {
         Pollster pollster = new Pollster();
         pollster.setLastName("Colonna");
         pollster.setEmail("romain@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         assertThrows(DataIntegrityViolationException.class, () ->{
             pollsterDAO.save(pollster);
@@ -40,7 +40,7 @@ public class PollsterDAOTest {
         Pollster pollster = new Pollster();
         pollster.setFirstName("Romain");
         pollster.setEmail("romain@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         assertThrows(DataIntegrityViolationException.class, () ->{
             pollsterDAO.save(pollster);
@@ -52,7 +52,7 @@ public class PollsterDAOTest {
         Pollster pollster = new Pollster();
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         assertThrows(DataIntegrityViolationException.class, () ->{
             pollsterDAO.save(pollster);
@@ -77,7 +77,7 @@ public class PollsterDAOTest {
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
         pollster.setEmail("romain897@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         assertDoesNotThrow(() -> {
             pollsterDAO.save(pollster);
@@ -90,7 +90,7 @@ public class PollsterDAOTest {
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
         pollster.setEmail("romain76@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         pollsterDAO.save(pollster);
 

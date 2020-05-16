@@ -48,7 +48,7 @@ public class ChoiceDAOTest {
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
         pollster.setEmail("romain12@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         surveyItem = new SurveyItem();
         surveyItem.setDescription("Une description.");

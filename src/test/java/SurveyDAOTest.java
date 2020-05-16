@@ -45,7 +45,7 @@ public class SurveyDAOTest {
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
         pollster.setEmail("romain334@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         SurveyItem surveyItem = new SurveyItem();
         surveyItem.setDescription("Description.");
@@ -76,7 +76,7 @@ public class SurveyDAOTest {
         p.setFirstName("Romain");
         p.setLastName("Colonna");
         p.setEmail("romain@gmail.com");
-        p.setPassword("coucou");
+        p.setPassword("coucoucou");
 
         Survey survey = new Survey();
         survey.setName("Sondage");

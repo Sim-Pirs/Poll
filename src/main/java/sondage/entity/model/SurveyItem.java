@@ -40,14 +40,14 @@ public class SurveyItem {
      * Description. La taille max est arbitraire.
      */
     @Column(name = "description", length = 500, nullable = false)
-    @Pattern(regexp = "[A-Z][a-z]+([-][A-Z]([a-z])+)?", message = "Le format de la description n'est pas valable.")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "Format de la description invalide.")
     @Size(min = 1, max = 500, message = "La description doit avoir une taille comprise entre 1 et 500 caractères.")
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "survey_tags", joinColumns = @JoinColumn(name = "survey_id"))
     @Column(name = "tag")
-    private Collection<@Pattern(regexp = "", message = "") String> tags;
+    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "Format du tag invalide.") String> tags;
 
 
 

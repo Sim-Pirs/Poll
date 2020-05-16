@@ -29,7 +29,7 @@ public class Survey {
      * Nom du sondage.
      */
     @Column(name = "name", length = 50, nullable = false)
-    @Pattern(regexp = "[A-Z][a-z]+([-][A-Z]([a-z])+)?", message = "Le format du nom n'est pas valable.")
+    @Pattern(regexp = "^[A-Za-z0-9]+([ ]?[A-Za-z0-9]+)+", message = "Format du nom invalide.")
     @Size(min = 1, max = 50, message = "Le nom doit avoir une taille comprise entre 1 et 50 caractères.")
     private String name;
 
@@ -37,7 +37,7 @@ public class Survey {
      * Description.
      */
     @Column(name = "description", length =  500, nullable = false)
-    @Pattern(regexp = "[A-Z][a-z]+([-][A-Z]([a-z])+)?", message = "Le format de la description n'est pas valable.")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "Format de la description invalide.")
     @Size(min = 1, max = 500, message = "La description doit avoir une taille comprise entre 1 et 500 caractères.")
     private String description;
 
@@ -68,7 +68,7 @@ public class Survey {
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
     @Valid
-    private List<SurveyItem> items;
+    private List<@Valid SurveyItem> items;
 
     /**
      * Liste des personnes devant y répondre.
