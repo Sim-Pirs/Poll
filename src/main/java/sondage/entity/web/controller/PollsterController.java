@@ -78,7 +78,10 @@ public class PollsterController {
             }
         }
 
-        return new ModelAndView("redirect:/sondeur/nouveau");
+        //TODO faire marcher pour avoir les erreurs lors des redirections
+        //attr.addFlashAttribute("org.springframework.validation.BindingResult.pollster", result);
+        //attr.addFlashAttribute("pollster", pollster);
+        return new ModelAndView("new_pollster");
     }
 
     @ModelAttribute("user")

@@ -16,12 +16,15 @@ import sondage.entity.services.IPollsterDAO;
 @EntityScan(basePackageClasses = Pollster.class)
 public class Starter extends SpringBootServletInitializer {
 
+	/*
 	@Bean("messageSource")
 	public ResourceBundleMessageSource messageSource() {
 		ResourceBundleMessageSource r = new ResourceBundleMessageSource();
 		r.setBasenames("messages/fr_FR.properties"); //TODO faire marcher
 		return r;
 	}
+
+	 */
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

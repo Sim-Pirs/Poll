@@ -81,7 +81,7 @@ public class SurveyController {
             return new ModelAndView("redirect:/");
         }
 
-        int nbOptions = 2;
+        int nbOptions = 0;
         try{
             nbOptions = Integer.parseInt(nbOptionsString);
         } catch (NumberFormatException e){
@@ -103,10 +103,15 @@ public class SurveyController {
             survey.setPollster(user.getPollster());
             manager.saveSurvey(survey);
 
-            mv = new ModelAndView("redirect:/sondage/edit?id=" + survey.getId());
+            if(nbOptions == 0){
+                mv = new ModelAndView("redirect:/sondage/liste");
+            } else {
+                mv = new ModelAndView("redirect:/sondage/edit?id=" + survey.getId());
+            }
         }  else {
             System.err.println("Erreur dans le formulaire du sondage.");
-            mv = new ModelAndView("redirect:/sondage/nouveau");
+            //mv = new ModelAndView("redirect:/sondage/nouveau");
+            mv = new ModelAndView("new_survey");
         }
 
         return mv;
@@ -159,8 +164,6 @@ public class SurveyController {
         }
 
         surveyValidator.validate(survey, result);
-        for(SurveyItem item : survey.getItems())
-            surveyItemValidator.validate(item, result);
 
         if(result.hasErrors()){
             ModelAndView mv = new ModelAndView("edit_survey");

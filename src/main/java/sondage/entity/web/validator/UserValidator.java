@@ -18,7 +18,7 @@ public class UserValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Pollster.class.isAssignableFrom(clazz);
+        return User.class.isAssignableFrom(clazz);
     }
 
     @Override

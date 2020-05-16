@@ -30,7 +30,7 @@ public class SurveyItemValidator implements Validator {
          */
 
         if(surveyItem.getNbPersMax() < surveyItem.getNbPersMin()){
-            errors.reject("surveyItem.nbPersMax", "Le nombre maximum de personne doit être inférieur ou égale au nombre minimum");
+            errors.reject("surveyItem.nbPersMax.tooSmall", "Le nombre maximum de personne doit être supérieur ou égale au nombre minimum");
         }
     }
 }
