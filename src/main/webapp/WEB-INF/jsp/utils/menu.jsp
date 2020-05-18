@@ -9,6 +9,8 @@
 <c:url var="newSurvey" value="/sondage/nouveau" />
 <c:url var="createSurvey" value="/sondage/creer" />
 <c:url var="updateSurvey" value="/sondage/update" />
+<c:url var="editSurveyRespondents" value="/sondage/sondes/edit" />
+<c:url var="saveSurveyRespondents" value="/sondage/sondes/save" />
 
 <c:url var="editSurvey" value="/sondage/edit" />
 <c:url var="listSurvey" value="/sondage/liste" />

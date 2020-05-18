@@ -111,7 +111,7 @@ public class SurveyItem {
                 ", nbPersMax=" + nbPersMax +
                 ", description='" + description + '\'' +
                 ", tags=" + tags +
-                ", parentId=" + parent.getId() +
+                //", parentId=" + parent.getId() +
                 '}';
     }
 }

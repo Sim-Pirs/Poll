@@ -1,5 +1,10 @@
 package sondage.entity.web.controller;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -7,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import sondage.entity.model.Respondent;
 import sondage.entity.model.Survey;
 import sondage.entity.model.SurveyItem;
 import sondage.entity.model.User;
@@ -15,6 +21,7 @@ import sondage.entity.web.validator.SurveyItemValidator;
 import sondage.entity.web.validator.SurveyValidator;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -142,6 +149,7 @@ public class SurveyController {
         }
 
         ModelAndView mv = new ModelAndView("edit_survey");
+        System.err.println(s);
         mv.addObject("survey", s);
 
         return mv;
@@ -162,14 +170,16 @@ public class SurveyController {
         if(s.getPollster().getId() != user.getPollster().getId()){
             return new ModelAndView("redirect:/");
         }
-
         surveyValidator.validate(survey, result);
 
         if(result.hasErrors()){
             ModelAndView mv = new ModelAndView("edit_survey");
             mv.addObject("survey", survey);
+
             return mv;
         }
+
+
 
         for (SurveyItem item : survey.getItems()) {
             item.setParent(survey);
@@ -241,6 +251,85 @@ public class SurveyController {
 
     }
 
+    @RequestMapping(value = "/sondes/edit", method = RequestMethod.GET)
+    public ModelAndView setupFormRespondents(@RequestParam(value = "id") String idSurveyString){
+        if(!user.isConnected()){
+            return new ModelAndView("redirect:/");
+        }
+
+        long idSurvey = -1;
+        try{
+            idSurvey = Long.parseLong(idSurveyString);
+        } catch (NumberFormatException e){
+            System.err.println("L'id n'est pas valide.");
+            return new ModelAndView("redirect:/");
+        }
+
+        Survey survey = manager.findSurveyById(idSurvey);
+
+        if(survey == null) return new ModelAndView("redirect:/");
+
+        Collection<Respondent> respondents = manager.findAllRespondentsBySurveyId(idSurvey);
+        System.err.println(respondents);
+
+        ModelAndView mv = new ModelAndView("edit_survey_respondents");
+        mv.addObject("id_survey", idSurvey);
+
+        if(respondents == null){
+            return mv;
+        }
+
+        StringBuilder respondentsStringBuilder= new StringBuilder();
+
+        for(Respondent r : respondents){
+            respondentsStringBuilder.append(r.getEmail());
+            for(String tag : r.getTags()){
+                respondentsStringBuilder.append(";").append(tag);
+            }
+            respondentsStringBuilder.append("\n");
+        }
+
+
+        mv.addObject("respondents", respondentsStringBuilder.toString());
+        return mv;
+    }
+
+    @RequestMapping(value = "/sondes/save", method = RequestMethod.POST)
+    public ModelAndView saveSurveyRespondents(@RequestParam(value = "id_survey") String idSurveyString,
+                                              @RequestParam(value = "respondents_string") String respondentsString){
+        if(!user.isConnected()){
+            return new ModelAndView("redirect:/");
+        }
+
+        long idSurvey = -1;
+        try{
+            idSurvey = Long.parseLong(idSurveyString);
+        } catch (NumberFormatException e){
+            System.err.println("L'id n'est pas valide.");
+            return new ModelAndView("redirect:/");
+        }
+
+        Survey survey = manager.findSurveyById(idSurvey);
+
+        if(survey == null) return new ModelAndView("redirect:/");
+
+        if(survey.getPollster().getId() != user.getPollster().getId()){
+            return new ModelAndView("redirect:/");
+        }
+
+        manager.removeSurveyById(idSurvey);
+
+        Collection<Respondent> respondents = getRespondentsFromCsvStringFormat(respondentsString);
+        for(Respondent r : respondents) {
+            survey.addRespondent(r);
+        }
+        survey.setRespondents(respondents);
+
+        Survey s = manager.saveSurvey(survey);//TODO mieux sauvegarder car change l'id en suppr/add
+
+        return new ModelAndView("redirect:/sondage/sondes/edit?id=" + s.getId());
+    }
+
 
     @ModelAttribute
     public Survey survey(){
@@ -250,5 +339,30 @@ public class SurveyController {
     @ModelAttribute("user")
     public User user() {
         return user;
+    }
+
+    private Collection<Respondent> getRespondentsFromCsvStringFormat(String respondentsString){
+        /* TODO trouver une meilleur manière de gérer les sondés */
+        Collection<Respondent> respondents = new HashSet<>();
+        try(CSVParser parser = CSVParser.parse(respondentsString, CSVFormat.newFormat(';'))) {
+            for (CSVRecord csvRecord : parser) {
+                if(csvRecord.get(0) == null) continue;
+                if(!EmailValidator.getInstance().isValid(csvRecord.get(0))) continue;
+
+                Respondent r = new Respondent();
+                r.setEmail(csvRecord.get(0));
+                for(int i = 1; i < csvRecord.size(); ++i) {
+                    if(csvRecord.get(i).equals("")) continue;
+                    r.addTag(csvRecord.get(i));
+                }
+                r.setToken(RandomStringUtils.randomAlphanumeric(100));
+                respondents.add(r);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /* ***************************************************** */
+
+        return respondents;
     }
 }

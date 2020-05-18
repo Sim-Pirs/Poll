@@ -1,3 +1,5 @@
+package web;
+
 import org.junit.jupiter.api.Test;
 import sondage.entity.model.*;
 import static org.junit.jupiter.api.Assertions.*;

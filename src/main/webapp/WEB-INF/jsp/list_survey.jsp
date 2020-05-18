@@ -38,13 +38,17 @@
                                 <td><c:out value="${survey.stringEndDate}" /></td>
                                 <td><c:out value="${survey.items.size()}" /></td>
                                 <td class="row">
+                                    <form action="${editSurveyRespondents}" method="get">
+                                        <input type="hidden" name="id" value="${survey.id}">
+                                        <button type="submit" class="btn btn-outline-dark btn-sm">Gérer diffusion</button>
+                                    </form>
                                     <form action="${editSurvey}" method="get">
                                         <input type="hidden" name="id" value="${survey.id}">
-                                        <button type="submit" class="btn btn-light btn-sm">Modifier</button>
+                                        <button type="submit" class="btn btn-outline-dark btn-sm">Modifier</button>
                                     </form>
                                     <form action="${delSurvey}" method="get">
                                         <input type="hidden" name="id" value="${survey.id}">
-                                        <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+                                        <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
                                     </form>
                                 </td>
                             </tr>

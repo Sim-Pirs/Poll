@@ -88,12 +88,12 @@
                 </div>
             </div>
         </div>
+
         <div class="form-group topShift">
-            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Submit</button>
+            <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Sauvegarder</button>
         </div>
     </form:form>
 
 </div>
 </body>
 </html>
-

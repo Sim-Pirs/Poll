@@ -25,6 +25,8 @@ public class SurveyValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "endDate",
                 "survey.endDate.empty", "Une date est requise.");
 
+        if(survey.getItems() == null) return;
+
         for(int i = 0; i < survey.getItems().size(); ++i) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "items[" + i + "].nbPersMin",
                     "surveyItem.nbPersMin.empty", "Un nombre minimum est requis.");

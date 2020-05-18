@@ -72,8 +72,7 @@ public class Survey {
     /**
      * Liste des personnes devant y répondre.
      */
-    @OneToMany(fetch = FetchType.LAZY)
-
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Respondent> respondents;
 
     public long getId() {

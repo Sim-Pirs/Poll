@@ -102,4 +102,27 @@ public class Respondent {
     public void setFinalItem(SurveyItem finalItem) {
         this.finalItem = finalItem;
     }
+
+    public String toCSVString(){
+        if(tags == null) return "";
+        StringBuilder stringBuilder = new StringBuilder(email);
+        for(int i = 0; i < tags.size(); ++i){
+            stringBuilder.append(";");
+            stringBuilder.append(tags.iterator().next());
+        }
+        stringBuilder.append("\n");
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Respondent{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", tags=" + tags +
+                ", token='" + token + '\'' +
+                //", surveyId=" + survey.getId() +
+                //", finalItem=" + finalItem +
+                '}';
+    }
 }

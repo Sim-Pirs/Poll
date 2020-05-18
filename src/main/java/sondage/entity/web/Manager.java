@@ -2,11 +2,9 @@ package sondage.entity.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sondage.entity.model.Pollster;
-import sondage.entity.model.Survey;
-import sondage.entity.model.SurveyItem;
-import sondage.entity.model.User;
+import sondage.entity.model.*;
 import sondage.entity.services.IPollsterDAO;
+import sondage.entity.services.IRespondentDAO;
 import sondage.entity.services.ISurveyDAO;
 import sondage.entity.services.ISurveyItemDAO;
 
@@ -23,6 +21,9 @@ public class Manager implements IDirectoryManager {
 
     @Autowired
     ISurveyItemDAO surveyItemDAO;
+
+    @Autowired
+    IRespondentDAO respondentDAO;
 
     /* ******************************** SESSION ******************************** */
     @Override
@@ -90,7 +91,32 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
+    public int updateSurveyRespondentsById(long id, Collection<Respondent> respondents) {
+        return surveyDAO.updateRespondentsById(id, respondents);
+    }
+
+    @Override
     public void deleteSurveyItemById(long id) {
         surveyItemDAO.deleteById(id);
+    }
+
+    @Override
+    public Respondent findRespondentsByEmailAndSurveyId(String email, long id) {
+        return respondentDAO.findByEmailAndSurvey_Id(email, id);
+    }
+
+    @Override
+    public Collection<Respondent> findAllRespondentsBySurveyId(long surveyId) {
+        return respondentDAO.findAllBySurvey_Id(surveyId);
+    }
+
+    @Override
+    public void saveRespondent(Respondent respondent) {
+        respondentDAO.save(respondent);
+    }
+
+    @Override
+    public void deleteRespondentsBySurveyId(long surveyId) {
+        respondentDAO.deleteAllBySurvey_Id(surveyId);
     }
 }

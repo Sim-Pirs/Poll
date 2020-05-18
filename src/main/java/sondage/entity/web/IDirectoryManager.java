@@ -3,10 +3,7 @@ package sondage.entity.web;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
-import sondage.entity.model.Pollster;
-import sondage.entity.model.Survey;
-import sondage.entity.model.SurveyItem;
-import sondage.entity.model.User;
+import sondage.entity.model.*;
 
 import java.util.Collection;
 import java.util.Date;
@@ -42,6 +39,18 @@ public interface IDirectoryManager {
     /* ****************** SURVEY ITEM ***************** */
     SurveyItem findSurveyItemById(long id);
 
+    int updateSurveyRespondentsById(long id, Collection<Respondent> respondents);
+
     void deleteSurveyItemById(long id);
     /* *************** FIN SURVEY ITEM **************** */
+
+    /* ****************** RESPONDENT ****************** */
+    Respondent findRespondentsByEmailAndSurveyId(String email, long id);
+
+    Collection<Respondent> findAllRespondentsBySurveyId(long surveyId);
+
+    void saveRespondent(Respondent respondent);
+
+    void deleteRespondentsBySurveyId(long surveyId);
+    /* **************** FIN RESPONDENT **************** */
 }
