@@ -12,7 +12,6 @@ import sondage.entity.model.Pollster;
 import sondage.entity.model.User;
 import sondage.entity.web.IDirectoryManager;
 import sondage.entity.web.validator.PollsterValidator;
-
 import javax.validation.Valid;
 
 
@@ -46,18 +45,14 @@ public class PollsterController {
 
     @RequestMapping("/profile")
     public ModelAndView showProfil(){
-        if(!user.isConnected()){
-            return new ModelAndView("redirect:/");
-        }
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         return new ModelAndView("profil");
     }
 
     @RequestMapping(value = "/nouveau", method = RequestMethod.GET)
     public ModelAndView showCreatePollster(@RequestParam(value = "success", required = false) boolean success ){
-        if(!user.isConnected()){
-            return new ModelAndView("redirect:/");
-        }
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         ModelAndView mv = new ModelAndView("new_pollster");
         mv.addObject("success", success);
@@ -65,29 +60,19 @@ public class PollsterController {
         return mv;
     }
 
-    @RequestMapping("/creer")
+    @RequestMapping(value = "/creer", method = RequestMethod.POST)
     public ModelAndView createPollster(@ModelAttribute @Valid Pollster pollster, BindingResult result){
-        if(!user.isConnected()){
-            return new ModelAndView("redirect:/");
-        }
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         pollsterValidator.validate(pollster, result);
-
-
-        if (!result.hasErrors()) {
-            Pollster p = manager.findPollsterByEmail(pollster.getEmail());
-            if(p == null) {
-                manager.savePollster(pollster);
-                ModelAndView mv = new ModelAndView("redirect:/sondeur/nouveau?success=true");
-
-                return mv;
-            }
-        }
-
         //TODO faire marcher pour avoir les erreurs lors des redirections
         //attr.addFlashAttribute("org.springframework.validation.BindingResult.pollster", result);
         //attr.addFlashAttribute("pollster", pollster);
-        return new ModelAndView("new_pollster");
+        if (result.hasErrors()) return new ModelAndView("new_pollster");
+
+        manager.savePollster(pollster);
+
+        return new ModelAndView("redirect:/sondeur/nouveau?success=true");
     }
 
     @ModelAttribute("user")
@@ -95,17 +80,8 @@ public class PollsterController {
         return user;
     }
 
-    @ModelAttribute
-    public Pollster pollster(@RequestParam(value = "firstName", required = false) String firstName,
-                             @RequestParam(value = "lastName", required = false) String lastName,
-                             @RequestParam(value = "email", required = false) String email,
-                             @RequestParam(value = "password", required = false) String password){
-        Pollster pollster = new Pollster();
-        pollster.setFirstName(firstName);
-        pollster.setLastName(lastName);
-        pollster.setEmail(email);
-        pollster.setPassword(password);
-
-        return pollster;
+    @ModelAttribute("pollster")
+    public Pollster pollster(){
+        return new Pollster();
     }
 }

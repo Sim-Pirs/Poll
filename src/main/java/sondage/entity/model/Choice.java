@@ -73,14 +73,4 @@ public class Choice {
     public void setItem(SurveyItem item) {
         this.item = item;
     }
-
-    @Override
-    public String toString() {
-        return "Choice{" +
-                "id=" + id +
-                ", score=" + score +
-                ", respondent=" + respondent +
-                ", item=" + item +
-                '}';
-    }
 }

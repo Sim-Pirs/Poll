@@ -5,7 +5,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * Représente une réponse possible a un sondage.
@@ -104,18 +103,5 @@ public class SurveyItem {
 
     public void setParent(Survey survey) {
         this.parent = survey;
-    }
-
-
-    @Override
-    public String toString() {
-        return "SurveyItem{" +
-                "id=" + id +
-                ", nbPersMin=" + nbPersMin +
-                ", nbPersMax=" + nbPersMax +
-                ", description='" + description + '\'' +
-                ", tags=" + tags +
-                ", parentId=" + parent.getId() +
-                '}';
     }
 }

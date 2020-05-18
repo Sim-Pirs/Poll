@@ -151,17 +151,4 @@ public class Survey {
     public void setRespondents(Collection<Respondent> respondents) {
         this.respondents = respondents;
     }
-
-    @Override
-    public String toString() {
-        return "Survey{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", endDate=" + endDate +
-                //", pollsterId=" + pollster.getId() +
-                ", items=" + items +
-                ", respondents=" + respondents +
-                '}';
-    }
 }

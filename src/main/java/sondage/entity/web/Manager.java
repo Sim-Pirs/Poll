@@ -9,6 +9,7 @@ import sondage.entity.services.ISurveyDAO;
 import sondage.entity.services.ISurveyItemDAO;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Service()
 public class Manager implements IDirectoryManager {
@@ -81,7 +82,7 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
-    public void removeSurveyById(long id) {
+    public void deleteSurveyById(long id) {
         surveyDAO.deleteById(id);
     }
 
@@ -91,8 +92,8 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
-    public int updateSurveyRespondentsById(long id, Collection<Respondent> respondents) {
-        return surveyDAO.updateRespondentsById(id, respondents);
+    public int updateSurveyById(long id, String name, String description, Date endDate, Pollster pollster, Collection<SurveyItem> items, Collection<Respondent> respondents) {
+        return updateSurveyById(id, name, description, endDate, pollster, items, respondents);
     }
 
     @Override

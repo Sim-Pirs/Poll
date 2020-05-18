@@ -33,13 +33,19 @@ public interface IDirectoryManager {
 
     Collection<Survey> findSurveyByPollsterId(long id);
 
-    void removeSurveyById(long id);
+    void deleteSurveyById(long id);
     /* ***************** FIN SURVEY ******************* */
 
     /* ****************** SURVEY ITEM ***************** */
     SurveyItem findSurveyItemById(long id);
 
-    int updateSurveyRespondentsById(long id, Collection<Respondent> respondents);
+    int updateSurveyById(long id,
+                         String name,
+                         String description,
+                         Date endDate,
+                         Pollster pollster,
+                         Collection<SurveyItem> items,
+                         Collection<Respondent> respondents);
 
     void deleteSurveyItemById(long id);
     /* *************** FIN SURVEY ITEM **************** */

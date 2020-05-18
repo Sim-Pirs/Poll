@@ -67,14 +67,4 @@ public class User implements Serializable {
     public void setErrorMessages(ArrayList<String> errorMessages) {
         this.errorMessages = errorMessages;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "pollster=" + pollster +
-                ", isConnected=" + isConnected +
-                ", asError=" + asError +
-                ", errorMessages=" + errorMessages +
-                '}';
-    }
 }
