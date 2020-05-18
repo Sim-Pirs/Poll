@@ -140,8 +140,9 @@ public class SurveyController {
 
         survey.setPollster(s.getPollster());
         if(survey.getItems() != null) {
+            System.err.println(survey.getItems());
             for (SurveyItem item : survey.getItems()) {
-                survey.addItem(item);
+                item.setParent(survey);
             }
         }
 
