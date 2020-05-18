@@ -39,11 +39,11 @@ public class PollsterValidator implements Validator {
                 "pollster.password.empty", "un mot de passe est requis.");
 
         if(manager.findPollsterByEmail(pollster.getEmail()) != null){
-            errors.reject("pollster.email.alreadyUsed", "Adresse mail déja utilisé.");
+            errors.rejectValue("email", "pollster.email.alreadyUsed", "Adresse mail déja utilisé.");
         }
 
         if(!EmailValidator.getInstance().isValid(pollster.getEmail())){
-            errors.reject("pollster.email.invalidFormat", "Adresse mail invalide.");
+            errors.rejectValue("email", "pollster.email.invalidFormat", "Adresse mail invalide.");
         }
 
     }

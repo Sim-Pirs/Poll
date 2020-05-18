@@ -17,7 +17,6 @@ import sondage.entity.model.Survey;
 import sondage.entity.model.SurveyItem;
 import sondage.entity.model.User;
 import sondage.entity.web.IDirectoryManager;
-import sondage.entity.web.validator.SurveyItemValidator;
 import sondage.entity.web.validator.SurveyValidator;
 
 import javax.validation.Valid;
@@ -38,10 +37,6 @@ public class SurveyController {
 
     @Autowired
     SurveyValidator surveyValidator;
-
-
-    @Autowired
-    SurveyItemValidator surveyItemValidator;
 
 
     @InitBinder
@@ -149,9 +144,7 @@ public class SurveyController {
         }
 
         ModelAndView mv = new ModelAndView("edit_survey");
-        System.err.println(s);
         mv.addObject("survey", s);
-
         return mv;
     }
 
@@ -179,13 +172,12 @@ public class SurveyController {
             return mv;
         }
 
-
-
-        for (SurveyItem item : survey.getItems()) {
-            item.setParent(survey);
-        }
-
         survey.setPollster(s.getPollster());
+        if(survey.getItems() != null) {
+            for (SurveyItem item : survey.getItems()) {
+                survey.addItem(item);
+            }
+        }
 
         manager.removeSurveyById(survey.getId());
         manager.saveSurvey(survey);
@@ -217,7 +209,7 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/liste");
     }
 
-    @RequestMapping(value = "/suppritem", method = RequestMethod.GET)
+    @RequestMapping(value = "/items/supprimer", method = RequestMethod.GET)
     public ModelAndView deleteItem(@RequestParam(value = "id", required = true) String idItemString){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
@@ -251,6 +243,36 @@ public class SurveyController {
 
     }
 
+    @RequestMapping(value = "/items/ajouter", method = RequestMethod.GET)
+    public ModelAndView addItem(@RequestParam(value = "id", required = true) String idSurveyString){
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
+
+        long idSurvey = -1;
+        try{
+            idSurvey = Long.parseLong(idSurveyString);
+        } catch (NumberFormatException e){
+            System.err.println("L'id n'est pas valide.");
+            return new ModelAndView("redirect:/");
+        }
+
+        Survey survey = manager.findSurveyById(idSurvey);
+
+        if(survey == null) return new ModelAndView("redirect:/");
+        if(survey.getPollster().getId() != user.getPollster().getId()) return new ModelAndView("redirect:/");
+
+        SurveyItem item = new SurveyItem();
+        item.setNbPersMin(1);
+        item.setNbPersMax(1);
+        survey.addItem(item);
+
+        manager.removeSurveyById(survey.getId());
+        Survey s = manager.saveSurvey(survey);
+
+        ModelAndView mv = new ModelAndView("redirect:/sondage/edit?id=" + s.getId());
+
+        return mv;
+    }
+
     @RequestMapping(value = "/sondes/edit", method = RequestMethod.GET)
     public ModelAndView setupFormRespondents(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()){
@@ -270,7 +292,6 @@ public class SurveyController {
         if(survey == null) return new ModelAndView("redirect:/");
 
         Collection<Respondent> respondents = manager.findAllRespondentsBySurveyId(idSurvey);
-        System.err.println(respondents);
 
         ModelAndView mv = new ModelAndView("edit_survey_respondents");
         mv.addObject("id_survey", idSurvey);

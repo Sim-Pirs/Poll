@@ -42,11 +42,11 @@
                                         <input type="hidden" name="id" value="${survey.id}">
                                         <button type="submit" class="btn btn-outline-dark btn-sm">Gérer diffusion</button>
                                     </form>
-                                    <form action="${editSurvey}" method="get">
+                                    <form action="${editSurvey}" method="get" class="leftShift">
                                         <input type="hidden" name="id" value="${survey.id}">
                                         <button type="submit" class="btn btn-outline-dark btn-sm">Modifier</button>
                                     </form>
-                                    <form action="${delSurvey}" method="get">
+                                    <form action="${delSurvey}" method="get" class="leftShift">
                                         <input type="hidden" name="id" value="${survey.id}">
                                         <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
                                     </form>

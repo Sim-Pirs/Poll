@@ -159,7 +159,7 @@ public class Survey {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", endDate=" + endDate +
-                ", pollsterId=" + pollster.getId() +
+                //", pollsterId=" + pollster.getId() +
                 ", items=" + items +
                 ", respondents=" + respondents +
                 '}';

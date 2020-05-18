@@ -62,6 +62,10 @@ public class SurveyItem {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public int getNbPersMin() {
         return nbPersMin;
     }
@@ -111,7 +115,7 @@ public class SurveyItem {
                 ", nbPersMax=" + nbPersMax +
                 ", description='" + description + '\'' +
                 ", tags=" + tags +
-                //", parentId=" + parent.getId() +
+                ", parentId=" + parent.getId() +
                 '}';
     }
 }

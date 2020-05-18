@@ -66,5 +66,3 @@
         </c:if>
     </div>
 </nav>
-
-<%@ include file="/WEB-INF/jsp/utils/error.jsp"%>

@@ -39,54 +39,56 @@
             <form:errors path="description" cssClass="alert alert-warning"
                          element="div" />
         </div>
-
-
         <div class="card">
             <div class="card-header">
                 Options
             </div>
             <div id="options">
                 <div class="card-body">
-                    <c:forEach begin="0" end="${survey.items.size() - 1}" var="cpt">
-                        <div class="card topShift">
-                            <div class="card-body">
-                                <label for="items[${cpt}].description">Description:</label>
-                                <form:textarea class="form-control" maxlength="500" path="items[${cpt}].description" rows="2" /><!--required="required"-->
-                                <form:errors path="items[${cpt}].description" cssClass="alert alert-warning" element="div" />
+                    <c:if test="${survey.items.size() > 0}">
+                        <c:forEach begin="0" end="${survey.items.size() - 1}" var="cpt">
+                            <div class="card topShift">
+                                <div class="card-body">
+                                    <form:input path="items[${cpt}].id" name="id_survey" type="hidden"/>
+                                    <label for="items[${cpt}].description">Description:</label>
+                                    <form:textarea class="form-control" maxlength="500" path="items[${cpt}].description" rows="2" /><!--required="required"-->
+                                    <form:errors path="items[${cpt}].description" cssClass="alert alert-warning" element="div" />
 
-                                <div class="form-row topShift">
-                                    <div class=" col-md-6">
-                                        <div class="input-group input-group-sm">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">Min</span>
+                                    <div class="form-row topShift">
+                                        <div class=" col-md-6">
+                                            <div class="input-group input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Min</span>
+                                                </div>
+                                                <form:input type="number" min="0" class="form-control" path="items[${cpt}].nbPersMin" /><!--required="required"-->
                                             </div>
-                                            <form:input type="number" min="0" class="form-control" path="items[${cpt}].nbPersMin" /><!--required="required"-->
+                                            <form:errors path="items[${cpt}].nbPersMin" cssClass="alert alert-warning" element="div" />
                                         </div>
-                                        <form:errors path="items[${cpt}].nbPersMin" cssClass="alert alert-warning" element="div" />
+                                        <div class=" col-md-6">
+                                            <div class="input-group input-group-sm">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Max</span>
+                                                </div>
+                                                <form:input type="number" min="0" class="form-control" path="items[${cpt}].nbPersMax" /><!--required="required"-->
+                                            </div>
+                                            <form:errors path="items[${cpt}].nbPersMax" cssClass="alert alert-warning" element="div" />
+                                        </div>
                                     </div>
-                                    <div class=" col-md-6">
-                                        <div class="input-group input-group-sm">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text">Max</span>
-                                            </div>
-                                            <form:input type="number" min="0" class="form-control" path="items[${cpt}].nbPersMax" /><!--required="required"-->
+                                    <div class="input-group input-group-sm topShift">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Tags</span>
                                         </div>
-                                        <form:errors path="items[${cpt}].nbPersMax" cssClass="alert alert-warning" element="div" />
+                                        <form:input type="text" class="form-control" path="items[${cpt}].tags" multiple="multiple"/><!--required="required"-->
+                                        <form:errors path="items[${cpt}].tags" cssClass="alert alert-warning" element="div" />
                                     </div>
                                 </div>
-                                <div class="input-group input-group-sm topShift">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">Tags</span>
-                                    </div>
-                                    <form:input type="text" class="form-control" path="items[${cpt}].tags" multiple="multiple"/><!--required="required"-->
-                                    <form:errors path="items[${cpt}].tags" cssClass="alert alert-warning" element="div" />
-                                </div>
+                                <a class="btn btn-outline-danger btn-sm" href="<c:url value = "/sondage/items/supprimer?id=${survey.items.get(cpt).id}"/>">Supprimer</a>
                             </div>
-                            <a class="btn btn-outline-danger btn-sm" href="<c:url value = "/sondage/suppritem?id=${cpt + 1}"/>">Supprimer</a>
-                        </div>
-                    </c:forEach>
+                        </c:forEach>
+                    </c:if>
                 </div>
             </div>
+            <a class="btn btn-outline-info btn-sm" href="<c:url value = "/sondage/items/ajouter?id=${survey.id}"/>">Ajouter un choix</a>
         </div>
 
         <div class="form-group topShift">

@@ -53,13 +53,16 @@ public class PollsterController {
         return new ModelAndView("profil");
     }
 
-    @RequestMapping("/nouveau")
-    public ModelAndView showCreatePollster(){
+    @RequestMapping(value = "/nouveau", method = RequestMethod.GET)
+    public ModelAndView showCreatePollster(@RequestParam(value = "success", required = false) boolean success ){
         if(!user.isConnected()){
             return new ModelAndView("redirect:/");
         }
 
-        return new ModelAndView("new_pollster");
+        ModelAndView mv = new ModelAndView("new_pollster");
+        mv.addObject("success", success);
+
+        return mv;
     }
 
     @RequestMapping("/creer")
@@ -70,11 +73,14 @@ public class PollsterController {
 
         pollsterValidator.validate(pollster, result);
 
+
         if (!result.hasErrors()) {
             Pollster p = manager.findPollsterByEmail(pollster.getEmail());
             if(p == null) {
                 manager.savePollster(pollster);
-                System.err.println("Nouveau sondeur créé: " + pollster);
+                ModelAndView mv = new ModelAndView("redirect:/sondeur/nouveau?success=true");
+
+                return mv;
             }
         }
 
