@@ -8,7 +8,6 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import sondage.entity.model.Pollster;
@@ -24,7 +23,7 @@ public class Starter extends SpringBootServletInitializer {
 		ReloadableResourceBundleMessageSource messageSource
 				= new ReloadableResourceBundleMessageSource();
 
-		messageSource.setBasename("classpath:messages/labels");
+		messageSource.setBasename("classpath:messages/messages");
 		messageSource.setDefaultEncoding("UTF-8");
 		return messageSource;
 	}
