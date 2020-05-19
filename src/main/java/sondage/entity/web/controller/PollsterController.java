@@ -28,21 +28,6 @@ public class PollsterController {
     @Autowired
     PollsterValidator pollsterValidator;
 
-    @RequestMapping(value = "/connexion", method = RequestMethod.POST)
-    public ModelAndView login(@RequestParam(value = "email", required = true) String email,
-                              @RequestParam(value = "password", required = true) String pass) {
-        manager.login(user, email, pass);
-
-        return new ModelAndView("redirect:/");
-    }
-
-    @RequestMapping("/deconnexion")
-    public ModelAndView logout() {
-        manager.logout(user);
-
-        return new ModelAndView("redirect:/");
-    }
-
     @RequestMapping("/profile")
     public ModelAndView showProfil(){
         if(!user.isConnected()) return new ModelAndView("redirect:/");

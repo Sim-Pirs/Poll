@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <c:url var="index" value="/" />
-<c:url var="connectPollster" value="/sondeur/connexion" />
+<c:url var="login" value="/connexion" />
 <c:url var="newPollster" value="/sondeur/nouveau" />
 <c:url var="createPollster" value="/sondeur/creer" />
 <c:url var="profilPollster" value="/sondeur/profile" />
-<c:url var="deconectPollster" value="/sondeur/deconnexion" />
+<c:url var="deconectPollster" value="/logout" />
 <c:url var="newSurvey" value="/sondage/nouveau" />
 <c:url var="createSurvey" value="/sondage/creer" />
 <c:url var="updateSurvey" value="/sondage/update" />
@@ -54,11 +54,7 @@
             </li>
         </ul>
         <c:if test="${user == null || !user.connected}">
-            <form class="form-inline my-2 my-lg-0 " method="post" action="<c:url value = "${connectPollster}"/>">
-                <input type="email" name="email" class="form-control mr-sm-2 btn-sm" placeholder="Email" aria-label="Search"/>
-                <input type="password" name="password" class="form-control mr-sm-2 btn-sm" placeholder="Password" aria-label="Search"/>
-                <button type="submit" class="btn btn-primary text-white btn-sm">Se connecter</button>
-            </form>
+            <a class="btn btn-outline-primary btn-sm leftShift" href="<c:url value = "${login}"/>">Se connecter</a>
         </c:if>
         <c:if test="${user != null && user.connected}">
             <a class="btn btn-outline-primary btn-sm leftShift" href="<c:url value = "${profilPollster}"/>">Mon profil</a>
