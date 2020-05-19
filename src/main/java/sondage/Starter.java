@@ -5,9 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import sondage.entity.model.Pollster;
 import sondage.entity.services.IPollsterDAO;
 
@@ -16,15 +19,23 @@ import sondage.entity.services.IPollsterDAO;
 @EntityScan(basePackageClasses = Pollster.class)
 public class Starter extends SpringBootServletInitializer {
 
-	/*
-	@Bean("messageSource")
-	public ResourceBundleMessageSource messageSource() {
-		ResourceBundleMessageSource r = new ResourceBundleMessageSource();
-		r.setBasenames("messages/fr_FR.properties"); //TODO faire marcher
-		return r;
+	@Bean
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource
+				= new ReloadableResourceBundleMessageSource();
+
+		messageSource.setBasename("classpath:messages/labels");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
 	}
 
-	 */
+	@Bean
+	public LocalValidatorFactoryBean getValidator() {
+		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+		bean.setValidationMessageSource(messageSource());
+		return bean;
+	}
+
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

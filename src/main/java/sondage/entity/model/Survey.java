@@ -29,16 +29,16 @@ public class Survey {
      * Nom du sondage.
      */
     @Column(name = "name", length = 50, nullable = false)
-    @Pattern(regexp = "^[A-Za-z0-9]+([ ]?[A-Za-z0-9]+)+", message = "Format du nom invalide.")
-    @Size(min = 1, max = 50, message = "Le nom doit avoir une taille comprise entre 1 et 50 caractères.")
+    @Pattern(regexp = "^[A-Za-z0-9]+([ ]?[A-Za-z0-9]+)+", message = "{survey.name.invalid}")
+    @Size(min = 1, max = 50, message = "{survey.name.badSize}")
     private String name;
 
     /**
      * Description.
      */
     @Column(name = "description", length =  500, nullable = false)
-    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "Format de la description invalide.")
-    @Size(min = 1, max = 500, message = "La description doit avoir une taille comprise entre 1 et 500 caractères.")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "{survey.description.badFormat}")
+    @Size(min = 1, max = 500, message = "{survey.description.badSize}")
     private String description;
 
     /**

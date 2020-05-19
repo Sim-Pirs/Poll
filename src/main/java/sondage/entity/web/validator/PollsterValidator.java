@@ -27,23 +27,23 @@ public class PollsterValidator implements Validator {
         Pollster pollster = (Pollster) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName",
-                "pollster.firstName.empty", "Un prénom est requis.");
+                "pollster.firstName.empty");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName",
-                "pollster.lastName.empty", "Un nom de famille est requis.");
+                "pollster.lastName.empty");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
-                "pollster.email.empty", "Un email est requis.");
+                "pollster.email.empty");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
-                "pollster.password.empty", "un mot de passe est requis.");
+                "pollster.password.empty");
 
         if(manager.findPollsterByEmail(pollster.getEmail()) != null){
-            errors.rejectValue("email", "pollster.email.alreadyUsed", "Adresse mail déja utilisé.");
+            errors.rejectValue("email", "pollster.email.alreadyUsed");
         }
 
         if(!EmailValidator.getInstance().isValid(pollster.getEmail())){
-            errors.rejectValue("email", "pollster.email.invalidFormat", "Adresse mail invalide.");
+            errors.rejectValue("email", "pollster.email.invalid");
         }
 
     }

@@ -19,17 +19,17 @@ public class Respondent {
     private long id;
 
     @Column(name = "email", length = 254, nullable = false)
-    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+", message = "Format de l'aresse mail invalide.")
-    @Size(min = 5, max = 254, message = "L'adresse mail doit avoir une taille comprise en 5 et 254 caractères.")
+    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+", message = "{respondent.email.invalid}")
+    @Size(min = 5, max = 254, message = "{respondent.email.badSize}")
     private String email;
 
     @ElementCollection
     @CollectionTable(name = "respondent_tags", joinColumns = @JoinColumn(name = "respondent_id"))
     @Column(name = "tag")
-    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "Format du tag invalide.") String> tags;
+    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "{respondent.tag.invalid}") String> tags;
 
     @Column(name = "token", length = 100, nullable = true, unique = true)
-    @Pattern(regexp = "^[A-Za-z0-9]+", message = "Token invalide. Seuls les caractères alphanumérique sont autorisés.")
+    @Pattern(regexp = "^[A-Za-z0-9]+", message = "{respondent.token.invalid}")
     private String token;
 
 

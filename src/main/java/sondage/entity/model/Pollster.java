@@ -23,31 +23,31 @@ public class Pollster {
      * Prénom du sondeur.
      */
     @Column(name = "first_name", length = 50, nullable = false)
-    @Pattern(regexp = "^[A-Za-z]+([ ]?[A-Za-z]+)?", message = "Format du prénom invalide. Seule les lettres sont autorisées.")
-    @Size(min = 2, max = 50, message = "Le prénom doit avoir une taille comprise entre 2 et 50 caractères.")
+    @Pattern(regexp = "^[A-Za-z]+([ ]?[A-Za-z]+)?", message = "{pollster.firstName.invalid}")
+    @Size(min = 2, max = 50, message = "{pollster.firstName.badSize}")
     private String firstName;
 
     /**
      * Nom de famille du sondeur.
      */
     @Column(name = "last_name", length = 100, nullable = false)
-    @Pattern(regexp = "^[A-Za-z]+([ ]?[A-Za-z]+)+", message = "Format du nom invalide. Seule les lettres sont autorisées.")
-    @Size(min = 2, max = 100, message = "Le nom doit avoir une taille comprise entre 2 et 100 caractères.")
+    @Pattern(regexp = "^[A-Za-z]+([ ]?[A-Za-z]+)+", message = "{pollster.lastName.invalid}")
+    @Size(min = 2, max = 100, message = "{pollster.lastName.badSize}")
     private String lastName;
 
     /**
      * Email du sondeur. Elle est unique (pas possible d'avoir deux sondeurs avec la même adresse).
      */
     @Column(name = "email", length = 254, nullable = false, unique = true)
-    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+", message = "Format de l'aresse mail invalide.")
-    @Size(min = 5, max = 254, message = "L'adresse mail doit avoir une taille comprise en 5 et 254 caractères.")
+    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+", message = "{pollster.email.invalid}")
+    @Size(min = 5, max = 254, message = "{pollster.email.badSize}")
     private String email;
 
     /**
      * Mot de passe.
      */
     @Column(name = "password", length = 50, nullable = false) //TODO remettre taille min du mot de passe a 8
-    @Size(min = 1, max = 254, message = "Le mot de passe doit avoir une taille comprise en 8 et 50 caractères.")
+    @Size(min = 1, max = 254, message = "{pollster.password.badSize}")
     private String password;
 
 

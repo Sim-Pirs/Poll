@@ -25,28 +25,28 @@ public class SurveyItem {
      * Nombre de personne min pouvant choisir cette option
      */
     @Column(name = "nb_pers_min", nullable = true)
-    @Min(value = 1, message = "Le nombre minimum possible est 1.")
+    @Min(value = 1, message = "{surveyItem.nbPersMin.badValue}")
     private int nbPersMin;
 
     /**
      * Nombre de personne max pouvant choisir cette option
      */
     @Column(name = "nb_pers_max", nullable = true)
-    @Min(value = 1, message = "Le nombre minimum de personne maximum est 1.")
+    @Min(value = 1, message = "{surveyItem.nbPersMax.badValue}")
     private int nbPersMax;
 
     /**
      * Description. La taille max est arbitraire.
      */
     @Column(name = "description", length = 500, nullable = true)
-    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "Format de la description invalide.")
-    @Size(min = 1, max = 500, message = "La description doit avoir une taille comprise entre 1 et 500 caractères.")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "{surveyItem.description.invalid}")
+    @Size(min = 1, max = 500, message = "{surveyItem.description.badSize}")
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "survey_tags", joinColumns = @JoinColumn(name = "survey_id"))
     @Column(name = "tag")
-    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "Format du tag invalide.") String> tags;
+    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "{surveyItem.tag.invalid}") String> tags;
 
 
 

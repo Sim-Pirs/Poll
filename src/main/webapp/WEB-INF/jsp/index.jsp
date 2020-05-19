@@ -22,6 +22,7 @@
         <div class="container middle">
             <h1 align="center" class="bigTitle">POLL</h1>
             <p align="center">- Make sondages great again -</p>
+            <p>${message}</p>
         </div>
     </body>
 </html>

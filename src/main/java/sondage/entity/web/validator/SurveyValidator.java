@@ -20,22 +20,22 @@ public class SurveyValidator implements Validator {
         Survey survey = (Survey) target;
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name",
-                "survey.name.empty", "Un nom est requis.");
+                "survey.name.empty");
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "endDate",
-                "survey.endDate.empty", "Une date est requise.");
+                "survey.endDate.empty");
 
         if(survey.getItems() == null) return;
 
         for(int i = 0; i < survey.getItems().size(); ++i) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "items[" + i + "].nbPersMin",
-                    "surveyItem.nbPersMin.empty", "Un nombre minimum est requis.");
+                    "surveyItem.nbPersMin.empty");
 
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "items[" + i + "].nbPersMax",
-                    "surveyItem.nbPersMax.empty", "Un nombre maximum est requis.");
+                    "surveyItem.nbPersMax.empty");
 
             if(survey.getItems().get(i).getNbPersMax() < survey.getItems().get(i).getNbPersMin()){
-                errors.rejectValue("items[" + i + "].nbPersMax", "surveyItem.nbPersMax.tooSmall", "Le nombre maximum de personne doit être supérieur ou égale au nombre minimum");
+                errors.rejectValue("items[" + i + "].nbPersMax", "surveyItem.nbPersMax.tooSmall");
             }
         }
     }
