@@ -17,10 +17,6 @@ public class User implements Serializable {
 
     private boolean isConnected = false;
 
-    private boolean asError = false;
-
-    private ArrayList<String> errorMessages;
-
 
 
 
@@ -38,33 +34,5 @@ public class User implements Serializable {
 
     public void setConnected(boolean isconnected) {
         this.isConnected = isconnected;
-    }
-
-    public boolean asError() {
-        return asError;
-    }
-
-    public void setAsError(boolean asError) {
-        this.asError = asError;
-    }
-
-    public ArrayList<String> getErrorMessages() {
-        return errorMessages;
-    }
-
-    public void addErrorMessage(String errorMessage){
-        if(this.errorMessages == null)
-            this.errorMessages = new ArrayList<>();
-
-        this.errorMessages.add(errorMessage);
-    }
-
-    public void cleanErrors(){
-        this.asError = false;
-        this.errorMessages = new ArrayList<>();
-    }
-
-    public void setErrorMessages(ArrayList<String> errorMessages) {
-        this.errorMessages = errorMessages;
     }
 }

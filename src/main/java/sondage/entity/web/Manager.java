@@ -36,11 +36,8 @@ public class Manager implements IDirectoryManager {
     public boolean login(User user, String email, String password) {
         Pollster pollster = pollsterDAO.findByEmailAndPassword(email, password);
 
-        if (pollster == null) {
-            user.setAsError(true);
-            user.addErrorMessage("Email ou mot de passe incorecte.");
+        if (pollster == null)
             return false;
-        }
 
         user.setPollster(pollster);
         user.setConnected(true);
@@ -51,8 +48,6 @@ public class Manager implements IDirectoryManager {
     public void logout(User user) {
         user.setPollster(null);
         user.setConnected(false);
-        user.setAsError(false);
-        user.setErrorMessages(null);
     }
     /* ************************************************************************* */
 
