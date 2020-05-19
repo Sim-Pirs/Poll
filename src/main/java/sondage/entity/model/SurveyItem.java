@@ -1,8 +1,10 @@
 package sondage.entity.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
-import java.util.HashSet;
 
 /**
  * Représente une réponse possible a un sondage.
@@ -22,25 +24,29 @@ public class SurveyItem {
     /**
      * Nombre de personne min pouvant choisir cette option
      */
-    @Column(name = "nb_pers_min", nullable = false)
+    @Column(name = "nb_pers_min", nullable = true)
+    @Min(value = 1, message = "{surveyItem.nbPersMin.badValue}")
     private int nbPersMin;
 
     /**
      * Nombre de personne max pouvant choisir cette option
      */
-    @Column(name = "nb_pers_max", nullable = false)
+    @Column(name = "nb_pers_max", nullable = true)
+    @Min(value = 1, message = "{surveyItem.nbPersMax.badValue}")
     private int nbPersMax;
 
     /**
      * Description. La taille max est arbitraire.
      */
-    @Column(name = "description", length = 500, nullable = false)
+    @Column(name = "description", length = 500, nullable = true)
+    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "{surveyItem.description.invalid}")
+    @Size(min = 1, max = 500, message = "{surveyItem.description.badSize}")
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "survey_tags", joinColumns = @JoinColumn(name = "survey_id"))
     @Column(name = "tag")
-    private Collection<String> tags;
+    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "{surveyItem.tag.invalid}") String> tags;
 
 
 
@@ -48,16 +54,15 @@ public class SurveyItem {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "survey_id")
-    private Survey surveyParent;
+    private Survey parent;
 
-    /**
-     * Liste personnnes sélectionné pour cette option
-     */
-    @OneToMany(fetch = FetchType.LAZY)
-    private Collection<Respondent> finalRespondents;
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public int getNbPersMin() {
@@ -92,26 +97,11 @@ public class SurveyItem {
         this.tags = tags;
     }
 
-    public Survey getSurvey() {
-        return surveyParent;
+    public Survey getParent() {
+        return parent;
     }
 
-    public void setSurvey(Survey survey) {
-        this.surveyParent = survey;
-    }
-
-    public Collection<Respondent> getRespondents() {
-        return finalRespondents;
-    }
-
-    public void addFinalRespondant(Respondent respondent){
-        if(this.finalRespondents == null)
-            this.finalRespondents = new HashSet<>();
-
-        this.finalRespondents.add(respondent);
-    }
-
-    public void setRespondents(Collection<Respondent> respondents) {
-        this.finalRespondents = respondents;
+    public void setParent(Survey survey) {
+        this.parent = survey;
     }
 }

@@ -22,7 +22,7 @@ public class Choice {
      * Score attribué à cette réponse. 1 est mieux que 5.
      */
     @Column(name = "score", nullable = false)
-    @Min(1)
+    @Min(value = 1, message = "Le score minimum est 1.")
     private int score;
 
 
@@ -72,15 +72,5 @@ public class Choice {
 
     public void setItem(SurveyItem item) {
         this.item = item;
-    }
-
-    @Override
-    public String toString() {
-        return "Choice{" +
-                "id=" + id +
-                ", score=" + score +
-                ", respondent=" + respondent +
-                ", item=" + item +
-                '}';
     }
 }

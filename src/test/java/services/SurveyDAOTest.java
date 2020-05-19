@@ -1,3 +1,4 @@
+package services;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,8 +18,10 @@ import sondage.entity.model.SurveyItem;
 import sondage.entity.services.IPollsterDAO;
 import sondage.entity.services.ISurveyDAO;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +37,7 @@ public class SurveyDAOTest {
     ISurveyDAO surveyDAO;
 
     private static Pollster pollster;
-    private static HashSet<SurveyItem> surveyItems;
+    private static List<SurveyItem> surveyItems;
     private static HashSet<Respondent> respondents;
 
     @BeforeAll
@@ -43,7 +46,7 @@ public class SurveyDAOTest {
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
         pollster.setEmail("romain334@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         SurveyItem surveyItem = new SurveyItem();
         surveyItem.setDescription("Description.");
@@ -55,7 +58,7 @@ public class SurveyDAOTest {
         respondent.setEmail("roain@gmail.com");
         respondent.setTags(new HashSet<>());
 
-        surveyItems = new HashSet<>();
+        surveyItems = new ArrayList<>();
         surveyItems.add(surveyItem);
 
         respondents = new HashSet<>();
@@ -74,7 +77,7 @@ public class SurveyDAOTest {
         p.setFirstName("Romain");
         p.setLastName("Colonna");
         p.setEmail("romain@gmail.com");
-        p.setPassword("coucou");
+        p.setPassword("coucoucou");
 
         Survey survey = new Survey();
         survey.setName("Sondage");

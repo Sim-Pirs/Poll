@@ -1,0 +1,123 @@
+package sondage.entity.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import sondage.entity.model.*;
+import sondage.entity.services.IPollsterDAO;
+import sondage.entity.services.IRespondentDAO;
+import sondage.entity.services.ISurveyDAO;
+import sondage.entity.services.ISurveyItemDAO;
+
+import java.util.Collection;
+import java.util.Date;
+
+@Service()
+public class Manager implements IDirectoryManager {
+
+    @Autowired
+    IPollsterDAO pollsterDAO;
+
+    @Autowired
+    ISurveyDAO surveyDAO;
+
+    @Autowired
+    ISurveyItemDAO surveyItemDAO;
+
+    @Autowired
+    IRespondentDAO respondentDAO;
+
+    /* ******************************** SESSION ******************************** */
+    @Override
+    public User newUser() {
+        return new User();
+    }
+
+    @Override
+    public boolean login(User user, String email, String password) {
+        Pollster pollster = pollsterDAO.findByEmailAndPassword(email, password);
+
+        if (pollster == null) {
+            user.setAsError(true);
+            user.addErrorMessage("Email ou mot de passe incorecte.");
+            return false;
+        }
+
+        user.setPollster(pollster);
+        user.setConnected(true);
+        return true;
+    }
+
+    @Override
+    public void logout(User user) {
+        user.setPollster(null);
+        user.setConnected(false);
+        user.setAsError(false);
+        user.setErrorMessages(null);
+    }
+    /* ************************************************************************* */
+
+    @Override
+    public Pollster findPollsterByEmail(String email) {
+        return pollsterDAO.findByEmail(email);
+    }
+
+    @Override
+    public void savePollster(Pollster pollster) {
+        pollsterDAO.save(pollster);
+    }
+
+    @Override
+    public Survey saveSurvey(Survey survey) {
+        return surveyDAO.save(survey);
+    }
+
+    @Override
+    public Survey findSurveyById(long id) {
+        return surveyDAO.findById(id);
+    }
+
+    @Override
+    public Collection<Survey> findSurveyByPollsterId(long id) {
+        return surveyDAO.findByPollster_Id(id);
+    }
+
+    @Override
+    public void deleteSurveyById(long id) {
+        surveyDAO.deleteById(id);
+    }
+
+    @Override
+    public SurveyItem findSurveyItemById(long id) {
+        return surveyItemDAO.findById(id);
+    }
+
+    @Override
+    public int updateSurveyById(long id, String name, String description, Date endDate, Pollster pollster, Collection<SurveyItem> items, Collection<Respondent> respondents) {
+        return updateSurveyById(id, name, description, endDate, pollster, items, respondents);
+    }
+
+    @Override
+    public void deleteSurveyItemById(long id) {
+        surveyItemDAO.deleteById(id);
+    }
+
+    @Override
+    public Respondent findRespondentsByEmailAndSurveyId(String email, long id) {
+        return respondentDAO.findByEmailAndSurvey_Id(email, id);
+    }
+
+    @Override
+    public Collection<Respondent> findAllRespondentsBySurveyId(long surveyId) {
+        return respondentDAO.findAllBySurvey_Id(surveyId);
+    }
+
+    @Override
+    public void saveRespondent(Respondent respondent) {
+        respondentDAO.save(respondent);
+    }
+
+    @Override
+    public void deleteRespondentsBySurveyId(long surveyId) {
+        respondentDAO.deleteAllBySurvey_Id(surveyId);
+    }
+}

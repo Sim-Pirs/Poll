@@ -1,6 +1,8 @@
 package sondage.entity.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -17,12 +19,20 @@ public class Respondent {
     private long id;
 
     @Column(name = "email", length = 254, nullable = false)
+    @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+", message = "{respondent.email.invalid}")
+    @Size(min = 5, max = 254, message = "{respondent.email.badSize}")
     private String email;
 
     @ElementCollection
     @CollectionTable(name = "respondent_tags", joinColumns = @JoinColumn(name = "respondent_id"))
     @Column(name = "tag")
-    private Collection<String> tags;
+    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "{respondent.tag.invalid}") String> tags;
+
+    @Column(name = "token", length = 100, nullable = true, unique = true)
+    @Pattern(regexp = "^[A-Za-z0-9]+", message = "{respondent.token.invalid}")
+    private String token;
+
+
 
 
 
@@ -34,6 +44,13 @@ public class Respondent {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "survey_id")
     private Survey survey;
+
+    /**
+     * Assigniation final du sondé.
+     */
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "survey_item_id")
+    private SurveyItem finalItem;
 
     public long getId() {
         return id;
@@ -62,11 +79,27 @@ public class Respondent {
         this.tags = tags;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public Survey getSurvey() {
         return survey;
     }
 
     public void setSurvey(Survey survey) {
         this.survey = survey;
+    }
+
+    public SurveyItem getFinalItem() {
+        return finalItem;
+    }
+
+    public void setFinalItem(SurveyItem finalItem) {
+        this.finalItem = finalItem;
     }
 }

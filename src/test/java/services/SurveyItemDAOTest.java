@@ -1,3 +1,5 @@
+package services;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +18,7 @@ import sondage.entity.services.IPollsterDAO;
 import sondage.entity.services.ISurveyDAO;
 import sondage.entity.services.ISurveyItemDAO;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -43,7 +46,7 @@ public class SurveyItemDAOTest {
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
         pollster.setEmail("romain45@gmail.com");
-        pollster.setPassword("coucou");
+        pollster.setPassword("coucoucou");
 
         Respondent respondent = new Respondent();
         respondent.setEmail("roain@gmail.com");

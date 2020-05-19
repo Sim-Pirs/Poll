@@ -1,0 +1,29 @@
+.middle {
+    align-content: center;
+    margin-top: 15%;
+    margin-left: 15%;
+}
+
+.topShift {
+    margin-top: 1%;
+}
+
+.alignCenter {
+    align-content: center;
+}
+
+.topShiftMd {
+    margin-top: 10%;
+}
+
+.leftShift {
+    margin-right: 1%;
+}
+
+.leftShiftItemMin {
+    margin-left: 5%;
+}
+
+.leftShiftItemMax {
+    margin-left: 2%;
+}
