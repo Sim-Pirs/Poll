@@ -29,7 +29,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="firstName">Prénom:</label>
-                            <form:input type="text" class="form-control" path="firstName" />
+                            <form:input type="text" class="form-control" path="firstName" required="required"/>
                             <form:errors path="firstName" cssClass="alert alert-warning"
                                          element="div" />
                         </div>
@@ -37,7 +37,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="lastName">Nom:</label>
-                            <form:input type="text" class="form-control" path="lastName" />
+                            <form:input type="text" class="form-control" path="lastName" required="required"/>
                             <form:errors path="lastName" cssClass="alert alert-warning"
                                          element="div" />
                         </div>
@@ -48,7 +48,7 @@
                     <div class="col col-md-8">
                         <div class="form-group">
                             <label for="email">Email:</label>
-                            <form:input type="email" class="form-control" path="email" />
+                            <form:input type="email" class="form-control" path="email" required="required"/>
                             <form:errors path="email" cssClass="alert alert-warning"
                                          element="div" />
                         </div>
@@ -56,7 +56,7 @@
                     <div class="col col-md-4">
                         <div class="form-group">
                             <label for="password">Mot de passe:</label>
-                            <form:input type="password" class="form-control" path="password"/>
+                            <form:input type="password" class="form-control" path="password" required="required"/>
                             <form:errors path="password" cssClass="alert alert-warning"
                                          element="div" />
                         </div>

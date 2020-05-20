@@ -302,6 +302,7 @@ public class SurveyController {
             for (CSVRecord csvRecord : parser) {
                 if(csvRecord.get(0) == null) continue;
                 if(!EmailValidator.getInstance().isValid(csvRecord.get(0))) continue;
+                if(!csvRecord.get(0).matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+")) continue;
                 System.err.println(csvRecord.get(0));
 
                 Respondent r = new Respondent();

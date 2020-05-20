@@ -18,7 +18,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="name">Nom:</label>
-                            <form:input class="form-control" path="name" />
+                            <form:input class="form-control" path="name" required="required"/>
                             <form:errors path="name" cssClass="alert alert-warning"
                                          element="div" />
                         </div>
@@ -26,7 +26,7 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="endDate">Date de fin:</label>
-                            <form:input type="date" class="form-control"  path="endDate" />
+                            <form:input type="date" class="form-control"  path="endDate" required="required"/>
                             <form:errors path="endDate" cssClass="alert alert-warning"
                                          element="div" />
                         </div>
@@ -34,13 +34,13 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <form:textarea class="form-control" maxlength="500" path="description" rows="2"/>
+                    <form:textarea class="form-control" maxlength="500" path="description" rows="2" required="required"/>
                     <form:errors path="description" cssClass="alert alert-warning"
                                  element="div" />
                 </div>
                 <div class="form-group">
                     <label for="nbOptions">Nombre de choix:</label>
-                    <input type="number" class="form-control" id="nbOptions"  value="2" name="nbOptions" />
+                    <input type="number" class="form-control" id="nbOptions"  value="2" name="nbOptions" required="required"/>
                 </div>
                 <div class="form-group topShift">
                     <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Créer</button>
