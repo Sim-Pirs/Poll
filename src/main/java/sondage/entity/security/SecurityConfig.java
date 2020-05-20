@@ -24,22 +24,20 @@ import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuc
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-	/* TODO : reparer ca et check les méthodes */
 	
     @Autowired
     UserService userDetailsService;
     
-    @Autowired
-    private AccessDeniedHandler accessDeniedHandler;
+   /* @Autowired
+    private AccessDeniedHandler accessDeniedHandler;*/	//en commentaire car créer un probleme au niveau de l'autowired
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService);
     }
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      /*  http.csrf()
+    protected void configure(HttpSecurity http) throws Exception { // revoir les acces
+        http.csrf()
                 .disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(new Http403ForbiddenEntryPoint() {
@@ -60,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()
                 .antMatchers("/logout").permitAll()
                 .antMatchers("/user").authenticated()
-                .anyRequest().permitAll();*/
+                .anyRequest().permitAll();
     }
     
     private class AuthentificationLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -87,4 +85,3 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 }
-
