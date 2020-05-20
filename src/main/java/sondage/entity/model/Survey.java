@@ -29,7 +29,7 @@ public class Survey {
      * Nom du sondage.
      */
     @Column(name = "name", length = 50, nullable = false)
-    @Pattern(regexp = "^[A-Za-z0-9]+([ ]?[A-Za-z0-9]+)+", message = "{survey.name.invalid}")
+    @Pattern(regexp = "^[A-Za-z0-9éè]+([ ]?[A-Za-z0-9éè]+)+", message = "{survey.name.invalid}")
     @Size(min = 1, max = 50, message = "{survey.name.badSize}")
     private String name;
 
@@ -37,7 +37,7 @@ public class Survey {
      * Description.
      */
     @Column(name = "description", length =  500, nullable = false)
-    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "{survey.description.badFormat}")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà]+)+[.?!]{0,1})+", message = "{survey.description.badFormat}")
     @Size(min = 1, max = 500, message = "{survey.description.badSize}")
     private String description;
 
@@ -150,5 +150,18 @@ public class Survey {
 
     public void setRespondents(Collection<Respondent> respondents) {
         this.respondents = respondents;
+    }
+
+    @Override
+    public String toString() {
+        return "Survey{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", endDate=" + endDate +
+                ", pollster=" + pollster +
+                ", items=" + items +
+                ", respondents=" + respondents +
+                '}';
     }
 }

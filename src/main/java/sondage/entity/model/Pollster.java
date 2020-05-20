@@ -23,7 +23,7 @@ public class Pollster {
      * Prénom du sondeur.
      */
     @Column(name = "first_name", length = 50, nullable = false)
-    @Pattern(regexp = "^[A-Za-z]+([ ]?[A-Za-z]+)?", message = "{pollster.firstName.invalid}")
+    @Pattern(regexp = "^[A-Za-zéè]+([ ]?[A-Za-zéè]+)?", message = "{pollster.firstName.invalid}")
     @Size(min = 2, max = 50, message = "{pollster.firstName.badSize}")
     private String firstName;
 
@@ -31,7 +31,7 @@ public class Pollster {
      * Nom de famille du sondeur.
      */
     @Column(name = "last_name", length = 100, nullable = false)
-    @Pattern(regexp = "^[A-Za-z]+([ ]?[A-Za-z]+)+", message = "{pollster.lastName.invalid}")
+    @Pattern(regexp = "^[A-Za-zéè]+([ ]?[A-Za-zéè]+)+", message = "{pollster.lastName.invalid}")
     @Size(min = 2, max = 100, message = "{pollster.lastName.badSize}")
     private String lastName;
 

@@ -102,4 +102,14 @@ public class Respondent {
     public void setFinalItem(SurveyItem finalItem) {
         this.finalItem = finalItem;
     }
+
+    @Override
+    public String toString() {
+        return "Respondent{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", tags=" + tags +
+                ", token='" + token + '\'' +
+                '}';
+    }
 }

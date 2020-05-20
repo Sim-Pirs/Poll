@@ -39,14 +39,14 @@ public class SurveyItem {
      * Description. La taille max est arbitraire.
      */
     @Column(name = "description", length = 500, nullable = true)
-    @Pattern(regexp = "^(([ ]?[A-Za-z,]+)+[.?!]{0,1})+", message = "{surveyItem.description.invalid}")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà]+)+[.?!]{0,1})+", message = "{surveyItem.description.invalid}")
     @Size(min = 1, max = 500, message = "{surveyItem.description.badSize}")
     private String description;
 
     @ElementCollection
     @CollectionTable(name = "survey_tags", joinColumns = @JoinColumn(name = "survey_id"))
     @Column(name = "tag")
-    private Collection<@Pattern(regexp = "[A-Za-z0-9]+([-]?[A-Za-z0-9]+)?", message = "{surveyItem.tag.invalid}") String> tags;
+    private Collection<@Pattern(regexp = "[A-Za-z0-9éè]+([-]?[A-Za-z0-9éè]+)?", message = "{surveyItem.tag.invalid}") String> tags;
 
 
 
@@ -103,5 +103,16 @@ public class SurveyItem {
 
     public void setParent(Survey survey) {
         this.parent = survey;
+    }
+
+    @Override
+    public String toString() {
+        return "SurveyItem{" +
+                "id=" + id +
+                ", nbPersMin=" + nbPersMin +
+                ", nbPersMax=" + nbPersMax +
+                ", description='" + description + '\'' +
+                ", tags=" + tags +
+                '}';
     }
 }

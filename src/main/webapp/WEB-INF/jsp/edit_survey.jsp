@@ -81,6 +81,7 @@
                                         <form:input type="text" class="form-control" path="items[${cpt}].tags" multiple="multiple"/><!--required="required"-->
                                         <form:errors path="items[${cpt}].tags" cssClass="alert alert-warning" element="div" />
                                     </div>
+                                    <small id="tagHelp" class="form-text text-muted">Veillez à bien séparer chaque tag par une virgule</small>
                                 </div>
                                 <a class="btn btn-outline-danger btn-sm" href="<c:url value = "/sondage/items/supprimer?id=${survey.items.get(cpt).id}"/>">Supprimer</a>
                             </div>

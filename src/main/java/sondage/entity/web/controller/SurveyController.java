@@ -140,10 +140,14 @@ public class SurveyController {
 
         survey.setPollster(s.getPollster());
         if(survey.getItems() != null) {
-            System.err.println(survey.getItems());
             for (SurveyItem item : survey.getItems()) {
                 item.setParent(survey);
             }
+        }
+
+        for(Respondent r : s.getRespondents()) {
+            System.out.println(r.getTags()); //ne pas enlever sinon bug avec les tags des items
+            survey.addRespondent(r);
         }
 
         manager.deleteSurveyById(survey.getId());
@@ -184,6 +188,7 @@ public class SurveyController {
         item.setNbPersMax(1);
         s.addItem(item);
 
+        System.out.println(s); //ne pas enlever sinon bug avec les tags des items
         manager.deleteSurveyById(s.getId());
         Survey survey = manager.saveSurvey(s);
 
@@ -243,7 +248,7 @@ public class SurveyController {
 
     @RequestMapping(value = "/sondes/update", method = RequestMethod.POST)
     public ModelAndView updateSurveyRespondents(@RequestParam(value = "id_survey") String idSurveyString,
-                                              @RequestParam(value = "respondents_string") String respondentsString){
+                                                @RequestParam(value = "respondents_string") String respondentsString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         long idSurvey = getIdFromString(idSurveyString);
@@ -253,6 +258,7 @@ public class SurveyController {
         if(s == null) return new ModelAndView("redirect:/");
         if(s.getPollster().getId() != user.getPollster().getId()) return new ModelAndView("redirect:/");
 
+        System.out.println(s); //ne pas enlever sinon bug avec les tags des items
         manager.deleteSurveyById(idSurvey);
 
         Collection<Respondent> respondents = getRespondentsFromCsvStringFormat(respondentsString);
@@ -296,6 +302,7 @@ public class SurveyController {
             for (CSVRecord csvRecord : parser) {
                 if(csvRecord.get(0) == null) continue;
                 if(!EmailValidator.getInstance().isValid(csvRecord.get(0))) continue;
+                System.err.println(csvRecord.get(0));
 
                 Respondent r = new Respondent();
                 r.setEmail(csvRecord.get(0));
