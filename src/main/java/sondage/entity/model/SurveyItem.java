@@ -39,7 +39,7 @@ public class SurveyItem {
      * Description. La taille max est arbitraire.
      */
     @Column(name = "description", length = 500, nullable = true)
-    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà]+)+[.?!]{0,1})+", message = "{surveyItem.description.invalid}")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà]+)+[.?!]{0,1}[ ]?)+", message = "{surveyItem.description.invalid}")
     @Size(min = 1, max = 500, message = "{surveyItem.description.badSize}")
     private String description;
 

@@ -37,7 +37,7 @@ public class Survey {
      * Description.
      */
     @Column(name = "description", length =  500, nullable = false)
-    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà]+)+[.?!]{0,1})+", message = "{survey.description.badFormat}")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà]+)+[.?!]{0,1}[ ]?)+", message = "{survey.description.badFormat}")
     @Size(min = 1, max = 500, message = "{survey.description.badSize}")
     private String description;
 
@@ -95,6 +95,11 @@ public class Survey {
         return description;
     }
 
+    public String getDescriptionForSize(int size) {
+
+        return description.substring(0, size);
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -150,6 +155,11 @@ public class Survey {
 
     public void setRespondents(Collection<Respondent> respondents) {
         this.respondents = respondents;
+    }
+
+    public String getEndDateToGoodFormat(){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(endDate);
     }
 
     @Override

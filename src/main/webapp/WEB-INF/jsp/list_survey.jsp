@@ -34,7 +34,14 @@
                         <c:forEach items="${mySurveys}" var="survey">
                             <tr>
                                 <td><c:out value="${survey.name}" /></td>
-                                <td><c:out value="${survey.description}" /></td>
+                                <td><c:choose>
+                                    <c:when test="${survey.description.length() > 40}">
+                                        <c:out value="${survey.getDescriptionForSize(37)}..." />
+                                    </c:when>
+                                    <c:otherwise>
+                                        <c:out value="${survey.description}" />
+                                    </c:otherwise>
+                                </c:choose></td>
                                 <td><c:out value="${survey.stringEndDate}" /></td>
                                 <td><c:out value="${survey.items.size()}" /></td>
                                 <td class="row">
