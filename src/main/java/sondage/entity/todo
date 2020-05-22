@@ -1,7 +1,4 @@
 - Système de valiation des entrées:
     - régler les petits problème d'affichage des exceptions lors de la modification d'un sondage
-    - après avoir finis la validation remettre la propriété "required" sur tous les inputs
 
-- Pouvoir ajouter des options lors de la modifications d'un sondage
-- Pouvoir ajouter des sondé lors de la modification d'un sondage
 - Ajouter un système de log
