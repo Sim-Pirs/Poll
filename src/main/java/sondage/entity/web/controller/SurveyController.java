@@ -87,14 +87,17 @@ public class SurveyController {
         return mv;
     }
 
-    @RequestMapping(value = "/saveChoice", method = RequestMethod.POST)
-    public ModelAndView saveChoice(@RequestParam(value = "repondent_id", required = true) String idRespondentString,
-                                   @RequestParam(value = "items_id", required = true) String[] idItemsArray,
-                                   @RequestParam(value = "scores", required = true) String[] scores){
+    @RequestMapping(value = "/repondre", method = RequestMethod.POST)
+    public ModelAndView saveChoice(@RequestParam(value = "repondent_id") String idRespondentString,
+                                   @RequestParam(value = "items_id") String[] idItemsArray,
+                                   @RequestParam(value = "scores") String[] scores){
         if(idItemsArray.length != scores.length) return new ModelAndView("redirect:/error");
 
         long idRespondent = getLongFromString(idRespondentString);
         if(idRespondent == -1) return new ModelAndView("redirect:/error");
+
+        Respondent respondent = manager.findRespondentById(idRespondent);
+        if(respondent == null) return new ModelAndView("redirect:/error");
 
         List<Long> idItemsList = new ArrayList<>();
         List<Integer> scoresList = new ArrayList<>();
@@ -103,16 +106,13 @@ public class SurveyController {
             if(idItem == -1) return new ModelAndView("redirect:/error");
 
             int score = getIntFromString(scores[i]);
-            if(score < 0) return new ModelAndView("redirect:/error");
+            if(score < 0) return new ModelAndView("redirect:/sondage/repondre?token=" + respondent.getToken());
 
             if(scoresList.contains(score)) return new ModelAndView("redirect:/error");
 
             idItemsList.add(idItem);
             scoresList.add(score);
         }
-
-        Respondent respondent = manager.findRespondentById(idRespondent);
-        if(respondent == null) return new ModelAndView("redirect:/error");
 
         manager.updateRespondentAccessById(respondent.getId(), respondent.getToken(), true);
 
@@ -133,7 +133,7 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/renouvelerAcces", method = RequestMethod.GET)
-    public ModelAndView sendNewAccess(@RequestParam(value = "id", required = true) String idRespondentString){
+    public ModelAndView sendNewAccess(@RequestParam(value = "id") String idRespondentString){
         long idRespondent = getLongFromString(idRespondentString);
         if(idRespondent == -1) return new ModelAndView("redirect:/error");
 
@@ -160,16 +160,16 @@ public class SurveyController {
         return mv;
     }
 
-    @RequestMapping("/nouveau")
+    @RequestMapping(value = "/nouveau", method = RequestMethod.GET)
     public ModelAndView showCreateSurveyForm(){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         return new ModelAndView("new_survey");
     }
 
-    @RequestMapping(value = "/creer", method = RequestMethod.POST)
+    @RequestMapping(value = "/nouveau", method = RequestMethod.POST)
     public ModelAndView createSurvey(@ModelAttribute @Valid Survey survey, BindingResult result,
-                                     @RequestParam(value = "nbOptions", required = true) String nbOptionsString){
+                                     @RequestParam(value = "nbOptions") String nbOptionsString){
         if(survey == null) return new ModelAndView("redirect:/");
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
@@ -208,7 +208,7 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/editer", method = RequestMethod.GET)
-    public ModelAndView showEditSurveyForm(@RequestParam(name = "id", required = true) String idSurveyString){
+    public ModelAndView showEditSurveyForm(@RequestParam(name = "id") String idSurveyString){
         if(!user.isConnected())return new ModelAndView("redirect:/");
 
         long idSurvey = getLongFromString(idSurveyString);
@@ -223,7 +223,7 @@ public class SurveyController {
         return mv;
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/editer", method = RequestMethod.POST)
     public ModelAndView updateSurvey(@ModelAttribute @Valid Survey survey, BindingResult result){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
@@ -253,6 +253,15 @@ public class SurveyController {
 
         manager.deleteSurveyById(survey.getId());
         manager.saveSurvey(survey);
+        /*
+        System.err.println("-----> " + manager.updateSurveyById(survey.getId(),
+                survey.getName(),
+                survey.getDescription(),
+                survey.getEndDate(),
+                survey.getPollster(),
+                survey.getItems(),
+                survey.getRespondents()));
+         */
 
         return new ModelAndView("redirect:/sondage/liste");
     }
@@ -274,7 +283,7 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/items/ajouter", method = RequestMethod.GET)
-    public ModelAndView addItem(@RequestParam(value = "id", required = true) String idSurveyString){
+    public ModelAndView addItem(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         long idSurvey = getLongFromString(idSurveyString);
@@ -297,7 +306,7 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/items/supprimer", method = RequestMethod.GET)
-    public ModelAndView deleteItem(@RequestParam(value = "id", required = true) String idItemString){
+    public ModelAndView deleteItem(@RequestParam(value = "id") String idItemString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         long idItem = getLongFromString(idItemString);
@@ -347,7 +356,7 @@ public class SurveyController {
         return mv;
     }
 
-    @RequestMapping(value = "/sondes/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/sondes/editer", method = RequestMethod.POST)
     public ModelAndView updateSurveyRespondents(@RequestParam(value = "id_survey") String idSurveyString,
                                                 @RequestParam(value = "respondents_string") String respondentsString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -439,13 +448,4 @@ public class SurveyController {
 
         return respondents;
     }
-
-    /*
-    private Date addHoursToJavaUtilDate(Date date, int hours) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.HOUR_OF_DAY, hours);
-        return calendar.getTime();
-    }
-    */
 }

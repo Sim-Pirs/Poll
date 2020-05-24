@@ -29,8 +29,8 @@ public class PollsterController {
     PollsterValidator pollsterValidator;
 
     @RequestMapping(value = "/connexion", method = RequestMethod.POST)
-    public ModelAndView login(@RequestParam(value = "email", required = true) String email,
-                              @RequestParam(value = "password", required = true) String pass) {
+    public ModelAndView login(@RequestParam(value = "email") String email,
+                              @RequestParam(value = "password") String pass) {
         manager.login(user, email, pass);
 
         return new ModelAndView("redirect:/");
@@ -60,14 +60,11 @@ public class PollsterController {
         return mv;
     }
 
-    @RequestMapping(value = "/creer", method = RequestMethod.POST)
+    @RequestMapping(value = "/nouveau", method = RequestMethod.POST)
     public ModelAndView createPollster(@ModelAttribute @Valid Pollster pollster, BindingResult result){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         pollsterValidator.validate(pollster, result);
-        //TODO faire marcher pour avoir les erreurs lors des redirections
-        //attr.addFlashAttribute("org.springframework.validation.BindingResult.pollster", result);
-        //attr.addFlashAttribute("pollster", pollster);
         if (result.hasErrors()) return new ModelAndView("new_pollster");
 
         manager.savePollster(pollster);
