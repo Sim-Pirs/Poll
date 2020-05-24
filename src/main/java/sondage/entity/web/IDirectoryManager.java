@@ -19,6 +19,8 @@ public interface IDirectoryManager {
 
     void sendAccessSurveyMail(String emailTo, String token, String surveyName);
 
+    void sendRecapMail(String emailTo, Collection<Choice> choices);
+
     /* ****************** POLLSTER ******************** */
     Pollster findPollsterByEmail(String email);
 

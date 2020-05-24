@@ -12,7 +12,7 @@
 <body>
 <div class="container middle">
     <h1 style="text-align: center" class="bigTitle">Préférences enregistrées.</h1>
-    <p style="text-align: center">Merci.</p>
+    <p style="text-align: center">Un mail de récapitulation vous a été envoyé.</p>
 </div>
 </body>
 </html>

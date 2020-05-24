@@ -11,6 +11,7 @@
 <c:url var="newSurvey" value="/sondage/nouveau" />
 <c:url var="editSurvey" value="/sondage/editer" />
 <c:url var="editSurveyRespondents" value="/sondage/sondes/editer" />
+<c:url var="notifyAllRespondents" value="/sondage/sondes/notifier" />
 <c:url var="delSurvey" value="/sondage/supprimer" />
 <c:url var="listSurvey" value="/sondage/liste" />
 

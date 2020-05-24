@@ -11,6 +11,22 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
+<c:if test="${success == true}">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        Les sondés ont bien été notifiés.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</c:if>
+<c:if test="${error == true}">
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        Une erreur est survenue lors de la notification des sondés.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</c:if>
 <div class="container">
     <h1 class="title topShift" style="text-align: center">Modification de la liste des personnes sondées</h1>
     <form:form method="POST" modelAttribute="respondents" action="${editSurveyRespondents}" cssClass="needs-validation">
@@ -29,7 +45,7 @@
         </div>
     </form:form>
 
-    <a href="#" class="btn btn-outline-warning" role="button" aria-pressed="true">Notifier tout le monde</a>
+    <a href="${notifyAllRespondents}?id=${id_survey}" class="btn btn-outline-warning" role="button" aria-pressed="true">Notifier tout le monde</a>
 </div>
 </body>
 </html>

@@ -21,7 +21,7 @@
         <div class="card-body">
             <p class="card-text">- Tout les choix doivent être classés.</p>
             <p class="card-text">- Le choix classé n°1 est celui étant le plus souhaité.</p>
-            <p class="card-text">- Chaque choix dois avoir une classement différent</p>
+            <p class="card-text">- Chaque choix doit avoir un classement différent</p>
         </div>
     </div>
     <c:if test="${error == true}">

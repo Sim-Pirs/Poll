@@ -29,7 +29,7 @@ public class Manager implements IDirectoryManager {
     IChoiceDAO choiceDAO;
 
     @Autowired
-    public JavaMailSender emailSender;
+    public EmailServiceImpl emailSender;
 
     /* ******************************** SESSION ******************************** */
     @Override
@@ -63,6 +63,12 @@ public class Manager implements IDirectoryManager {
 
     @Override
     public void sendAccessSurveyMail(String emailTo, String token, String surveyName) {
+        emailSender.sendAccessMail(emailTo, token, surveyName);
+    }
+
+    @Override
+    public void sendRecapMail(String emailTo, Collection<Choice> choices) {
+        emailSender.sendRecapMail(emailTo, choices);
     }
 
     @Override

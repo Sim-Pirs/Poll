@@ -44,7 +44,8 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/repondre", method = RequestMethod.GET)
-    public ModelAndView showSurvey(@RequestParam(value = "token") String token){
+    public ModelAndView showSurvey(@RequestParam(value = "token") String token,
+                                   @RequestParam(value = "error", required = false) boolean error){
         Respondent respondent = manager.findRespondentByToken(token);
         if(respondent == null) return new ModelAndView("redirect:/error");
 
@@ -83,6 +84,7 @@ public class SurveyController {
         mv.addObject("respondent", respondent);
         mv.addObject("survey", tmpSurvey);
         mv.addObject("scores", scores);
+        mv.addObject("error", error);
 
         return mv;
     }
@@ -106,7 +108,7 @@ public class SurveyController {
             if(idItem == -1) return new ModelAndView("redirect:/error");
 
             int score = getIntFromString(scores[i]);
-            if(score < 0) return new ModelAndView("redirect:/sondage/repondre?token=" + respondent.getToken());
+            if(score < 0) return new ModelAndView("redirect:/sondage/repondre?token=" + respondent.getToken() + "&error=true");
 
             if(scoresList.contains(score)) return new ModelAndView("redirect:/error");
 
@@ -116,6 +118,7 @@ public class SurveyController {
 
         manager.updateRespondentAccessById(respondent.getId(), respondent.getToken(), true);
 
+        Collection<Choice> choices = new HashSet<>();
         for(int i = 0; i < idItemsArray.length; ++i){
             SurveyItem item = manager.findSurveyItemById(idItemsList.get(i));
             if(item == null) return new ModelAndView("redirect:/error");
@@ -127,8 +130,11 @@ public class SurveyController {
 
             manager.deleteChoiceByRespondentIdAndItemId(idRespondent, idItemsList.get(i));
             manager.saveChoice(choice);
+
+            choices.add(choice);
         }
 
+        manager.sendRecapMail(respondent.getEmail(), choices);
         return new ModelAndView("choices_saved");
     }
 
@@ -143,7 +149,7 @@ public class SurveyController {
         System.err.println("token: " + token);
 
         Respondent respondent = manager.findRespondentById(idRespondent);
-        //manager.sendAccessSurveyMail(respondent.getEmail(), respondent.getToken(), respondent.getSurvey().getName());
+        manager.sendAccessSurveyMail(respondent.getEmail(), respondent.getToken(), respondent.getSurvey().getName());
 
         return new ModelAndView("redirect:/");
     }
@@ -223,6 +229,7 @@ public class SurveyController {
         return mv;
     }
 
+    //TODO update au lieu de del/save
     @RequestMapping(value = "/editer", method = RequestMethod.POST)
     public ModelAndView updateSurvey(@ModelAttribute @Valid Survey survey, BindingResult result){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -253,8 +260,9 @@ public class SurveyController {
 
         manager.deleteSurveyById(survey.getId());
         manager.saveSurvey(survey);
-        /*
-        System.err.println("-----> " + manager.updateSurveyById(survey.getId(),
+
+        //System.err.println(survey.getItems());
+        /*System.err.println("-----> " + manager.updateSurveyById(survey.getId(),
                 survey.getName(),
                 survey.getDescription(),
                 survey.getEndDate(),
@@ -282,6 +290,7 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/liste");
     }
 
+    //TODO régler prob avec tag des sondés
     @RequestMapping(value = "/items/ajouter", method = RequestMethod.GET)
     public ModelAndView addItem(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -327,7 +336,9 @@ public class SurveyController {
     }
 
     @RequestMapping(value = "/sondes/editer", method = RequestMethod.GET)
-    public ModelAndView showSurveyRespondentsForm(@RequestParam(value = "id") String idSurveyString){
+    public ModelAndView showSurveyRespondentsForm(@RequestParam(value = "id") String idSurveyString,
+                                                  @RequestParam(value = "error", required = false) boolean error,
+                                                  @RequestParam(value = "success", required = false) boolean success){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         long idSurvey = getLongFromString(idSurveyString);
@@ -353,9 +364,12 @@ public class SurveyController {
         }
 
         mv.addObject("respondents", respondentsStringBuilder.toString());
+        mv.addObject("success", success);
+        mv.addObject("error", error);
         return mv;
     }
 
+    //TODO update au lieu de del/save
     @RequestMapping(value = "/sondes/editer", method = RequestMethod.POST)
     public ModelAndView updateSurveyRespondents(@RequestParam(value = "id_survey") String idSurveyString,
                                                 @RequestParam(value = "respondents_string") String respondentsString){
@@ -385,9 +399,27 @@ public class SurveyController {
 
         manager.deleteRespondentsBySurveyId(s.getId());
 
-        Survey survey = manager.saveSurvey(s);//TODO mieux sauvegarder car change l'id en suppr/add
+        Survey survey = manager.saveSurvey(s);
 
         return new ModelAndView("redirect:/sondage/sondes/editer?id=" + survey.getId());
+    }
+
+    @RequestMapping(value = "/sondes/notifier", method = RequestMethod.GET)
+    public ModelAndView notifyAllRespondents(@RequestParam(value = "id") String idSurveyString){
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
+
+        long idSurvey = getLongFromString(idSurveyString);
+        if(idSurvey == -1) return new ModelAndView("redirect:/");
+
+        Collection<Respondent> respondents = manager.findAllRespondentsBySurveyId(idSurvey);
+        if(respondents == null || respondents.size() < 1) return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&error=" + true);
+
+        Survey survey = manager.findSurveyById(idSurvey);
+        if(survey == null) return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&error=" + true);
+
+        for(Respondent r : respondents) manager.sendAccessSurveyMail(r.getEmail(), r.getToken(), survey.getName());
+
+        return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&success=" + true);
     }
 
 
