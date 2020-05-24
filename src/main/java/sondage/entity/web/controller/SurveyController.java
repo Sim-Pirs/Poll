@@ -146,8 +146,6 @@ public class SurveyController {
         String token = RandomStringUtils.randomAlphanumeric(100);
         manager.updateRespondentAccessById(idRespondent, token, false);
 
-        System.err.println("token: " + token);
-
         Respondent respondent = manager.findRespondentById(idRespondent);
         manager.sendAccessSurveyMail(respondent.getEmail(), respondent.getToken(), respondent.getSurvey().getName());
 
@@ -290,7 +288,6 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/liste");
     }
 
-    //TODO régler prob avec tag des sondés
     @RequestMapping(value = "/items/ajouter", method = RequestMethod.GET)
     public ModelAndView addItem(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -307,7 +304,13 @@ public class SurveyController {
         item.setNbPersMax(1);
         s.addItem(item);
 
-        System.out.println(s); //ne pas enlever sinon bug avec les tags des items
+        for(Respondent r : s.getRespondents()) {
+            System.out.println(r.getTags()); //ne pas enlever sinon bug avec les tags des sondés
+        }
+        for(SurveyItem i : s.getItems()) {
+            System.out.println(i.getTags()); //ne pas enlever sinon bug avec les tags des items
+        }
+
         manager.deleteSurveyById(s.getId());
         Survey survey = manager.saveSurvey(s);
 
@@ -393,7 +396,6 @@ public class SurveyController {
             r.setToken(RandomStringUtils.randomAlphanumeric(100));
             r.setExpired(false);
             s.addRespondent(r);
-            System.err.println("token: " + r.getToken());
         }
         s.setRespondents(respondents);
 
