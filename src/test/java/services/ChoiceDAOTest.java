@@ -70,6 +70,7 @@ public class ChoiceDAOTest {
         respondent.addTag("M1");
         respondent.addTag("ILD");
         respondent.setSurvey(survey);
+        respondent.setExpired(false);
     }
 
     @BeforeEach

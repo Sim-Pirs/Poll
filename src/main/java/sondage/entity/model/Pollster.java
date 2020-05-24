@@ -1,6 +1,7 @@
 package sondage.entity.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -41,6 +42,7 @@ public class Pollster {
     @Column(name = "email", length = 254, nullable = false, unique = true)
     @Pattern(regexp = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+", message = "{pollster.email.invalid}")
     @Size(min = 5, max = 254, message = "{pollster.email.badSize}")
+    @Email
     private String email;
 
     /**

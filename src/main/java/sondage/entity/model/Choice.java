@@ -7,7 +7,7 @@ import javax.validation.constraints.Min;
  * Représente une réponse à un sondage par un sondé.
  */
 @Entity
-@Table(name = "CHOICES")
+@Table(name = "CHOICES", uniqueConstraints={@UniqueConstraint(columnNames={"respondent_id", "item_id"})})
 public class Choice {
 
     /**

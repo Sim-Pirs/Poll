@@ -1,12 +1,10 @@
 package sondage.entity.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import sondage.entity.model.*;
-import sondage.entity.services.IPollsterDAO;
-import sondage.entity.services.IRespondentDAO;
-import sondage.entity.services.ISurveyDAO;
-import sondage.entity.services.ISurveyItemDAO;
+import sondage.entity.services.*;
 
 import java.util.Collection;
 import java.util.Date;
@@ -25,6 +23,12 @@ public class Manager implements IDirectoryManager {
 
     @Autowired
     IRespondentDAO respondentDAO;
+
+    @Autowired
+    IChoiceDAO choiceDAO;
+
+    @Autowired
+    public JavaMailSender emailSender;
 
     /* ******************************** SESSION ******************************** */
     @Override
@@ -55,6 +59,10 @@ public class Manager implements IDirectoryManager {
         user.setErrorMessages(null);
     }
     /* ************************************************************************* */
+
+    @Override
+    public void sendAccessSurveyMail(String emailTo, String token, String surveyName) {
+    }
 
     @Override
     public Pollster findPollsterByEmail(String email) {
@@ -102,13 +110,28 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
-    public Respondent findRespondentsByEmailAndSurveyId(String email, long id) {
+    public Respondent findRespondentById(long id) {
+        return respondentDAO.findById(id);
+    }
+
+    @Override
+    public Respondent findRespondentByEmailAndSurveyId(String email, long id) {
         return respondentDAO.findByEmailAndSurvey_Id(email, id);
     }
 
     @Override
     public Collection<Respondent> findAllRespondentsBySurveyId(long surveyId) {
         return respondentDAO.findAllBySurvey_Id(surveyId);
+    }
+
+    @Override
+    public Respondent findRespondentByToken(String token) {
+        return respondentDAO.findByToken(token);
+    }
+
+    @Override
+    public void updateRespondentAccessById(long id, String token, boolean isExpired) {
+        respondentDAO.updateAccessById(id, token, isExpired);
     }
 
     @Override
@@ -119,5 +142,20 @@ public class Manager implements IDirectoryManager {
     @Override
     public void deleteRespondentsBySurveyId(long surveyId) {
         respondentDAO.deleteAllBySurvey_Id(surveyId);
+    }
+
+    @Override
+    public Choice findChoiceByRespondentIdAndItemId(long idResp, long idItem) {
+        return choiceDAO.findByRespondent_IdAndItem_Id(idResp, idItem);
+    }
+
+    @Override
+    public Choice saveChoice(Choice choice) {
+        return choiceDAO.save(choice);
+    }
+
+    @Override
+    public void deleteChoiceByRespondentIdAndItemId(long idResp, long idItem) {
+        choiceDAO.deleteByRespondent_IdAndItem_Id(idResp, idItem);
     }
 }

@@ -1,19 +1,32 @@
 package sondage.entity.services;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 import sondage.entity.model.Respondent;
 
 import java.util.Collection;
+import java.util.Date;
 
 public interface IRespondentDAO extends CrudRepository<Respondent, Long> {
 
-    @Query("SELECT r FROM Respondent r JOIN FETCH r.tags WHERE r.id = ?1")
+    //@Query("SELECT r FROM Respondent r JOIN FETCH r.tags WHERE r.id = ?1")
     Respondent findById(long id);
 
     Respondent findByEmailAndSurvey_Id(String email, long id);
 
     Collection<Respondent> findAllBySurvey_Id(long id);
+
+    Respondent findByToken(String token);
+
+    @Modifying
+    @Query("update Respondent r set " +
+            "r.token = :token, " +
+            "r.isExpired = :isExpired " +
+            "where r.id = :id")
+    @Transactional
+    void updateAccessById(long id, String token, boolean isExpired);
 
     Respondent save(Respondent r);
 

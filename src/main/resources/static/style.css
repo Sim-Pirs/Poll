@@ -12,6 +12,11 @@
     align-content: center;
 }
 
+.alignButtonCenter {
+    margin: auto;
+    width: 15%;
+}
+
 .topShiftMd {
     margin-top: 10%;
 }

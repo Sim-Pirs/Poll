@@ -157,21 +157,20 @@ public class SurveyDAOTest {
     }
 
     @Test
-    public void testSave_WithRespondentNotInBase_ThrowException(){
+    public void testSave_WithRespondentNotInBase_NotThrowException(){
         Respondent r = new Respondent();
         r.setEmail("roain@gmail.com");
         r.setTags(new HashSet<>());
-        HashSet<Respondent> rs = new HashSet<>();
-        rs.add(r);
+        r.setExpired(false);
 
         Survey survey = new Survey();
         survey.setName("Sondage");
         survey.setDescription("Une description.");
         survey.setEndDate(new Date());
         survey.setPollster(pollster);
-        survey.setRespondents(rs);
+        survey.addRespondent(r);
 
-        assertThrows(InvalidDataAccessApiUsageException.class, () ->{
+        assertDoesNotThrow(() ->{
             surveyDAO.save(survey);
         });
     }

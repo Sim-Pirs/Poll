@@ -20,9 +20,8 @@
             </c:forEach>
         </c:if>
         <div class="container middle">
-            <h1 align="center" class="bigTitle">POLL</h1>
-            <p align="center">- Make sondages great again -</p>
-            <p>${message}</p>
+            <h1 style="text-align: center" class="bigTitle">POLL</h1>
+            <p style="text-align: center">- Make sondages great again -</p>
         </div>
     </body>
 </html>

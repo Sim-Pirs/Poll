@@ -37,7 +37,8 @@ public class RespondentDAOTest {
     ISurveyDAO surveyDAO;
 
     private static Pollster pollster;
-    private static Survey survey;
+    private static Survey survey1;
+    private static Survey survey2;
 
     @BeforeAll
     public static void init(){
@@ -47,17 +48,24 @@ public class RespondentDAOTest {
         pollster.setEmail("romain@gmail.com");
         pollster.setPassword("coucoucou");
 
-        survey = new Survey();
-        survey.setName("Sondage");
-        survey.setDescription("Une description.");
-        survey.setEndDate(new Date());
-        survey.setPollster(pollster);
+        survey1 = new Survey();
+        survey1.setName("Sondage");
+        survey1.setDescription("Une description.");
+        survey1.setEndDate(new Date());
+        survey1.setPollster(pollster);
+
+        survey2 = new Survey();
+        survey2.setName("Sondage");
+        survey2.setDescription("Une description.");
+        survey2.setEndDate(new Date());
+        survey2.setPollster(pollster);
     }
 
     @BeforeEach
     public void add(){
         pollsterDAO.save(pollster);
-        surveyDAO.save(survey);
+        surveyDAO.save(survey1);
+        surveyDAO.save(survey2);
     }
 
     @AfterEach
@@ -74,7 +82,8 @@ public class RespondentDAOTest {
         Respondent respondent = new Respondent();
         respondent.setEmail("Romain@gmail.com");
         respondent.setTags(tags);
-        respondent.setSurvey(survey);
+        respondent.setSurvey(survey1);
+        respondent.setExpired(false);
 
         assertDoesNotThrow(() -> {
             respondentDAO.save(respondent);
@@ -90,7 +99,8 @@ public class RespondentDAOTest {
         Respondent respondent = new Respondent();
         respondent.setEmail("Romain@gmail.com");
         respondent.setTags(tags);
-        respondent.setSurvey(survey);
+        respondent.setSurvey(survey1);
+        respondent.setExpired(false);
 
         respondentDAO.save(respondent);
 
@@ -107,7 +117,7 @@ public class RespondentDAOTest {
 
         Respondent respondent = new Respondent();
         respondent.setTags(tags);
-        respondent.setSurvey(survey);
+        respondent.setSurvey(survey1);
 
         assertThrows(DataIntegrityViolationException.class, () ->{
             respondentDAO.save(respondent);
@@ -138,11 +148,13 @@ public class RespondentDAOTest {
         Respondent r1 = new Respondent();
         r1.setEmail("Romain@gmail.com");
         r1.setTags(tags);
-        r1.setSurvey(survey);
+        r1.setSurvey(survey1);
+        r1.setExpired(false);
         Respondent r2 = new Respondent();
         r2.setEmail("Romain@gmail.com");
         r2.setTags(tags);
-        r2.setSurvey(survey);
+        r2.setSurvey(survey2);
+        r2.setExpired(false);
 
         respondentDAO.save(r1);
 

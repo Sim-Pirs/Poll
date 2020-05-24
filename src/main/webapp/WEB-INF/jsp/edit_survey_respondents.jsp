@@ -24,7 +24,7 @@
         </div>
         <small id="tagHelp" class="form-text text-muted">Un par ligne avec la forme suivante: &#60;email&#62;;&#60;tag1&#62;;&#60;tag2&#62;;...</small>
 
-        <div class="form-group topShift" align="center">
+        <div class="form-group topShift" style="margin: auto; width: 15%;">
             <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Sauvegarder</button>
         </div>
     </form:form>

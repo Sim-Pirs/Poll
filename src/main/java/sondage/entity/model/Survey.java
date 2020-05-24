@@ -37,7 +37,7 @@ public class Survey {
      * Description.
      */
     @Column(name = "description", length =  500, nullable = false)
-    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà]+)+[.?!]{0,1}[ ]?)+", message = "{survey.description.badFormat}")
+    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà0-9]+)+[.?!]{0,1}[ ]?)+", message = "{survey.description.badFormat}")
     @Size(min = 1, max = 500, message = "{survey.description.badSize}")
     private String description;
 
@@ -169,9 +169,9 @@ public class Survey {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", endDate=" + endDate +
-                ", pollster=" + pollster +
+                //", pollster=" + pollster +
                 ", items=" + items +
-                ", respondents=" + respondents +
+                //", respondents=" + respondents +
                 '}';
     }
 }
