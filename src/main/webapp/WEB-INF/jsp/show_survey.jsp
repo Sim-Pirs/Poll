@@ -14,7 +14,25 @@
 <body>
 <div class="container">
     <h1 class="title topShift" style="text-align: center">Sondage</h1>
-        <div class="row">
+    <div class="card">
+        <div class="card-header">
+            Instructions
+        </div>
+        <div class="card-body">
+            <p class="card-text">- Tout les choix doivent être classés.</p>
+            <p class="card-text">- Le choix classé n°1 est celui étant le plus souhaité.</p>
+            <p class="card-text">- Chaque choix dois avoir une classement différent</p>
+        </div>
+    </div>
+    <c:if test="${error == true}">
+        <div class="alert alert-danger alert-dismissible fade show topShift" role="alert">
+            Erreur dans le classement des choix!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </c:if>
+        <div class="row topShift">
             <div class="col">
                 <div class="form-group">
                     <label for="name">Nom:</label>

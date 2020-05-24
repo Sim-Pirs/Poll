@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
 
@@ -12,10 +12,10 @@
     <body>
         <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
         <div class="container">
-            <h1 align="center" class="bigTitle topShift">Mes sondages</h1>
+            <h1 style="text-align: center" class="bigTitle topShift">Mes sondages</h1>
             <c:choose>
                 <c:when test="${mySurveys.size() < 1}">
-                    <div style="align-self: center;" class="topShiftMd">
+                    <div style="text-align: center" class="topShiftMd">
                         <p>Vous ne possédez pas encore de sondages.</p>
                     </div>
                 </c:when>

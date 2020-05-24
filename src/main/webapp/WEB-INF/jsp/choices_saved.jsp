@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
 
@@ -11,8 +11,8 @@
 </head>
 <body>
 <div class="container middle">
-    <h1 align="center" class="bigTitle">Préférences enregistrées.</h1>
-    <p align="center">Merci.</p>
+    <h1 style="text-align: center" class="bigTitle">Préférences enregistrées.</h1>
+    <p style="text-align: center">Merci.</p>
 </div>
 </body>
 </html>
