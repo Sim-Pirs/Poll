@@ -1,21 +1,19 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <c:url var="index" value="/" />
-<c:url var="connectPollster" value="/sondeur/connexion" />
-<c:url var="newPollster" value="/sondeur/nouveau" />
-<c:url var="createPollster" value="/sondeur/creer" />
-<c:url var="profilPollster" value="/sondeur/profile" />
-<c:url var="deconectPollster" value="/sondeur/deconnexion" />
-<c:url var="newSurvey" value="/sondage/nouveau" />
-<c:url var="createSurvey" value="/sondage/creer" />
-<c:url var="updateSurvey" value="/sondage/update" />
-<c:url var="editSurveyRespondents" value="/sondage/sondes/editer" />
-<c:url var="saveSurveyRespondents" value="/sondage/sondes/update" />
-
-<c:url var="editSurvey" value="/sondage/editer" />
-<c:url var="listSurvey" value="/sondage/liste" />
-<c:url var="delSurvey" value="/sondage/supprimer" />
 <c:url var="about" value="/apropos" />
+
+<c:url var="connectPollster" value="/sondeur/connexion" />
+<c:url var="deconectPollster" value="/sondeur/deconnexion" />
+<c:url var="newPollster" value="/sondeur/nouveau" />
+<c:url var="profilPollster" value="/sondeur/profile" />
+
+<c:url var="newSurvey" value="/sondage/nouveau" />
+<c:url var="editSurvey" value="/sondage/editer" />
+<c:url var="editSurveyRespondents" value="/sondage/sondes/editer" />
+<c:url var="delSurvey" value="/sondage/supprimer" />
+<c:url var="listSurvey" value="/sondage/liste" />
+
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="<c:url value = "${index}"/>">POLL </a>
@@ -25,8 +23,8 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li <c:if test="${path != createSurvey}"> class="nav-item"</c:if>
-                <c:if test="${path == createSurvey}"> class="nav-item active"</c:if>>
+            <li <c:if test="${path != newSurvey}"> class="nav-item"</c:if>
+                <c:if test="${path == newSurvey}"> class="nav-item active"</c:if>>
                 <a class="nav-link" <c:if test="${user != null && user.connected}"> href="${newSurvey}" </c:if>
                         <c:if test="${user == null || !user.connected}"> href="${index}" </c:if>>
                     Créer un sondage 

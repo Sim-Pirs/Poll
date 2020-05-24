@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
 
@@ -12,8 +12,8 @@
 <body>
 <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
 <div class="container">
-    <h1 class="title topShift" align="center">Modification de la liste des personnes sondées</h1>
-    <form:form method="POST" modelAttribute="respondents" action="${saveSurveyRespondents}" cssClass="needs-validation">
+    <h1 class="title topShift" style="text-align: center">Modification de la liste des personnes sondées</h1>
+    <form:form method="POST" modelAttribute="respondents" action="${editSurveyRespondents}" cssClass="needs-validation">
         <input name="id_survey" type="hidden" value="${id_survey}"/>
         <div class="input-group topShift">
             <div class="input-group-prepend">

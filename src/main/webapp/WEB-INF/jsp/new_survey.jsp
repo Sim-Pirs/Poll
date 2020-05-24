@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
 
@@ -12,8 +12,8 @@
     <body>
         <%@ include file="/WEB-INF/jsp/utils/menu.jsp"%>
         <div class="container">
-            <h1 class="title topShift" align="center">Création d'un sondage</h1>
-            <form:form method="POST" modelAttribute="survey" action="${createSurvey}" cssClass="needs-validation">
+            <h1 class="title topShift" style="text-align: center">Création d'un sondage</h1>
+            <form:form method="POST" modelAttribute="survey" action="${newSurvey}" cssClass="needs-validation">
                 <div class="row">
                     <div class="col">
                         <div class="form-group">

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
@@ -21,10 +21,10 @@
             </div>
         </c:if>
         <div class="container">
-            <h1 class="title topShift" align="center">Création d'un sondeur</h1>
+            <h1 class="title topShift" style="text-align: center">Création d'un sondeur</h1>
 
 
-            <form:form method="POST" modelAttribute="pollster" action="${createPollster}" >
+            <form:form method="POST" modelAttribute="pollster" action="${newPollster}" >
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
@@ -66,7 +66,6 @@
                     <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Créer</button>
                 </div>
             </form:form>
-        </div>
         </div>
     </body>
 </html>

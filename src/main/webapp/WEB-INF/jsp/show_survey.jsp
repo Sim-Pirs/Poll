@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="/WEB-INF/jsp/utils/include.jsp"%>
 
-<c:url var="saveChoices" value="/sondage/saveChoice" />
+<c:url var="saveChoices" value="/sondage/repondre" />
 
 <html>
 <head>
@@ -13,7 +13,7 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="title topShift" align="center">Sondage</h1>
+    <h1 class="title topShift" style="text-align: center">Sondage</h1>
         <div class="row">
             <div class="col">
                 <div class="form-group">
@@ -30,7 +30,7 @@
         </div>
         <div class="form-group">
             <label for="description">Description:</label>
-            <textarea id="description" class="form-control" type="text" placeholder="${survey.description}" readonly></textarea>
+            <textarea id="description" class="form-control" placeholder="${survey.description}" readonly></textarea>
         </div>
         <div id="options">
             <div class="card-body">
@@ -44,7 +44,7 @@
                                     <label for="descriptions[${cpt.count}]">Description:</label>
                                     <textarea id="descriptions[${cpt.count}]" class="form-control" placeholder="${item.description}" readonly></textarea>
 
-                                    <label class="topShift" for="scores[${cpt.index}]">Classement:</label>
+                                    <label class="topShift" for="scores">Classement:</label>
                                     <select id="scores" name="scores" class="form-control">
                                         <option>...</option>
                                         <c:forEach begin="0" end="${survey.items.size() - 1}" var="cptChoice">
