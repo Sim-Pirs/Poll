@@ -1,12 +1,10 @@
 package sondage.entity.web;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.transaction.annotation.Transactional;
 import sondage.entity.model.*;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 public interface IDirectoryManager {
 
@@ -34,19 +32,13 @@ public interface IDirectoryManager {
 
     Collection<Survey> findSurveyByPollsterId(long id);
 
+    int updateSurveyById(long id, String name, String description, Date endDate, Pollster pollster, List<SurveyItem> items, Collection<Respondent> respondents);
+
     void deleteSurveyById(long id);
     /* ***************** FIN SURVEY ******************* */
 
     /* ****************** SURVEY ITEM ***************** */
     SurveyItem findSurveyItemById(long id);
-
-    int updateSurveyById(long id,
-                         String name,
-                         String description,
-                         Date endDate,
-                         Pollster pollster,
-                         Collection<SurveyItem> items,
-                         Collection<Respondent> respondents);
 
     void deleteSurveyItemById(long id);
     /* *************** FIN SURVEY ITEM **************** */
