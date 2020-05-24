@@ -1,5 +1,4 @@
-package sondage.security;
-
+package sondage.entity.security;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,8 @@ import sondage.entity.services.IPollsterDAO;
 
 @Service
 public class UserService implements UserDetailsService {
-	
+
+	@Autowired
     private final IPollsterDAO pollsterRepository;
     
     @Autowired
@@ -26,7 +26,7 @@ public class UserService implements UserDetailsService {
         Objects.requireNonNull(email);
         User user = new User();
         user.setPollster(pollsterRepository.findByEmail(email));
-        /*voir une exception si l'adresse mail n'existe pas*/
-        return (UserDetails) user;
+        return user;
     }
 }
+
