@@ -54,8 +54,8 @@
         </ul>
         <c:if test="${user == null || !user.connected}">
             <form class="form-inline my-2 my-lg-0 " method="post" action="<c:url value = "${connectPollster}"/>">
-                <input type="email" name="email" class="form-control mr-sm-2 btn-sm" placeholder="Email" aria-label="Search"/>
-                <input type="password" name="password" class="form-control mr-sm-2 btn-sm" placeholder="Password" aria-label="Search"/>
+                <input type="email" name="email" class="form-control mr-sm-2 btn-sm" placeholder="Email" aria-label="Search" required/>
+                <input type="password" name="password" class="form-control mr-sm-2 btn-sm" placeholder="Password" aria-label="Search" required/>
                 <button type="submit" class="btn btn-primary text-white btn-sm">Se connecter</button>
             </form>
         </c:if>
