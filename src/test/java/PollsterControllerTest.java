@@ -1,4 +1,5 @@
-
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,31 +10,33 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import sondage.Starter;
+import sondage.entity.model.Pollster;
 import sondage.entity.web.controller.IndexController;
+import sondage.entity.web.controller.PollsterController;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Starter.class)
-public class IndexControllerTest {
+public class PollsterControllerTest {
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    private IndexController indexController;
+    private PollsterController pollsterController;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Test
-    public void default_ShouldReturnHomePage() throws Exception {
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/", String.class)).contains("- Make sondages great again -");
+    @BeforeEach
+    public void init(){
+        Pollster pollster = new Pollster();
+        pollster.setFirstName("Romain");
+        pollster.setLastName("Colonna");
+        pollster.setEmail("romain@gmail.com");
+        pollster.setPassword("1Aaaaaaa.");
     }
 
     @Test
-    public void apropos_ShouldReturnAProposPage() throws Exception {
-        assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/apropos", String.class)).contains("<b>Poll</b> est une application qui permet de créer des sondages.");
+    public void test(){
     }
 }

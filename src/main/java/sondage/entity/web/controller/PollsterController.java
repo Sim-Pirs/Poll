@@ -12,12 +12,23 @@ import sondage.entity.model.Pollster;
 import sondage.entity.model.User;
 import sondage.entity.web.IDirectoryManager;
 import sondage.entity.web.validator.PollsterValidator;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
+import java.util.Base64;
 
 
 @Controller()
 @RequestMapping("/sondeur")
 public class PollsterController {
+
+    private static final int ITERATIONS = 10000;
+    private static final int KEY_LENGTH = 256;
+    private static final String SALT = "711nndsihNPVFL9s6eo8c5UqTG0PziZ340KwXEdGIoNWsvsrD09AMuwcp03MWKO9ymYKe82MokltQiCXUAOvSct5EJpEJoBrMPfK";
 
     @Autowired
     IDirectoryManager manager;
@@ -31,6 +42,7 @@ public class PollsterController {
     @RequestMapping(value = "/connexion", method = RequestMethod.POST)
     public ModelAndView login(@RequestParam(value = "email") String email,
                               @RequestParam(value = "password") String pass) {
+        pass = generateSecurePassword(pass, SALT);
         manager.login(user, email, pass);
 
         return new ModelAndView("redirect:/");
@@ -67,6 +79,7 @@ public class PollsterController {
         pollsterValidator.validate(pollster, result);
         if (result.hasErrors()) return new ModelAndView("new_pollster");
 
+        pollster.setPassword(generateSecurePassword(pollster.getPassword(), SALT));
         manager.savePollster(pollster);
 
         return new ModelAndView("redirect:/sondeur/nouveau?success=true");
@@ -80,5 +93,28 @@ public class PollsterController {
     @ModelAttribute("pollster")
     public Pollster pollster(){
         return new Pollster();
+    }
+
+
+    public static String generateSecurePassword(String password, String salt) {
+        String returnValue = null;
+        byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
+
+        returnValue = Base64.getEncoder().encodeToString(securePassword);
+
+        return returnValue;
+    }
+
+    private static byte[] hash(char[] password, byte[] salt) {
+        PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
+        Arrays.fill(password, Character.MIN_VALUE);
+        try {
+            SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+            return skf.generateSecret(spec).getEncoded();
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new AssertionError("Error while hashing a password: " + e.getMessage(), e);
+        } finally {
+            spec.clearPassword();
+        }
     }
 }

@@ -1,7 +1,6 @@
 package sondage.entity.web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,8 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 import sondage.entity.model.Pollster;
 import sondage.entity.model.User;
 import sondage.entity.web.IDirectoryManager;
-
-import java.util.Locale;
 
 
 @Controller
@@ -32,7 +29,7 @@ public class IndexController {
             pollster.setFirstName("Aa");
             pollster.setLastName("Aa");
             pollster.setEmail("a@a.a");
-            pollster.setPassword("a");
+            pollster.setPassword("nN5G3N3OHyuyunVl/WZc+vWVNeayG7vohmGvmkCuImA=");
 
             manager.savePollster(pollster);
             aBoolean = true;
