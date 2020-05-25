@@ -42,7 +42,7 @@
             <div class="col">
                 <div class="form-group">
                     <label for="endDate">Date de fin:</label>
-                    <input id="endDate" class="form-control" type="date" value="${survey.endDateToGoodFormat}" readonly>
+                    <input id="endDate" class="form-control" type="date" value="${survey.getStringEndDate("yyyy-MM-dd")}" readonly>
                 </div>
             </div>
         </div>

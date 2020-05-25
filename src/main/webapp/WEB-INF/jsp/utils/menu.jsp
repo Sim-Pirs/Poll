@@ -61,8 +61,8 @@
             </form>
         </c:if>
         <c:if test="${user != null && user.connected}">
-            <a class="btn btn-outline-primary btn-sm leftShift" href="<c:url value = "${profilPollster}"/>">Mon profil</a>
-            <a class="btn btn-outline-danger btn-sm" href="<c:url value = "${deconectPollster}"/>">Se deconnecter</a>
+            <a class="btn btn-outline-primary btn-sm" href="<c:url value = "${profilPollster}"/>">Mon profil</a>
+            <a class="btn btn-outline-danger btn-sm leftShift" href="<c:url value = "${deconectPollster}"/>">Se deconnecter</a>
         </c:if>
     </div>
 </nav>
