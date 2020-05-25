@@ -35,28 +35,42 @@
                             <tr>
                                 <td><c:out value="${survey.name}" /></td>
                                 <td><c:choose>
-                                    <c:when test="${survey.description.length() > 40}">
-                                        <c:out value="${survey.getDescriptionForSize(37)}..." />
+                                    <c:when test="${survey.description.length() > 50}">
+                                        <c:out value="${survey.getDescriptionForSize(47)}..." />
                                     </c:when>
                                     <c:otherwise>
                                         <c:out value="${survey.description}" />
                                     </c:otherwise>
                                 </c:choose></td>
-                                <td><c:out value="${survey.stringEndDate}" /></td>
+                                <td><c:out value="${survey.getStringEndDate(\"dd/MM/yyyy\")}" /></td>
                                 <td><c:out value="${survey.items.size()}" /></td>
                                 <td class="row">
-                                    <form action="${editSurveyRespondents}" method="get">
-                                        <input type="hidden" name="id" value="${survey.id}">
-                                        <button type="submit" class="btn btn-outline-dark btn-sm">Gérer diffusion</button>
-                                    </form>
-                                    <form action="${editSurvey}" method="get" class="leftShift">
-                                        <input type="hidden" name="id" value="${survey.id}">
-                                        <button type="submit" class="btn btn-outline-dark btn-sm">Modifier</button>
-                                    </form>
-                                    <form action="${delSurvey}" method="get" class="leftShift">
-                                        <input type="hidden" name="id" value="${survey.id}">
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
-                                    </form>
+                                    <ul class="nav">
+                                        <li class="nav-item">
+                                            <form action="${editSurveyRespondents}" method="get">
+                                                <input type="hidden" name="id" value="${survey.id}">
+                                                <button type="submit" class="btn btn-outline-dark btn-sm">Diffusion</button>
+                                            </form>
+                                        </li>
+                                        <li class="nav-item">
+                                            <form action="${editSurvey}" method="get" class="">
+                                                <input type="hidden" name="id" value="${survey.id}">
+                                                <button type="submit" class="btn btn-outline-dark btn-sm">Modifier</button>
+                                            </form>
+                                        </li>
+                                        <li class="nav-item">
+                                            <form action="${resultSurvey}" method="get" class="">
+                                                <input type="hidden" name="id" value="${survey.id}">
+                                                <button type="submit" class="btn btn-outline-dark btn-sm">Résultat</button>
+                                            </form>
+                                        </li>
+                                        <li class="nav-item">
+                                            <form action="${delSurvey}" method="get" class="">
+                                                <input type="hidden" name="id" value="${survey.id}">
+                                                <button type="submit" class="btn btn-outline-danger btn-sm">Supprimer</button>
+                                            </form>
+                                        </li>
+                                    </ul>
                                 </td>
                             </tr>
                         </c:forEach>

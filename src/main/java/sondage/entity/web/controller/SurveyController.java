@@ -424,6 +424,40 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&success=" + true);
     }
 
+    @RequestMapping(value = "/resultats", method = RequestMethod.GET)
+    public ModelAndView showResult(@RequestParam(value = "id") String idSurveyString){
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
+
+        long idSurvey = getLongFromString(idSurveyString);
+        if(idSurvey == -1) return new ModelAndView("redirect:/");
+
+        Survey survey = manager.findSurveyById(idSurvey);
+        if(survey == null) return new ModelAndView("redirect:/");
+
+        ModelAndView mv = new ModelAndView("result");
+        mv.addObject("survey", survey);
+
+        return mv;
+    }
+
+    @RequestMapping(value = "/resultats", method = RequestMethod.POST)
+    public ModelAndView getResult(@RequestParam(value = "id") String idSurveyString){
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
+
+        long idSurvey = getLongFromString(idSurveyString);
+        if(idSurvey == -1) return new ModelAndView("redirect:/");
+
+        Survey survey = manager.findSurveyById(idSurvey);
+        if(survey == null) return new ModelAndView("redirect:/");
+
+        //TODO appeler l'algo ici
+
+        ModelAndView mv = new ModelAndView("result");
+        mv.addObject("survey", survey);
+
+        return mv;
+    }
+
 
     @ModelAttribute("survey")
     public Survey survey(){

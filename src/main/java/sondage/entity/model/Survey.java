@@ -49,6 +49,12 @@ public class Survey {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date endDate;
 
+    /**
+     * Indique si les résultat ont été obtenue ou non
+     */
+    @Column(name = "is_result_obtained", nullable = false)
+    private boolean isResultObtained = false;
+
 
 
 
@@ -96,8 +102,7 @@ public class Survey {
     }
 
     public String getDescriptionForSize(int size) {
-
-        return description.substring(0, size);
+        return size > description.length() ? description : description.substring(0, size);
     }
 
     public void setDescription(String description) {
@@ -108,13 +113,17 @@ public class Survey {
         return endDate;
     }
 
-    public String getStringEndDate(){
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    public String getStringEndDate(String format){
+        DateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(endDate);
     }
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isTerminated(){
+        return endDate.compareTo(new Date()) <= 0;
     }
 
     public Pollster getPollster() {
@@ -157,9 +166,12 @@ public class Survey {
         this.respondents = respondents;
     }
 
-    public String getEndDateToGoodFormat(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(endDate);
+    public boolean isResultObtained() {
+        return isResultObtained;
+    }
+
+    public void setResultObtained(boolean resultObtained) {
+        isResultObtained = resultObtained;
     }
 
     @Override
