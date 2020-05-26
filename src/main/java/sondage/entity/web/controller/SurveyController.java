@@ -54,7 +54,7 @@ public class SurveyController {
             mv.addObject("respondent_id", respondent.getId());
             return mv;
         }
-        //if(respondent.getSurvey().getEndDate().compareTo(new Date()) <= 0) return new ModelAndView("redirect:/error");
+        if(respondent.getSurvey().getEndDate().compareTo(new Date()) <= 0) return new ModelAndView("redirect:/error");
 
         Survey tmpSurvey = new Survey();
         tmpSurvey.setId(respondent.getSurvey().getId());
@@ -110,7 +110,7 @@ public class SurveyController {
             int score = getIntFromString(scores[i]);
             if(score < 0) return new ModelAndView("redirect:/sondage/repondre?token=" + respondent.getToken() + "&error=true");
 
-            if(scoresList.contains(score)) return new ModelAndView("redirect:/error");
+            if(scoresList.contains(score)) return new ModelAndView("redirect:/sondage/repondre?token=" + respondent.getToken() + "&error=true");
 
             idItemsList.add(idItem);
             scoresList.add(score);

@@ -1,11 +1,12 @@
 package sondage.entity.web.validator;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import sondage.entity.model.Survey;
+
+import java.util.Date;
 
 @Service
 public class SurveyValidator implements Validator {
@@ -24,6 +25,9 @@ public class SurveyValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "endDate",
                 "survey.endDate.empty");
+
+        if(survey.getEndDate().compareTo(new Date()) <= 0)
+            errors.rejectValue("endDate", "survey.endDate.expiredDate");
 
         if(survey.getItems() == null) return;
 
