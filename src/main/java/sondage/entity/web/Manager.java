@@ -97,11 +97,6 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
-    public int updateSurveyById(long id, String name, String description, Date endDate, Pollster pollster, List<SurveyItem> items, Collection<Respondent> respondents) {
-        return surveyDAO.updateById(id, name, description, endDate, pollster, items, respondents);
-    }
-
-    @Override
     public void deleteSurveyById(long id) {
         surveyDAO.deleteById(id);
     }

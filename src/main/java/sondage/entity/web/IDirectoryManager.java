@@ -34,8 +34,6 @@ public interface IDirectoryManager {
 
     Collection<Survey> findSurveyByPollsterId(long id);
 
-    int updateSurveyById(long id, String name, String description, Date endDate, Pollster pollster, List<SurveyItem> items, Collection<Respondent> respondents);
-
     void deleteSurveyById(long id);
     /* ***************** FIN SURVEY ******************* */
 

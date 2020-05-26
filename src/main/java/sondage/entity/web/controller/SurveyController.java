@@ -129,7 +129,7 @@ public class SurveyController {
             choice.setScore(scoresList.get(i));
 
             manager.deleteChoiceByRespondentIdAndItemId(idRespondent, idItemsList.get(i));
-            manager.saveChoice(choice);
+            manager.saveChoice(choice); //TODO peu etre juste update
 
             choices.add(choice);
         }
@@ -227,7 +227,6 @@ public class SurveyController {
         return mv;
     }
 
-    //TODO update au lieu de del/save
     @RequestMapping(value = "/editer", method = RequestMethod.POST)
     public ModelAndView updateSurvey(@ModelAttribute @Valid Survey survey, BindingResult result){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -256,18 +255,7 @@ public class SurveyController {
             survey.addRespondent(r);
         }
 
-        manager.deleteSurveyById(survey.getId());
         manager.saveSurvey(survey);
-
-        //System.err.println(survey.getItems());
-        /*System.err.println("-----> " + manager.updateSurveyById(survey.getId(),
-                survey.getName(),
-                survey.getDescription(),
-                survey.getEndDate(),
-                survey.getPollster(),
-                survey.getItems(),
-                survey.getRespondents()));
-         */
 
         return new ModelAndView("redirect:/sondage/liste");
     }
@@ -302,19 +290,11 @@ public class SurveyController {
         SurveyItem item = new SurveyItem();
         item.setNbPersMin(1);
         item.setNbPersMax(1);
+
         s.addItem(item);
+        manager.saveSurvey(s);
 
-        for(Respondent r : s.getRespondents()) {
-            System.out.println(r.getTags()); //ne pas enlever sinon bug avec les tags des sondés
-        }
-        for(SurveyItem i : s.getItems()) {
-            System.out.println(i.getTags()); //ne pas enlever sinon bug avec les tags des items
-        }
-
-        manager.deleteSurveyById(s.getId());
-        Survey survey = manager.saveSurvey(s);
-
-        return new ModelAndView("redirect:/sondage/editer?id=" + survey.getId());
+        return new ModelAndView("redirect:/sondage/editer?id=" + s.getId());
     }
 
     @RequestMapping(value = "/items/supprimer", method = RequestMethod.GET)
@@ -372,7 +352,6 @@ public class SurveyController {
         return mv;
     }
 
-    //TODO update au lieu de del/save
     @RequestMapping(value = "/sondes/editer", method = RequestMethod.POST)
     public ModelAndView updateSurveyRespondents(@RequestParam(value = "id_survey") String idSurveyString,
                                                 @RequestParam(value = "respondents_string") String respondentsString){
@@ -384,9 +363,6 @@ public class SurveyController {
         Survey s = manager.findSurveyById(idSurvey);
         if(s == null) return new ModelAndView("redirect:/");
         if(s.getPollster().getId() != user.getPollster().getId()) return new ModelAndView("redirect:/");
-
-        System.out.println(s); //ne pas enlever sinon bug avec les tags des items
-        manager.deleteSurveyById(idSurvey);
 
         Collection<Respondent> respondents = getRespondentsFromCsvStringFormat(respondentsString);
         for(Respondent r : respondents) {
@@ -400,10 +376,9 @@ public class SurveyController {
         s.setRespondents(respondents);
 
         manager.deleteRespondentsBySurveyId(s.getId());
+        manager.saveSurvey(s);
 
-        Survey survey = manager.saveSurvey(s);
-
-        return new ModelAndView("redirect:/sondage/sondes/editer?id=" + survey.getId());
+        return new ModelAndView("redirect:/sondage/sondes/editer?id=" + s.getId());
     }
 
     @RequestMapping(value = "/sondes/notifier", method = RequestMethod.GET)
