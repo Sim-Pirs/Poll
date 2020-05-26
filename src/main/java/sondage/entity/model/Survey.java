@@ -73,7 +73,7 @@ public class Survey {
      * Liste des options du sondage
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
-    private List<@Valid SurveyItem> items;
+    private List<SurveyItem> items;
 
     /**
      * Liste des personnes devant y répondre.
@@ -141,6 +141,10 @@ public class Survey {
     public void addItem(SurveyItem item){
         if(this.items == null)
             this.items = new ArrayList<>();
+
+        for(SurveyItem i : this.items){
+            if (i.getId() == item.getId()) return;
+        }
 
         this.items.add(item);
         item.setParent(this);
