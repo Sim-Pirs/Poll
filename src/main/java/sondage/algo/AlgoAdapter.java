@@ -33,14 +33,29 @@ public class AlgoAdapter {
     public List<Choice> getResult(){
         long[][] result = AlgoAffect.affectation(getNbRespondents(), getNbItems(), getRespons(), getChoix());
 
+        for(int i=0; i<getNbRespondents(); i++ ) {
+            for(int j=0; j<getNbItems(); j++ ) {
+                System.err.print(result[i][j]);
+            }
+            System.err.println("");
+        }
+
+
+
         List<Choice> finalChoices = new ArrayList<>();
+
         for(int i = 0; i < getNbRespondents(); ++i){
             for(Choice c : choiceList){
-                if(c.getItem().getId() != result[0][i]) continue;
-                if(c.getRespondent().getId() != result[1][i]) continue;
+                //System.err.println("ITEM :" + c.getItem() + ": " + result[i][0]);
+                //System.err.println("RESPOND :" + c.getRespondent() + ": " + result[i][1]);
+                if(c.getItem().getId() != result[i][0]) continue;
+                if(c.getRespondent().getId() != result[i][1]) continue;
                 finalChoices.add(c);
+
             }
+
         }
+
 
         return finalChoices;
     }
@@ -52,16 +67,26 @@ public class AlgoAdapter {
         for(int i = 0; i < tableRespons.length; ++i){
             for(int j = 0; j < tableRespons[i].length; ++j){
                 if(i == 0 && j == 0) continue;
-                if(j == 0) tableRespons[i][j] = this.respondentsList.get(i).getId();
-                if(i == 0) tableRespons[i][j] = this.itemsList.get(j).getId();
+                if(j == 0) tableRespons[i][j] = this.respondentsList.get(i-1).getId();
+                if(i == 0) tableRespons[i][j] = this.itemsList.get(j-1).getId();
                 if(i != 0 && j != 0) break;
             }
         }
 
+        System.err.println("avant : ");
+        for(int i=0; i<getNbRespondents(); i++ ) {
+            for(int j=0; j<getNbItems(); j++ ) {
+                System.err.print(tableRespons[i][j]);
+            }
+            System.err.println("");
+        }
+
+        System.err.println("aprés : ");
+
         for(int i = 1; i < tableRespons.length; ++i){
             for(int j = 1; j < tableRespons[i].length; ++j){
-                long idResp = tableRespons[i][0];
-                long idItem = tableRespons[0][j];
+                long idResp = tableRespons[0][i];
+                long idItem = tableRespons[j][0];
 
                 for(Choice c : this.choiceList){
                     if(c.getRespondent().getId() != idResp || c.getItem().getId() != idItem) continue;
