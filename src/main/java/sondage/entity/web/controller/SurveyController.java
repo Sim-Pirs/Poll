@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import sondage.algo.AlgoAdapter;
 import sondage.entity.model.*;
 import sondage.entity.web.IDirectoryManager;
 import sondage.entity.web.validator.SurveyValidator;
@@ -425,7 +426,18 @@ public class SurveyController {
         Survey survey = manager.findSurveyById(idSurvey);
         if(survey == null) return new ModelAndView("redirect:/");
 
-        //TODO appeler l'algo ici
+        List<Choice> choices = manager.findAllChoiceByItemParentId(idSurvey);
+        AlgoAdapter algoAdapter = new AlgoAdapter(choices);
+        List<Choice> results = algoAdapter.getResult();
+
+        for(Choice c : results){
+            c.getRespondent().setFinalItem(c.getItem());
+            manager.saveRespondent(c.getRespondent());
+        }
+
+        System.err.println(results);
+
+        survey.setResultObtained(true);
 
         ModelAndView mv = new ModelAndView("result");
         mv.addObject("survey", survey);

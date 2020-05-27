@@ -152,6 +152,11 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
+    public List<Choice> findAllChoiceByItemParentId(long id) {
+        return choiceDAO.findAllByItem_Parent_Id(id);
+    }
+
+    @Override
     public Choice saveChoice(Choice choice) {
         return choiceDAO.save(choice);
     }

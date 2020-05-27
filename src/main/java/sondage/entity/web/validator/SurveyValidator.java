@@ -26,8 +26,8 @@ public class SurveyValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "endDate",
                 "survey.endDate.empty");
 
-        if(survey.getEndDate().compareTo(new Date()) <= 0)
-            errors.rejectValue("endDate", "survey.endDate.expiredDate");
+        //if(survey.getEndDate().compareTo(new Date()) <= 0)
+        //    errors.rejectValue("endDate", "survey.endDate.expiredDate");
 
         if(survey.getItems() == null) return;
 

@@ -62,6 +62,8 @@ public interface IDirectoryManager {
     /* ******************** CHOICE ******************** */
     Choice findChoiceByRespondentIdAndItemId(long idResp, long idItem);
 
+    List<Choice> findAllChoiceByItemParentId(long id);
+
     Choice saveChoice(Choice choice);
 
     void deleteChoiceByRespondentIdAndItemId(long idResp, long idItem);

@@ -143,6 +143,7 @@ public class Survey {
             this.items = new ArrayList<>();
 
         for(SurveyItem i : this.items){
+            if(i.getId() == 0) continue;
             if (i.getId() == item.getId()) return;
         }
 
