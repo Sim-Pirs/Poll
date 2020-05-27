@@ -426,6 +426,7 @@ public class SurveyController {
         Survey survey = manager.findSurveyById(idSurvey);
         if(survey == null) return new ModelAndView("redirect:/");
 
+        // appel a l'algo //
         List<Choice> choices = manager.findAllChoiceByItemParentId(idSurvey);
         AlgoAdapter algoAdapter = new AlgoAdapter(choices);
         List<Choice> results = algoAdapter.getResult();
@@ -436,6 +437,7 @@ public class SurveyController {
         }
 
         System.err.println(results);
+        ///////////////////////
 
         survey.setResultObtained(true);
 
