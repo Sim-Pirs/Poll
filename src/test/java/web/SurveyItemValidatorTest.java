@@ -8,7 +8,7 @@ import javax.validation.constraints.*;
 
 public class SurveyItemValidatorTest {
 	
-	/*Test des regex*/
+	/*Tests des regex*/
 	/*Méthodes test regex*/
 		
 		public void descriptionRegex(String description, boolean validates) throws NoSuchFieldException, SecurityException{
