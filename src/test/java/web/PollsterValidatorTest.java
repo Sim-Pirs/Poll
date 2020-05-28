@@ -8,8 +8,7 @@ import javax.validation.constraints.*;
 
 public class PollsterValidatorTest {
 	
-	/*Partie 1 test des regex*/
-	
+	/*Test des regex*/
 	
 		/*Méthodes de test*/
 		public void firstNameRegex(String firstName,boolean validates) throws NoSuchFieldException, SecurityException{
@@ -102,7 +101,4 @@ public class PollsterValidatorTest {
 			pollster.setPassword("m4st3rILDgog+");
 			passwordRegex(pollster.getPassword(), true);
 		}*/
-	/*******************************************************************************************************/
-	/*Partie 2 test sur le pollsterValidator*/
-
 }
