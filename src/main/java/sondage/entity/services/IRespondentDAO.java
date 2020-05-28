@@ -7,11 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 import sondage.entity.model.Respondent;
 
 import java.util.Collection;
-import java.util.Date;
 
 public interface IRespondentDAO extends CrudRepository<Respondent, Long> {
 
-    //@Query("SELECT r FROM Respondent r JOIN FETCH r.tags WHERE r.id = ?1")
     Respondent findById(long id);
 
     Respondent findByEmailAndSurvey_Id(String email, long id);
