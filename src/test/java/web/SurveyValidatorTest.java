@@ -8,7 +8,7 @@ import javax.validation.constraints.*;
 
 public class SurveyValidatorTest {
 	
-	/*Partie 1 test des regex*/
+	/*Tests des regex*/
 	
 		public void nameRegex(String name,boolean validates) throws NoSuchFieldException, SecurityException{
 		    Field field = Survey.class.getDeclaredField("name");
@@ -26,7 +26,7 @@ public class SurveyValidatorTest {
 		@Test
 		public void testSurveyBadName()  throws NoSuchFieldException, SecurityException {
 			Survey survey = new Survey();
-			survey.setName(";Projet???Master"); //ici l'erreur est l'espace en début de titre
+			survey.setName(";Projet???Master");
 			nameRegex(survey.getName(), false);
 		}
 		
@@ -52,7 +52,4 @@ public class SurveyValidatorTest {
 			survey.setDescription("Ceci est une description.");
 			descriptionRegex(survey.getDescription(), true);
 		}
-	/*******************************************************************************************************/
-	/*Partie 2 sur le SurveyValidator*/
-
 }
