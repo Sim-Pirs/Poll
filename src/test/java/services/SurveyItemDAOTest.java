@@ -1,6 +1,5 @@
 package services;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import sondage.entity.services.IPollsterDAO;
 import sondage.entity.services.ISurveyDAO;
 import sondage.entity.services.ISurveyItemDAO;
 
-import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -60,7 +58,7 @@ public class SurveyItemDAOTest {
 
 
     @Test
-    public void testSave_AddSurvey_NoExceptionThrow() {
+    public void testSave_AddGoodSurveyItem_NoExceptionThrow() {
         SurveyItem surveyItem = new SurveyItem();
         surveyItem.setDescription("Description.");
         surveyItem.setNbPersMin(2);
@@ -72,17 +70,19 @@ public class SurveyItemDAOTest {
         survey.setDescription("Une description.");
         survey.setEndDate(new Date());
         survey.setPollster(pollster);
+
+        surveyDAO.save(survey);
+
         survey.addItem(surveyItem);
 
         assertDoesNotThrow(() -> {
-            surveyDAO.save(survey);
+           surveyItemDAO.save(surveyItem);
         });
     }
 
     @Test
-    public void testSave_AddSurvey_WellAdded() {
+    public void testSave_WithNoDescription_NoExceptionThrow() {
         SurveyItem surveyItem = new SurveyItem();
-        surveyItem.setDescription("Description.");
         surveyItem.setNbPersMin(2);
         surveyItem.setNbPersMax(5);
         surveyItem.setTags(new HashSet<>());
@@ -92,17 +92,23 @@ public class SurveyItemDAOTest {
         survey.setDescription("Une description.");
         survey.setEndDate(new Date());
         survey.setPollster(pollster);
-        survey.addItem(surveyItem);
 
         surveyDAO.save(survey);
 
-        SurveyItem item = surveyItemDAO.findById(surveyItem.getId());
+        survey.addItem(surveyItem);
 
-        assertEquals(surveyItem.getId(), item.getId());
+        assertDoesNotThrow(() -> {
+            surveyItemDAO.save(surveyItem);
+        });
     }
 
     @Test
-    public void testSave_WithSurveyAlreadyAdded_WellAdded() {
+    public void testSave_WithNoNbPersMin_ThrowException() {
+        SurveyItem surveyItem = new SurveyItem();
+        surveyItem.setDescription("Description.");
+        surveyItem.setNbPersMax(5);
+        surveyItem.setTags(new HashSet<>());
+
         Survey survey = new Survey();
         survey.setName("Sondage");
         survey.setDescription("Une description.");
@@ -111,19 +117,55 @@ public class SurveyItemDAOTest {
 
         surveyDAO.save(survey);
 
+        survey.addItem(surveyItem);
 
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            surveyItemDAO.save(surveyItem);
+        });
+    }
+
+    @Test
+    public void testSave_WithNoNbPersMax_ThrowException() {
+        SurveyItem surveyItem = new SurveyItem();
+        surveyItem.setDescription("Description.");
+        surveyItem.setNbPersMin(2);
+        surveyItem.setTags(new HashSet<>());
+
+        Survey survey = new Survey();
+        survey.setName("Sondage");
+        survey.setDescription("Une description.");
+        survey.setEndDate(new Date());
+        survey.setPollster(pollster);
+
+        surveyDAO.save(survey);
+
+        survey.addItem(surveyItem);
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            surveyItemDAO.save(surveyItem);
+        });
+    }
+
+    @Test
+    public void testSave_WithNoTag_NoExceptionThrow() {
         SurveyItem surveyItem = new SurveyItem();
         surveyItem.setDescription("Description.");
         surveyItem.setNbPersMin(2);
         surveyItem.setNbPersMax(5);
-        surveyItem.setTags(new HashSet<>());
+
+        Survey survey = new Survey();
+        survey.setName("Sondage");
+        survey.setDescription("Une description.");
+        survey.setEndDate(new Date());
+        survey.setPollster(pollster);
+
+        surveyDAO.save(survey);
 
         survey.addItem(surveyItem);
 
-        surveyItemDAO.save(surveyItem);
-        SurveyItem item = surveyItemDAO.findById(surveyItem.getId());
-
-        assertEquals(surveyItem.getId(), item.getId());
+        assertDoesNotThrow(() -> {
+            surveyItemDAO.save(surveyItem);
+        });
     }
 
     @Test

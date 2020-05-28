@@ -9,7 +9,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import sondage.Starter;
-import sondage.entity.web.controller.IndexController;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,9 +19,6 @@ public class IndexControllerTest {
 
     @LocalServerPort
     private int port;
-
-    @Autowired
-    private IndexController indexController;
 
     @Autowired
     private TestRestTemplate restTemplate;

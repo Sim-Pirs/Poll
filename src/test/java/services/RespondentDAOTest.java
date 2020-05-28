@@ -91,25 +91,6 @@ public class RespondentDAOTest {
     }
 
     @Test
-    public void testSave_GoodRespondent_WellAdded(){
-        HashSet<String> tags = new HashSet<>();
-        tags.add("M1");
-        tags.add("ILD");
-
-        Respondent respondent = new Respondent();
-        respondent.setEmail("Romain@gmail.com");
-        respondent.setTags(tags);
-        respondent.setSurvey(survey1);
-        respondent.setExpired(false);
-
-        respondentDAO.save(respondent);
-
-        Respondent r = respondentDAO.findById(respondent.getId());
-
-        assertEquals(respondent.getId(), r.getId());
-    }
-
-    @Test
     public void testSave_WithoutEmail_ThrowException(){
         HashSet<String> tags = new HashSet<>();
         tags.add("M1");

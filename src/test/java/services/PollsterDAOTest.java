@@ -1,6 +1,5 @@
 package services;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -84,47 +83,4 @@ public class PollsterDAOTest {
             pollsterDAO.save(pollster);
         });
     }
-
-    @Test
-    public void testSave_WithoutSurveys_WellAdded(){
-        Pollster pollster = new Pollster();
-        pollster.setFirstName("Romain");
-        pollster.setLastName("Colonna");
-        pollster.setEmail("romain76@gmail.com");
-        pollster.setPassword("coucoucou");
-
-        pollsterDAO.save(pollster);
-
-        Pollster p = pollsterDAO.findById(pollster.getId());
-
-        assertEquals(pollster.getId(), p.getId());
-    }
-
-    /*
-    @Test
-    public void testSave_GoodPollster(){
-        Pollster pollster = new Pollster();
-        pollster.setFirstName("Romain");
-        pollster.setLastName("Colonna");
-        pollster.setEmail("romain@gmail.com");
-        pollster.setPassword("coucou");
-
-        HashSet<Survey> surveys = new HashSet<>();
-        Survey survey = new Survey();
-        survey.setName("Sondage");
-        survey.setDescription("Une description.");
-        survey.setEndDate(new Date());
-        survey.setPollster(pollster);
-        surveys.add(survey);
-
-        pollster.setSurveys(surveys);
-
-        pollsterDAO.save(pollster);
-
-        Pollster p = pollsterDAO.findById(pollster.getId());
-        p.getSurveys().size();
-
-        assertEquals(pollster.getId(), p.getId());
-    }
-     */
 }

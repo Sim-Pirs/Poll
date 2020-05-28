@@ -1,6 +1,5 @@
 package services;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -157,7 +156,7 @@ public class SurveyDAOTest {
     }
 
     @Test
-    public void testSave_WithRespondentNotInBase_NotThrowException(){
+    public void testSave_WithRespondentNotInBase_NoThrowException(){
         Respondent r = new Respondent();
         r.setEmail("roain@gmail.com");
         r.setTags(new HashSet<>());
