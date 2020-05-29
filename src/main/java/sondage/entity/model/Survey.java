@@ -3,7 +3,6 @@ package sondage.entity.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.text.DateFormat;
@@ -11,14 +10,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * Représente un sondage
+ * Représente un sondage.
  */
 @Entity
 @Table(name = "SURVEYS")
 public class Survey {
 
     /**
-     * id du sondage.
+     * Identifiant unique du sondage.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,25 +44,17 @@ public class Survey {
      * Date de fin du sondage. Passé cette date, on ne peu plus y répondre.
      */
     @Column(name = "end_date", nullable = false)
-    //@Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date endDate;
 
     /**
-     * Indique si les résultat ont été obtenue ou non
+     * Indique si les résultat ont été obtenue ou non.
      */
     @Column(name = "is_result_obtained", nullable = false)
     private boolean isResultObtained = false;
 
-
-
-
-
-
-
-
     /**
-     * Proprio du sondage.
+     * Propriétaire du sondage.
      */
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "pollster_id")
@@ -76,10 +67,12 @@ public class Survey {
     private List<SurveyItem> items;
 
     /**
-     * Liste des personnes devant y répondre.
+     * Liste des personnes devant répondre au sondage.
      */
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Respondent> respondents;
+
+
 
     public long getId() {
         return id;
@@ -101,6 +94,11 @@ public class Survey {
         return description;
     }
 
+    /**
+     * Renvoi la description avec la taille souhaitée.
+     * @param size Taille souhaitée.
+     * @return Description tronqué à la taille indiquée.
+     */
     public String getDescriptionForSize(int size) {
         return size > description.length() ? description : description.substring(0, size);
     }
@@ -113,6 +111,11 @@ public class Survey {
         return endDate;
     }
 
+    /**
+     * Renvoi la date de fin sous forme de String avec le format souhaitée.
+     * @param format Format de la date.
+     * @return Date sous forme de String.
+     */
     public String getStringEndDate(String format){
         DateFormat dateFormat = new SimpleDateFormat(format);
         return dateFormat.format(endDate);
@@ -138,6 +141,10 @@ public class Survey {
         return items;
     }
 
+    /**
+     * Ajoute l'item souhaité au sondage. Si l'item est déja présent, il n'est pas ajouté.
+     * @param item Item a ajouté.
+     */
     public void addItem(SurveyItem item){
         if(this.items == null)
             this.items = new ArrayList<>();
@@ -186,9 +193,9 @@ public class Survey {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", endDate=" + endDate +
-                //", pollster=" + pollster +
+                ", pollsterId=" + pollster.getId() +
                 ", items=" + items +
-                //", respondents=" + respondents +
+                ", respondents=" + respondents +
                 '}';
     }
 }

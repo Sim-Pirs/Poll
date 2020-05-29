@@ -1,13 +1,11 @@
 package sondage.entity.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import sondage.entity.model.*;
 import sondage.entity.services.*;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Service()
@@ -33,11 +31,6 @@ public class Manager implements IDirectoryManager {
 
     /* ******************************** SESSION ******************************** */
     @Override
-    public User newUser() {
-        return new User();
-    }
-
-    @Override
     public boolean login(User user, String email, String password) {
         Pollster pollster = pollsterDAO.findByEmailAndPassword(email, password);
 
@@ -55,7 +48,6 @@ public class Manager implements IDirectoryManager {
         user.setPollster(null);
         user.setConnected(false);
     }
-    /* ************************************************************************* */
 
     @Override
     public void sendAccessSurveyMail(String emailTo, String token, String surveyName) {
@@ -71,17 +63,21 @@ public class Manager implements IDirectoryManager {
     public void sendFinalAffectation(Respondent respondent) {
         emailSender.sendFinalMail(respondent);
     }
+    /* ************************************************************************* */
 
-    @Override
-    public Pollster findPollsterByEmail(String email) {
-        return pollsterDAO.findByEmail(email);
-    }
-
+    /* ******************************* POLLSTER ******************************** */
     @Override
     public void savePollster(Pollster pollster) {
         pollsterDAO.save(pollster);
     }
 
+    @Override
+    public Pollster findPollsterByEmail(String email) {
+        return pollsterDAO.findByEmail(email);
+    }
+    /* ***************************** FIN POLLSTER ****************************** */
+
+    /* ******************************* SURVEY ********************************** */
     @Override
     public Survey saveSurvey(Survey survey) {
         return surveyDAO.save(survey);
@@ -101,7 +97,9 @@ public class Manager implements IDirectoryManager {
     public void deleteSurveyById(long id) {
         surveyDAO.deleteById(id);
     }
+    /* ***************************** FIN SURVEY ******************************** */
 
+    /* ***************************** SURVEY ITEM ******************************* */
     @Override
     public SurveyItem findSurveyItemById(long id) {
         return surveyItemDAO.findById(id);
@@ -110,6 +108,13 @@ public class Manager implements IDirectoryManager {
     @Override
     public void deleteSurveyItemById(long id) {
         surveyItemDAO.deleteById(id);
+    }
+    /* **************************** FIN SURVEY ITEM **************************** */
+
+    /* ****************************** RESPONDENT ******************************* */
+    @Override
+    public void saveRespondent(Respondent respondent) {
+        respondentDAO.save(respondent);
     }
 
     @Override
@@ -138,11 +143,6 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
-    public void saveRespondent(Respondent respondent) {
-        respondentDAO.save(respondent);
-    }
-
-    @Override
     public void deleteRespondentsBySurveyId(long surveyId) {
         respondentDAO.deleteAllBySurvey_Id(surveyId);
     }
@@ -150,6 +150,13 @@ public class Manager implements IDirectoryManager {
     @Override
     public void deleteRespondentById(long id) {
         respondentDAO.deleteById(id);
+    }
+    /* **************************** FIN RESPONDENT ***************************** */
+
+    /* ******************************** CHOICE ********************************* */
+    @Override
+    public Choice saveChoice(Choice choice) {
+        return choiceDAO.save(choice);
     }
 
     @Override
@@ -163,12 +170,8 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
-    public Choice saveChoice(Choice choice) {
-        return choiceDAO.save(choice);
-    }
-
-    @Override
     public void deleteChoiceByRespondentIdAndItemId(long idResp, long idItem) {
         choiceDAO.deleteByRespondent_IdAndItem_Id(idResp, idItem);
     }
+    /* ***************************** FIN CHOICE ******************************** */
 }

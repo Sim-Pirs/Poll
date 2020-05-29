@@ -4,14 +4,14 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 
 /**
- * Représente une réponse à un sondage par un sondé.
+ * Représente une réponse d'un sondé à un sondage.
  */
 @Entity
 @Table(name = "CHOICES", uniqueConstraints={@UniqueConstraint(columnNames={"respondent_id", "item_id"})})
 public class Choice {
 
     /**
-     * Idendifiant unique de la réponse du sondé.
+     * Idendifiant unique de la réponse.
      */
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +25,8 @@ public class Choice {
     @Min(value = 1, message = "Le score minimum est 1.")
     private int score;
 
-
-
-
-
-
-
     /**
-     * Sondé ayant fais ce choix.
+     * Sondé ayant fait ce choix.
      */
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "respondent_id")
@@ -44,6 +38,7 @@ public class Choice {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private SurveyItem item;
+
 
 
     public long getId() {
@@ -72,5 +67,15 @@ public class Choice {
 
     public void setItem(SurveyItem item) {
         this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return "Choice{" +
+                "id=" + id +
+                ", score=" + score +
+                ", respondentId=" + respondent.getId() +
+                ", itemId=" + item.getId() +
+                '}';
     }
 }

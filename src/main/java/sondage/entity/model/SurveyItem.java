@@ -7,14 +7,14 @@ import javax.validation.constraints.Size;
 import java.util.Collection;
 
 /**
- * Représente une réponse possible a un sondage.
+ * Représente une option de sondage.
  */
 @Entity
 @Table(name = "SURVEY_ITEMS")
 public class SurveyItem {
 
     /**
-     * Idendifiant unique de la réponse.
+     * Idendifiant unique de l'option.
      */
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,39 +22,42 @@ public class SurveyItem {
     private long id;
 
     /**
-     * Nombre de personne min pouvant choisir cette option
+     * Nombre de personne min pouvant être affectés à cette option.
      */
     @Column(name = "nb_pers_min", nullable = true)
     @Min(value = 1, message = "{surveyItem.nbPersMin.badValue}")
     private int nbPersMin;
 
     /**
-     * Nombre de personne max pouvant choisir cette option
+     * Nombre de personne max pouvant être affectés à cette option.
      */
     @Column(name = "nb_pers_max", nullable = true)
     @Min(value = 1, message = "{surveyItem.nbPersMax.badValue}")
     private int nbPersMax;
 
     /**
-     * Description. La taille max est arbitraire.
+     * Description.
      */
     @Column(name = "description", length = 500, nullable = true)
     @Pattern(regexp = "^(([ ]?[A-Za-z,éèà0-9]+)+[.?!]{0,1}[ ]?)+", message = "{surveyItem.description.invalid}")
     @Size(min = 1, max = 500, message = "{surveyItem.description.badSize}")
     private String description;
 
+    /**
+     * Tags de l'option.
+     */
     @ElementCollection
     @CollectionTable(name = "survey_tags", joinColumns = @JoinColumn(name = "survey_id"))
     @Column(name = "tag")
     private Collection<@Pattern(regexp = "[A-Za-z0-9éè]+([-]?[A-Za-z0-9éè]+)?", message = "{surveyItem.tag.invalid}") String> tags;
 
-
-
-
-
+    /**
+     * Sondage auquel appartient l'option.
+     */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "survey_id")
     private Survey parent;
+
 
 
     public long getId() {
@@ -113,6 +116,7 @@ public class SurveyItem {
                 ", nbPersMax=" + nbPersMax +
                 ", description='" + description + '\'' +
                 ", tags=" + tags +
+                ", parentId=" + parent.getId() +
                 '}';
     }
 }

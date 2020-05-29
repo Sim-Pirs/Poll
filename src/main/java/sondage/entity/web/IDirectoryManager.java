@@ -1,15 +1,10 @@
 package sondage.entity.web;
 
 import sondage.entity.model.*;
-
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 public interface IDirectoryManager {
-
-    // créer un utilisateur anonyme
-    User newUser();
 
     // identifier un utilisateur
     boolean login(User user, String email, String password);
