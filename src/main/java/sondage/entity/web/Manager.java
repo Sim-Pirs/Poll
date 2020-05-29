@@ -42,8 +42,6 @@ public class Manager implements IDirectoryManager {
         Pollster pollster = pollsterDAO.findByEmailAndPassword(email, password);
 
         if (pollster == null) {
-            user.setAsError(true);
-            user.addErrorMessage("Email ou mot de passe incorecte.");
             return false;
         }
 
@@ -56,8 +54,6 @@ public class Manager implements IDirectoryManager {
     public void logout(User user) {
         user.setPollster(null);
         user.setConnected(false);
-        user.setAsError(false);
-        user.setErrorMessages(null);
     }
     /* ************************************************************************* */
 

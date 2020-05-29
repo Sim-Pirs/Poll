@@ -43,7 +43,9 @@ public class PollsterController {
     public ModelAndView login(@RequestParam(value = "email") String email,
                               @RequestParam(value = "password") String pass) {
         pass = generateSecurePassword(pass, SALT);
-        manager.login(user, email, pass);
+        if(!manager.login(user, email, pass)){
+            return new ModelAndView("redirect:/?error=true");
+        }
 
         return new ModelAndView("redirect:/");
     }
