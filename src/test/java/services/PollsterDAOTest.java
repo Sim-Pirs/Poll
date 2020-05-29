@@ -24,6 +24,19 @@ public class PollsterDAOTest {
 
 
     @Test
+    public void testSave_GoodPollster_ThrowException(){
+        Pollster pollster = new Pollster();
+        pollster.setFirstName("Romain");
+        pollster.setLastName("Colonna");
+        pollster.setEmail("romain@gmail.com");
+        pollster.setPassword("coucoucou");
+
+        assertDoesNotThrow(() -> {
+            pollsterDAO.save(pollster);
+        });
+    }
+
+    @Test
     public void testSave_WithoutFirstName_ThrowException(){
         Pollster pollster = new Pollster();
         pollster.setLastName("Colonna");
