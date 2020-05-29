@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import sondage.entity.model.Pollster;
 import sondage.entity.model.User;
-import sondage.entity.web.IDirectoryManager;
+import sondage.entity.web.ISurveyManager;
 import sondage.entity.web.validator.PollsterValidator;
 
 import javax.crypto.SecretKeyFactory;
@@ -31,7 +31,7 @@ public class PollsterController {
     private static final String SALT = "711nndsihNPVFL9s6eo8c5UqTG0PziZ340KwXEdGIoNWsvsrD09AMuwcp03MWKO9ymYKe82MokltQiCXUAOvSct5EJpEJoBrMPfK";
 
     @Autowired
-    IDirectoryManager manager;
+    ISurveyManager manager;
 
     @Autowired
     User user;

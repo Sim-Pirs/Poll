@@ -6,9 +6,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import sondage.entity.model.Pollster;
 import sondage.entity.model.User;
-import sondage.entity.web.IDirectoryManager;
+import sondage.entity.web.ISurveyManager;
 
 
 @Controller
@@ -16,7 +15,7 @@ import sondage.entity.web.IDirectoryManager;
 public class IndexController {
 
     @Autowired
-    IDirectoryManager manager;
+    ISurveyManager manager;
 
     @Autowired
     User user;

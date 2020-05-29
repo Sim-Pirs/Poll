@@ -5,7 +5,6 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -14,9 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import sondage.algo.AlgoAdapter;
 import sondage.entity.model.*;
-import sondage.entity.web.IDirectoryManager;
+import sondage.entity.web.ISurveyManager;
 import sondage.entity.web.validator.SurveyValidator;
 
 import javax.validation.Valid;
@@ -30,7 +28,7 @@ import java.util.*;
 public class SurveyController {
 
     @Autowired
-    IDirectoryManager manager;
+    ISurveyManager manager;
 
     @Autowired
     User user;
@@ -387,8 +385,7 @@ public class SurveyController {
         }
 
         Collection<Respondent> allRespondents = s.getRespondents();
-        Hibernate.initialize(allRespondents);
-        //System.out.println(allRespondents);
+        allRespondents.size();
 
         s.setRespondents(null);
         for(Respondent r : finalRespondents){
@@ -471,17 +468,7 @@ public class SurveyController {
         Survey survey = manager.findSurveyById(idSurvey);
         if(survey == null) return new ModelAndView("redirect:/");
 
-        List<Choice> choices = manager.findAllChoiceByItemParentId(idSurvey);
-        AlgoAdapter algoAdapter = new AlgoAdapter(choices);
-        List<Choice> results = algoAdapter.getResult();
-
-        for(Choice c : results){
-            c.getRespondent().setFinalItem(c.getItem());
-            manager.saveRespondent(c.getRespondent());
-        }
-
-        survey.setResultObtained(true);
-        manager.saveSurvey(survey);
+        manager.makeAffectation(survey);
 
         ModelAndView mv = new ModelAndView("result");
         mv.addObject("survey", survey);

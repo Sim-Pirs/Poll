@@ -2,6 +2,7 @@ package sondage.entity.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sondage.algo.AlgoAdapter;
 import sondage.entity.model.*;
 import sondage.entity.services.*;
 
@@ -9,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service()
-public class Manager implements IDirectoryManager {
+public class Manager implements ISurveyManager {
 
     @Autowired
     IPollsterDAO pollsterDAO;
@@ -29,7 +30,7 @@ public class Manager implements IDirectoryManager {
     @Autowired
     public EmailServiceImpl emailSender;
 
-    /* ******************************** SESSION ******************************** */
+
     @Override
     public boolean login(User user, String email, String password) {
         Pollster pollster = pollsterDAO.findByEmailAndPassword(email, password);
@@ -63,7 +64,21 @@ public class Manager implements IDirectoryManager {
     public void sendFinalAffectation(Respondent respondent) {
         emailSender.sendFinalMail(respondent);
     }
-    /* ************************************************************************* */
+
+    @Override
+    public void makeAffectation(Survey survey) {
+        List<Choice> choices = this.findAllChoiceByItemParentId(survey.getId());
+        AlgoAdapter algoAdapter = new AlgoAdapter(choices);
+        List<Choice> results = algoAdapter.getResult();
+
+        for(Choice c : results){
+            c.getRespondent().setFinalItem(c.getItem());
+            this.saveRespondent(c.getRespondent());
+        }
+
+        survey.setResultObtained(true);
+        this.saveSurvey(survey);
+    }
 
     /* ******************************* POLLSTER ******************************** */
     @Override

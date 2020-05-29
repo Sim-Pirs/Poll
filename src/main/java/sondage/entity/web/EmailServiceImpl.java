@@ -16,6 +16,12 @@ public class EmailServiceImpl {
     private JavaMailSender sender;
 
 
+    /**
+     * Envoi un mail contenant un lien pour accéder à un sondage.
+     * @param emailTo Email du destinataire.
+     * @param token Token nécessaire pour l'accés au sondage.
+     * @param surveyName Nom du sondage.
+     */
     public void sendAccessMail(String emailTo, String token, String surveyName) {
         String recoveryLink = "http://localhost:8081/sondage/repondre?token=" + token;
 
@@ -28,6 +34,11 @@ public class EmailServiceImpl {
         sender.send(mail);
     }
 
+    /**
+     * Envoi un mail contenant un récapitulatif des choix d'un sondage.
+     * @param emailTo Email du destinataire.
+     * @param choices Liste des choix.
+     */
     public void sendRecapMail(String emailTo, Collection<Choice> choices) {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(emailTo);
@@ -44,6 +55,10 @@ public class EmailServiceImpl {
         sender.send(mail);
     }
 
+    /**
+     * Envoi un mail contenant l'affectation final pour un sondage.
+     * @param respondent Personne sondé.
+     */
     public void sendFinalMail(Respondent respondent){
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(respondent.getEmail());

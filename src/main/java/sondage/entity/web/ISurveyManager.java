@@ -4,7 +4,7 @@ import sondage.entity.model.*;
 import java.util.Collection;
 import java.util.List;
 
-public interface IDirectoryManager {
+public interface ISurveyManager {
 
     // identifier un utilisateur
     boolean login(User user, String email, String password);
@@ -17,6 +17,8 @@ public interface IDirectoryManager {
     void sendRecapMail(String emailTo, Collection<Choice> choices);
 
     void sendFinalAffectation(Respondent respondent);
+
+    void makeAffectation(Survey survey);
 
     /* ****************** POLLSTER ******************** */
     Pollster findPollsterByEmail(String email);
