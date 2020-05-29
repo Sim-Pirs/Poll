@@ -14,8 +14,6 @@ import sondage.entity.web.IDirectoryManager;
 @RequestMapping("")
 public class IndexController {
 
-    private boolean aBoolean = false;
-
     @Autowired
     IDirectoryManager manager;
 
@@ -24,17 +22,6 @@ public class IndexController {
 
     @RequestMapping(value = "")
     public ModelAndView index(){
-        if(!aBoolean) {
-            Pollster pollster = new Pollster();
-            pollster.setFirstName("Aa");
-            pollster.setLastName("Aa");
-            pollster.setEmail("a@a.a");
-            pollster.setPassword("nN5G3N3OHyuyunVl/WZc+vWVNeayG7vohmGvmkCuImA=");
-
-            manager.savePollster(pollster);
-            aBoolean = true;
-        }
-
         return new ModelAndView("index");
     }
     
