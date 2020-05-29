@@ -72,6 +72,11 @@ public class Manager implements IDirectoryManager {
     }
 
     @Override
+    public void sendFinalAffectation(Respondent respondent) {
+        emailSender.sendFinalMail(respondent);
+    }
+
+    @Override
     public Pollster findPollsterByEmail(String email) {
         return pollsterDAO.findByEmail(email);
     }
@@ -144,6 +149,11 @@ public class Manager implements IDirectoryManager {
     @Override
     public void deleteRespondentsBySurveyId(long surveyId) {
         respondentDAO.deleteAllBySurvey_Id(surveyId);
+    }
+
+    @Override
+    public void deleteRespondentById(long id) {
+        respondentDAO.deleteById(id);
     }
 
     @Override

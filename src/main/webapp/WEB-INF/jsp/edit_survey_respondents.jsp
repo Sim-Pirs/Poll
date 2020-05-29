@@ -45,7 +45,7 @@
         </div>
     </form:form>
 
-    <a href="${notifyAllRespondents}?id=${id_survey}" class="btn btn-outline-warning" role="button" aria-pressed="true">Notifier tout le monde</a>
+    <a href="${notifyAllRespondentsForAccess}?id=${id_survey}" class="btn btn-outline-warning" role="button" aria-pressed="true">Notifier tout le monde</a>
 </div>
 </body>
 </html>

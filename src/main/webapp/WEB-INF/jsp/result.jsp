@@ -44,16 +44,17 @@
                                                 <label for="descriptions[${cptItem.count}]">Description:</label>
                                                 <textarea id="descriptions[${cptItem.count}]" class="form-control" placeholder="${item.description}" readonly></textarea>
                                             </div>
+                                            <c:forEach items="${survey.respondents}" var="respondent" varStatus="cptResp">
+                                                <c:if test="${respondent.finalItem.id == item.id}">
+                                                    <p>${respondent.email}</p>
+                                                </c:if>
+                                            </c:forEach>
                                         </div>
-                                        <c:forEach items="${survey.respondents}" var="respondent" varStatus="cptResp">
-                                            <c:if test="${respondent.finalItem.id == item.id}">
-                                                <p>${respondent.email}</p>
-                                            </c:if>
-                                        </c:forEach>
                                     </c:forEach>
                                 </c:if>
                             </div>
                         </div>
+                        <a href="${notifyAllRespondentsForFinalItem}?id=${survey.id}" class="btn btn-outline-warning" role="button" aria-pressed="true">Notifier tout le monde</a>
                     </c:when>
                     <c:otherwise>
                         <p style="text-align: center">Le tirage des resultat n'a pas encore été fait.</p>
@@ -66,7 +67,7 @@
             </c:when>
             <c:otherwise>
                 <h1 class="title topShift" style="text-align: center">Le sondage n'est pas finis</h1>
-                <p style="text-align: center">Il le sera le ${survey.getStringEndDate("dd/MM/yyyy")} à ${survey.getStringEndDate("hh:mm:ss")}.</p>
+                <p style="text-align: center">Il le sera le ${survey.getStringEndDate("dd/MM/yyyy")} à ${survey.getStringEndDate("hh:mm:ss")}. Vous pouvez cependant modifier sa date de fin.</p>
             </c:otherwise>
         </c:choose>
     </div>

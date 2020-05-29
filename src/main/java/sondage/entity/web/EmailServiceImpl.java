@@ -5,6 +5,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import sondage.entity.model.Choice;
+import sondage.entity.model.Respondent;
 
 import java.util.Collection;
 
@@ -31,7 +32,7 @@ public class EmailServiceImpl {
         SimpleMailMessage mail = new SimpleMailMessage();
         mail.setTo(emailTo);
         mail.setFrom("POLL");
-        mail.setSubject("Récapitulation de vos réponse à \"" + choices.iterator().next().getItem().getParent().getName() + "\"");
+        mail.setSubject("Récapitulatif de vos réponse au sondage \"" + choices.iterator().next().getItem().getParent().getName() + "\"");
 
         StringBuilder emailBody = new StringBuilder();
         for(Choice c : choices){
@@ -40,6 +41,18 @@ public class EmailServiceImpl {
         }
 
         mail.setText(emailBody.toString());
+        sender.send(mail);
+    }
+
+    public void sendFinalMail(Respondent respondent){
+        SimpleMailMessage mail = new SimpleMailMessage();
+        mail.setTo(respondent.getEmail());
+        mail.setFrom("POLL");
+        mail.setSubject("Affectation final du sondage \"" + respondent.getFinalItem().getParent().getName() + "\"");
+
+        String emailBody = "L'option retenue est la suivant: \n" + respondent.getFinalItem().getDescription();
+        mail.setText(emailBody);
+
         sender.send(mail);
     }
 }

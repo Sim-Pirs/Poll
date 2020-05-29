@@ -21,6 +21,8 @@ public interface IDirectoryManager {
 
     void sendRecapMail(String emailTo, Collection<Choice> choices);
 
+    void sendFinalAffectation(Respondent respondent);
+
     /* ****************** POLLSTER ******************** */
     Pollster findPollsterByEmail(String email);
 
@@ -57,6 +59,8 @@ public interface IDirectoryManager {
     void saveRespondent(Respondent respondent);
 
     void deleteRespondentsBySurveyId(long surveyId);
+
+    void deleteRespondentById(long id);
     /* **************** FIN RESPONDENT **************** */
 
     /* ******************** CHOICE ******************** */

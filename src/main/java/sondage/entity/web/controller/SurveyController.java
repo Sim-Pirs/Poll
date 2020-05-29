@@ -5,9 +5,11 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -353,6 +355,7 @@ public class SurveyController {
         return mv;
     }
 
+    @Transactional
     @RequestMapping(value = "/sondes/editer", method = RequestMethod.POST)
     public ModelAndView updateSurveyRespondents(@RequestParam(value = "id_survey") String idSurveyString,
                                                 @RequestParam(value = "respondents_string") String respondentsString){
@@ -365,25 +368,48 @@ public class SurveyController {
         if(s == null) return new ModelAndView("redirect:/");
         if(s.getPollster().getId() != user.getPollster().getId()) return new ModelAndView("redirect:/");
 
-        Collection<Respondent> respondents = getRespondentsFromCsvStringFormat(respondentsString);
-        for(Respondent r : respondents) {
-            Respondent tmp = manager.findRespondentByEmailAndSurveyId(r.getEmail(), s.getId());
-            if(tmp != null) continue;
+        List<Respondent> respondents = getRespondentsFromCsvStringFormat(respondentsString);
+        List<Respondent> finalRespondents = new ArrayList<>();
+        //if(respondents.size() < 1) return new ModelAndView("redirect:/");
+        for(int i = 0; i < respondents.size(); ++i) {
+            Respondent tmp = manager.findRespondentByEmailAndSurveyId(respondents.get(i).getEmail(), s.getId());
+            if(tmp != null) {
+                //si les tags ont changé
+                if(!tmp.getTags().containsAll(respondents.get(i).getTags()) || !respondents.get(i).getTags().containsAll(tmp.getTags())){
+                    tmp.setTags(respondents.get(i).getTags());
+                }
+                finalRespondents.add(tmp);
+            } else {
+                respondents.get(i).setToken(RandomStringUtils.randomAlphanumeric(100));
+                respondents.get(i).setExpired(false);
+                finalRespondents.add(respondents.get(i));
+            }
+        }
 
-            r.setToken(RandomStringUtils.randomAlphanumeric(100));
-            r.setExpired(false);
+        Collection<Respondent> allRespondents = s.getRespondents();
+        Hibernate.initialize(allRespondents);
+        //System.out.println(allRespondents);
+
+        s.setRespondents(null);
+        for(Respondent r : finalRespondents){
             s.addRespondent(r);
         }
-        s.setRespondents(respondents);
-
-        manager.deleteRespondentsBySurveyId(s.getId());
         manager.saveSurvey(s);
+
+        for(Respondent r : allRespondents){
+            if(s.getRespondents() == null) {
+                manager.deleteRespondentsBySurveyId(s.getId());
+                break;
+            }
+            if(s.getRespondents().contains(r)) continue;
+            manager.deleteRespondentById(r.getId());
+        }
 
         return new ModelAndView("redirect:/sondage/sondes/editer?id=" + s.getId());
     }
 
-    @RequestMapping(value = "/sondes/notifier", method = RequestMethod.GET)
-    public ModelAndView notifyAllRespondents(@RequestParam(value = "id") String idSurveyString){
+    @RequestMapping(value = "/sondes/notifierAcces", method = RequestMethod.GET)
+    public ModelAndView notifyAllRespondentsForAccess(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
 
         long idSurvey = getLongFromString(idSurveyString);
@@ -398,6 +424,25 @@ public class SurveyController {
         for(Respondent r : respondents) manager.sendAccessSurveyMail(r.getEmail(), r.getToken(), survey.getName());
 
         return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&success=" + true);
+    }
+
+    @RequestMapping(value = "/sondes/notifierAffectation", method = RequestMethod.GET)
+    public ModelAndView notifyAllRespondentsForFinalAffect(@RequestParam(value = "id") String idSurveyString){
+        if(!user.isConnected()) return new ModelAndView("redirect:/");
+
+        long idSurvey = getLongFromString(idSurveyString);
+        if(idSurvey == -1) return new ModelAndView("redirect:/");
+
+        Collection<Respondent> respondents = manager.findAllRespondentsBySurveyId(idSurvey);
+        if(respondents == null || respondents.size() < 1) return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&error=" + true);
+
+        Survey survey = manager.findSurveyById(idSurvey);
+
+        if(survey == null) return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&error=" + true);
+
+        for(Respondent r : respondents) manager.sendFinalAffectation(r);
+
+        return new ModelAndView("redirect:/sondage/resultats?id=" + idSurvey + "&success=" + true);
     }
 
     @RequestMapping(value = "/resultats", method = RequestMethod.GET)
@@ -426,7 +471,6 @@ public class SurveyController {
         Survey survey = manager.findSurveyById(idSurvey);
         if(survey == null) return new ModelAndView("redirect:/");
 
-        // appel a l'algo //
         List<Choice> choices = manager.findAllChoiceByItemParentId(idSurvey);
         AlgoAdapter algoAdapter = new AlgoAdapter(choices);
         List<Choice> results = algoAdapter.getResult();
@@ -436,10 +480,8 @@ public class SurveyController {
             manager.saveRespondent(c.getRespondent());
         }
 
-        System.err.println(results);
-        ///////////////////////
-
         survey.setResultObtained(true);
+        manager.saveSurvey(survey);
 
         ModelAndView mv = new ModelAndView("result");
         mv.addObject("survey", survey);
@@ -481,9 +523,9 @@ public class SurveyController {
         return number;
     }
 
-    private Collection<Respondent> getRespondentsFromCsvStringFormat(String respondentsString){
+    private List<Respondent> getRespondentsFromCsvStringFormat(String respondentsString){
         /* TODO trouver une meilleur manière de gérer les sondés */
-        Collection<Respondent> respondents = new HashSet<>();
+        List<Respondent> respondents = new ArrayList<>();
         try(CSVParser parser = CSVParser.parse(respondentsString, CSVFormat.newFormat(';'))) {
             for (CSVRecord csvRecord : parser) {
                 if(csvRecord.get(0) == null) continue;
