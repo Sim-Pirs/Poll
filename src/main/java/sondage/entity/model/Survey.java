@@ -1,9 +1,14 @@
 package sondage.entity.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Représente un sondage
@@ -24,20 +29,31 @@ public class Survey {
      * Nom du sondage.
      */
     @Column(name = "name", length = 50, nullable = false)
+    @Pattern(regexp = "^[A-Za-z0-9éè]+([ ]?[A-Za-z0-9éè]+)+", message = "{survey.name.invalid}")
+    @Size(min = 1, max = 50, message = "{survey.name.badSize}")
     private String name;
 
     /**
      * Description.
      */
     @Column(name = "description", length =  500, nullable = false)
+    @Pattern(regexp = "^(([ ]?[A-Za-z,éèà0-9]+)+[.?!]{0,1}[ ]?)+", message = "{survey.description.badFormat}")
+    @Size(min = 1, max = 500, message = "{survey.description.badSize}")
     private String description;
 
     /**
      * Date de fin du sondage. Passé cette date, on ne peu plus y répondre.
      */
     @Column(name = "end_date", nullable = false)
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date endDate;
+
+    /**
+     * Indique si les résultat ont été obtenue ou non
+     */
+    @Column(name = "is_result_obtained", nullable = false)
+    private boolean isResultObtained = false;
 
 
 
@@ -56,17 +72,21 @@ public class Survey {
     /**
      * Liste des options du sondage
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "surveyParent")
-    private Collection<SurveyItem> items;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "parent")
+    private List<SurveyItem> items;
 
     /**
      * Liste des personnes devant y répondre.
      */
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Respondent> respondents;
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -81,6 +101,10 @@ public class Survey {
         return description;
     }
 
+    public String getDescriptionForSize(int size) {
+        return size > description.length() ? description : description.substring(0, size);
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -89,8 +113,17 @@ public class Survey {
         return endDate;
     }
 
+    public String getStringEndDate(String format){
+        DateFormat dateFormat = new SimpleDateFormat(format);
+        return dateFormat.format(endDate);
+    }
+
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public boolean isTerminated(){
+        return endDate.compareTo(new Date()) <= 0;
     }
 
     public Pollster getPollster() {
@@ -101,19 +134,24 @@ public class Survey {
         this.pollster = pollster;
     }
 
-    public Collection<SurveyItem> getItems() {
+    public List<SurveyItem> getItems() {
         return items;
     }
 
     public void addItem(SurveyItem item){
         if(this.items == null)
-            this.items = new HashSet<>();
+            this.items = new ArrayList<>();
+
+        for(SurveyItem i : this.items){
+            if(i.getId() == 0) continue;
+            if (i.getId() == item.getId()) return;
+        }
 
         this.items.add(item);
-        item.setSurvey(this);
+        item.setParent(this);
     }
 
-    public void setItems(Collection<SurveyItem> items) {
+    public void setItems(List<SurveyItem> items) {
         this.items = items;
     }
 
@@ -131,5 +169,26 @@ public class Survey {
 
     public void setRespondents(Collection<Respondent> respondents) {
         this.respondents = respondents;
+    }
+
+    public boolean isResultObtained() {
+        return isResultObtained;
+    }
+
+    public void setResultObtained(boolean resultObtained) {
+        isResultObtained = resultObtained;
+    }
+
+    @Override
+    public String toString() {
+        return "Survey{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", endDate=" + endDate +
+                //", pollster=" + pollster +
+                ", items=" + items +
+                //", respondents=" + respondents +
+                '}';
     }
 }

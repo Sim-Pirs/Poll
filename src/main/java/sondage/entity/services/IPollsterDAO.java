@@ -7,6 +7,10 @@ public interface IPollsterDAO extends CrudRepository<Pollster, Long> {
 
     Pollster findById(long id);
 
+    Pollster findByEmail(String email);
+
+    Pollster findByEmailAndPassword(String email, String password);
+
     Pollster save(Pollster p);
 
 
