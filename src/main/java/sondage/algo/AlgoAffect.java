@@ -5,77 +5,172 @@ import java.util.Comparator;
 
 public class AlgoAffect {
 
-    private int NbreEtudiants;
-    private int NbreOptions;
-    private long[][] T_Resultats;
-    private long[][] T_Choix;
+    /*************calculScore**************/
+    /* Entrée : nbRespondents (nombre total des respondents),
+     * 			nbItems(nombre total des items) ,
+     * 			tableRespons(table qui contient les reponses des respondents pour chaque item).
+     * Sortie : tableOrdonne (tableau qui contient des items dans l'ordre par rapport à l'item le plus demandé jusqu' à l'item  le moins demandé ).
+     * But : Calculer les scores pour les items */
 
-    /*************Constructeur**************/
-
-    public AlgoAffect(int nb_etudiant , int nb_option ,long[][] Table_rep) {
-        this.NbreEtudiants = nb_etudiant;
-        this.NbreOptions = nb_option;
-        this.T_Resultats = Table_rep;
-
-    }
-
-    /*************Calcul_Score**************/
-
-    public static long [][] Calcul_Score(int nb_etudiant , int nb_option ,long[][] Table_rep){
-
-        long[][] T_Ordonne;
-        T_Ordonne = new long [nb_option][2];
-        for(int i = 0 ; i < nb_option ; i++) {
+    public static long [][] calculScore(int nbRespondents , int nbItems ,long[][] tableRespons){
+        /*Initialiser le tableau ordonne*/
+        long[][] tableOrdonne;
+        tableOrdonne = new long [nbItems][2];
+        for(int i = 0 ; i < nbItems ; i++) {
             for(int j = 0 ; j < 2 ; j++) {
-                T_Ordonne[i][j]= 0;
+                tableOrdonne[i][j]= 0;
             }
         }
-
-        for(int i = 1 ; i <= nb_option ; i++) {
-            T_Ordonne[i-1][0] = Table_rep[0][i];
-            for(int j = 1 ; j <= nb_etudiant ;j++) {
-                T_Ordonne[i-1][1] = T_Ordonne[i-1][1] + Table_rep[j][i];
+        /*Calculer les scores pour les items*/
+        for(int i = 1 ; i <= nbItems ; i++) {
+            tableOrdonne[i-1][0] = tableRespons[0][i];
+            for(int j = 1 ; j <= nbRespondents ;j++) {
+                tableOrdonne[i-1][1] = tableOrdonne[i-1][1] + tableRespons[j][i];
             }
         }
-
-        Arrays.sort(T_Ordonne, new Comparator<long[]>() {
+        /*ordonner les items*/
+        Arrays.sort(tableOrdonne, new Comparator<long[]>() {
             @Override
             public int compare(long[] o2, long[] o1) {
                 return Long.compare(o2[1], o1[1]);
             }
         });
 
-        return T_Ordonne;
+        return tableOrdonne;
     }
 
 
+    /*************getMin**************/
+    /* Entrée : item_id(identifiant de l'item),
+     * 			tableCapacite (tableau qui contient les identifiants des items avec la capacité min et max pour chaque item),
+     * 			nbItems (nombre total des items).
+     * Sortie : retourne la capacité min de l'identifiant de l'item(item_id).
+     * But: trouver la capacité min pour le item_id */
 
-
-
-    /*************Affectation**************/
-    public static long [][] affectation(int nb_etudiant , int nb_option ,long[][] Table_rep , long[][] Table_choi) {
-
-        long[][] T_Ordonne2 = Calcul_Score( nb_etudiant , nb_option , Table_rep);
-        long[][] T_ResF;
-        long[][] actual;
-        int index = 0;
-        T_ResF = new long [nb_etudiant][2];
-        actual = new long [nb_option][2];
-        for (int i = 0; i < nb_option; i++) {
-            actual[i][0]=T_Ordonne2[i][0];
-            actual[i][1]=0;
+    private static long getMin(long item_id, long[][] tableCapacite,long nbItems) {
+        for (int i = 0; i < nbItems; i++) {
+            if(tableCapacite [i][0]==item_id) {
+                return tableCapacite [i][1];
+            }
         }
-        int level = 1;
-        while (level<=nb_option){
-            for(int i=0 ; i < nb_option ; i++) {	// pour le tableau T_Ordonne2
-                for(int j=0 ; j < nb_option ; j++) { // pour le tableau Table_rep
-                    if(T_Ordonne2[i][0] == Table_rep[0][j+1] ){ //condition pour lier le tableau d'ordonne avec tableau de r�sultat
-                        for(int k=1 ; k <= nb_etudiant ; k++) {// pour passer sur tous les �tudiants
-                            if(notAffected(Table_rep[k][0],T_ResF,nb_etudiant)&&Table_rep[k][j+1] == level  &&actual[i][1]<getMin(T_Ordonne2[i][0],Table_choi,nb_option)) { // 1ere choix
-                                T_ResF [index][0] = T_Ordonne2[i][0]; //projet
-                                T_ResF [index][1] = Table_rep[k][0];//etudiant
+        return 0;
+    }
+
+
+    /*************getMax**************/
+    /* Entrée : item_id (identifiant de l'item),
+     * 			tableCapacite (tableau qui contient les identifiants des items avec la capacité min et max pour chaque item),
+     * 			nbItems (nombre total des items)
+     * Sortie :  retourne la capacité max de identifiant de l'item(item_id).
+     * But: trouver la capacité max pour le item_id */
+
+    private static long getMax(long item_id, long[][] tableCapacite,long nbItems) {
+        for (int i = 0; i < nbItems; i++) {
+            if(tableCapacite [i][0]==item_id) {
+                return tableCapacite [i][2];
+            }
+        }
+
+        return 0;
+    }
+
+
+    /*************notAffected**************/
+    /* Entrée :  respondent_id(identifiant du respondent),
+     * 			 tableResultTmp (tableau qui contient les resultat temporaire des affectations),
+     *		 	 nbRespondent (nombre total des respondents).
+     * Sortie : true si le respondent_id a déja pris un item false sinon.
+     * But: vérifier si le respondent a déja pris un item */
+
+    private static boolean notAffected(long respondent_id, long[][] tableResultTmp,long nbRespondents) {
+        for (int i = 0; i < nbRespondents; i++) {
+            if(tableResultTmp [i][1]==respondent_id) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    /*************getActual**************/
+    /* Entrée : item_id(identifiant de l'item),
+     * 			tableActual (tableau qui contient les id des items avec le nombre de réspondent qui se trouve dans chaque item),
+     * 			nbItems (nombre total des items)
+     * Sortie :  retourne l'item dans le tableActual
+     * But: trouver la item actual */
+
+    private static long getActual(long[][] tableActual, int nbItems, long item_id) {
+        for (int i = 0; i < nbItems; i++)
+            if(tableActual [i][0]==item_id)
+                return tableActual[i][1];
+        return 0;
+    }
+
+
+    /*************updateActual**************/
+    /* Entrée : item_id(identifiant de l'item),
+     * 			tableActual (tableau qui contient les id des items avec le nombre de réspondent qui se trouve dans chaque item),
+     * 			nbItems (nombre total des items)
+     * 			value : la répétation de chaque item
+     * Sortie : ...
+     * But: mise a jour de l'item actual dans le table*/
+
+    private static void updateActual(long[][] tableActual, int nbItems, long item_id, long value) {
+        for (int i = 0; i < nbItems; i++)
+            if(tableActual [i][0]==item_id)
+                tableActual[i][1]=value;
+    }
+
+
+    /*************affectation**************/
+    /* Entrée : nbRespondents (nombre total des respondents),
+     * 			nbItems(nombre total des items) ,
+     *			tableRespons(table qui contient les reponses des respondents pour chaque item ),
+     *			tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item),
+     * Sortie : tableResultFinal (tableau qui contient les id items et les id respondents).
+     * But : chaque respondent a été affecté a un item*/
+
+    public static long [][] affectation(int nbRespondents , int nbItems ,long[][] tableRespons , long[][] tableCapacite) {
+
+        long[][] tableOrdonne = calculScore( nbRespondents , nbItems , tableRespons); /*stock le score dans le tableOrdonne*/
+        long[][] tableResultFinal;
+
+        /*	tableau qui contient les id des items avec le nombre de réspondent qui se trouve dans chaque item*/
+        long[][] tableActual;
+
+        /*indice pour le tableResultFinal*/
+        int index = 0;
+
+        tableResultFinal = new long [nbRespondents][2];
+        tableActual = new long [nbItems][2];
+
+        /*Initialiser le tableau actual*/
+        for (int i = 0; i < nbItems; i++) {
+            tableActual[i][0]=tableOrdonne[i][0];
+            tableActual[i][1]=0;
+        }
+        int ordre = 1;
+        while (ordre<=nbItems){
+            /* pour le tableau tableOrdonne */
+            for(int i=0 ; i < nbItems ; i++) {
+                /* pour le tableau tableRespons */
+                for(int j=0 ; j < nbItems ; j++) {
+                    /*condition pour lier le tableau tableOrdonne avec le tableau tableRespons */
+                    if(tableOrdonne[i][0] == tableRespons[0][j+1] ){
+                        /*on boucle sur tous les respondents*/
+                        for(int k=1 ; k <= nbRespondents ; k++) {
+                            /*condition1 : on cherche s'il existe des respondents non affectés */
+                            /*condition2 : si condition1 oui , on vérifie les respondents non affectés dans table_Respons par rapport l'ordre de choix */
+                            /*condition3 : si condition2 oui , on vérifie pour chaque item si la capacité min est respectée*/
+                            if(notAffected(tableRespons[k][0],tableResultFinal,nbRespondents) && tableRespons[k][j+1] == ordre  && tableActual[i][1]<getMin(tableOrdonne[i][0],tableCapacite,nbItems)) {
+                                /*remplir les id_item dans le tableResultFinal*/
+                                tableResultFinal [index][0] = tableOrdonne[i][0];
+                                /*remplir les id_respondents dans le tableResultFinal*/
+                                tableResultFinal [index][1] = tableRespons[k][0];
                                 index++;
-                                actual[i][1]=actual[i][1]+1;
+                                /*on incrémente le nombre de respondent qui se trouve dans chaque item */
+                                tableActual[i][1]=tableActual[i][1]+1;
 
                             }
 
@@ -83,76 +178,77 @@ public class AlgoAffect {
                     }
                 }
             }
-
-            level++;
-        }
-        System.out.println("---------------Actual before canceling------------------");
-        // actual
-        for (int i = nb_option-1; i >= 0; i--)
-            System.out.println(actual[i][0]+":"+actual[i][1]+":"+getMin(actual[i][0],Table_choi,nb_option));
-
-        System.out.println("--------------------------------------------------------");
-
-        for(int i = 0 ;i < nb_etudiant  ; i++) {
-
-            for(int j =0 ; j <= 1 ;j++) {
-
-                System.out.print("Tab_d["+i+"]["+j+"]="+T_ResF[i][j]+" ");
-            }
-            System.out.println();
+            ordre++;
         }
 
 
-        for (int i = nb_option-1; i >= 0; i--) {
-            if(actual[i][1]<getMin(actual[i][0],Table_choi,nb_option)) {
-                //System.out.println(actual[i][0]+":"+actual[i][1]+":"+getMin(actual[i][0],Table_choi,nb_option));
-                cancelProject(nb_etudiant,nb_option,Table_rep,Table_choi,T_ResF, actual,actual[i][0]);
+        /* supprime les items qui n'acceptent pas la capacité min et on commence par le projet le moins demandées*/
+        for (int i = nbItems-1; i >= 0; i--) {
+            if(tableActual[i][1]<getMin(tableActual[i][0],tableCapacite,nbItems)) {
+                cancelProject(nbRespondents,nbItems,tableRespons,tableCapacite,tableResultFinal, tableActual,tableActual[i][0]);
 
             }
         }
 
-        System.out.println("---------------Actual after canceling-------------------");
-        // actual
-        for (int i = nb_option-1; i >= 0; i--)
-            System.out.println(actual[i][0]+":"+actual[i][1]+":"+getMin(actual[i][0],Table_choi,nb_option));
+        Arrays.sort(tableResultFinal , new Comparator<long[]>() {
+            @Override
+            public int compare(long[] o2, long[] o1) {
+                return Long.compare(o2[0], o1[0]);
+            }
+        });
 
-        System.out.println("--------------------------------------------------------");
-
-
-        //}
-
-        return T_ResF;
+        return tableResultFinal;
     }
 
 
-    private static void cancelProject(int nb_etudiant, int nb_option, long[][] table_rep, long[][] table_choi,
-                                      long[][] t_ResF,long[][] actual, long project) {
-        for(int k=0 ; k < nb_etudiant ; k++) {
-            if(t_ResF[k][0]==project) {
-                //System.out.println(t_ResF[k][1]);
-                //move this std to another project
-                moveStudentToNewProject(nb_etudiant,nb_option,table_rep,table_choi,t_ResF,actual,project,k);
+    /*************cancelProject**************/
+    /* Entrée : nbRespondents (nombre total des respondents),
+     * 			nbItems(nombre total des items) ,
+     *			tableRespons(table qui contient les reponses des respondents pour chaque item ),
+     *			tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item),
+     *			tableResultFinal (tableau qui contient les id items et les id respondents),
+     * 			tableActual (tableau qui contient les id des items avec la répétation de chaque item),
+     * 			item_id(identifiant de l'item).
+     * Sortie : ...
+     * But : supprimer les item qui ne sont pas acceptés par la capacité min */
 
+    private static void cancelProject(int nbRespondents, int nbItems, long[][] tableRespons, long[][] tableCapacite,
+                                      long[][] tableResultFinal,long[][] tableActual, long item_id) {
+        for(int k=0 ; k < nbRespondents ; k++) {
+            if(tableResultFinal[k][0]==item_id) {
+                moveStudentToNewProject(nbRespondents,nbItems,tableRespons,tableCapacite,tableResultFinal,tableActual,item_id,k);
             }
         }
 
     }
 
-    private static void moveStudentToNewProject(int nb_etudiant, int nb_option, long[][] table_rep, long[][] table_choi,
-                                                long[][] t_ResF,long[][] actual, long old_project,int idx) {
+    /*************moveStudentToNewProject**************/
+    /* Entrée : nbRespondents (nombre total des respondents),
+     * 			nbItems(nombre total des items) ,
+     *			tableRespons(table qui contient les reponses des respondents pour chaque item ),
+     *			tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item),
+     *			tableResultFinal (tableau qui contient les id items et les id respondents),
+     *			tableActual (tableau qui contient les id des items avec la répétation de chaque item),
+     * 			oldItem (l'item qui a été supprimé),
+     * 			idx (indice pour passer sur tous les respondents qui n'ont pas pris l'item)
+     * Sortie : ...
+     * But : déplacer les respondents qui étaient dans l'item qui doit être supprimé dans d'autres items*/
+
+    private static void moveStudentToNewProject(int nbRespondents, int nbItems, long[][] tableRespons, long[][] tableCapacite,
+                                                long[][] tableResultFinal,long[][] tableActual, long oldItem,int idx) {
         int level = 1;
-        while(level <=nb_option) {
+        while(level <=nbItems) {
 
-            for(int i=1 ; i <= nb_etudiant ; i++) {
-                if(table_rep[i][0]==t_ResF[idx][1]) {
-                    for(int j=0 ; j < nb_option ; j++) {
-                        long new_project_actual = getActual(actual,nb_option,table_rep[0][j+1]);
-                        long old_project_actual = getActual(actual,nb_option,old_project);
-                        long new_project_id= table_rep[0][j+1];
-                        if(new_project_id!=old_project && new_project_actual<getMax(new_project_id,table_choi,nb_option)&&new_project_actual != 0 && table_rep[i][j+1] == level ) {
-                            t_ResF[idx][0]=new_project_id;
-                            updateActual(actual,nb_option,new_project_id,new_project_actual+1);
-                            updateActual(actual,nb_option,old_project,old_project_actual-1);
+            for(int i=1 ; i <= nbRespondents ; i++) {
+                if(tableRespons[i][0]==tableResultFinal[idx][1]) {
+                    for(int j=0 ; j < nbItems ; j++) {
+                        long new_project_actual = getActual(tableActual,nbItems,tableRespons[0][j+1]);
+                        long old_project_actual = getActual(tableActual,nbItems,oldItem);
+                        long new_project_id= tableRespons[0][j+1];
+                        if(new_project_id!=oldItem && new_project_actual<getMax(new_project_id,tableCapacite,nbItems)&&new_project_actual != 0 && tableRespons[i][j+1] == level ) {
+                            tableResultFinal[idx][0]=new_project_id;
+                            updateActual(tableActual,nbItems,new_project_id,new_project_actual+1);
+                            updateActual(tableActual,nbItems,oldItem,old_project_actual-1);
                             return;
 
                         }
@@ -162,315 +258,5 @@ public class AlgoAffect {
             }
             level ++;
         }
-    }
-
-
-
-    private static long getActual(long[][] actual, int nb_option, long project) {
-        for (int i = 0; i < nb_option; i++)
-            if(actual [i][0]==project)
-                return actual[i][1];
-        return 0;
-    }
-
-    private static void updateActual(long[][] actual, int nb_option, long project, long value) {
-        for (int i = 0; i < nb_option; i++)
-            if(actual [i][0]==project)
-                actual[i][1]=value;
-    }
-
-
-    private static boolean notAffected(long etudiant_id, long[][] t_ResF,long nb_etudiant) {
-        for (int i = 0; i < nb_etudiant; i++) {
-            if(t_ResF [i][1]==etudiant_id) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static long getMin(long projetc_id, long[][] Table_choi,long nb_option) {
-        for (int i = 0; i < nb_option; i++) {
-            if(Table_choi [i][0]==projetc_id) {
-                return Table_choi [i][1];
-            }
-        }
-
-        return 0;
-    }
-
-    private static long getMax(long projetc_id, long[][] Table_choi,long nb_option) {
-        for (int i = 0; i < nb_option; i++) {
-            if(Table_choi [i][0]==projetc_id) {
-                return Table_choi [i][2];
-            }
-        }
-
-        return 0;
-    }
-    /*************getter**************/
-
-    public int getNbreEtudiants() {
-        return NbreEtudiants;
-    }
-    public int getNbreOptions() {
-        return NbreOptions;
-    }
-    public long[][] getT_Resultats() {
-        return T_Resultats;
-    }
-    public long[][] getT_Choix() {
-        return T_Choix;
-    }
-
-    /*************setter**************/
-
-    public void setNbreEtudiants(int nbreEtudiants) {
-        NbreEtudiants = nbreEtudiants;
-    }
-    public void setNbreOptions(int nbreOptions) {
-        NbreOptions = nbreOptions;
-    }
-    public void setT_Resultats(long[][] t_Resultats) {
-        T_Resultats = t_Resultats;
-    }
-    public void setT_Choix(long[][] t_Choix) {
-        T_Choix = t_Choix;
-    }
-
-
-
-    public static void main(String[] args){
-
-        int nb_etudiant = 12;
-        int nb_choix = 5;
-
-        /**************** tableau de repondre ******************/
-
-        long[][] Table_repondre;
-        Table_repondre= new long [nb_etudiant+1][nb_choix+1];
-
-        for(int i = 0 ; i <= nb_etudiant ; i++)
-            for(int j = 0 ; j <= nb_choix ; j++) {
-                Table_repondre[i][j]= 0;
-            }
-
-        Table_repondre[0][0] = 0;
-
-        // lES ID POUR LES ETUDIANTS
-        Table_repondre[1][0] = 1;
-        Table_repondre[2][0] = 2;
-        Table_repondre[3][0] = 3;
-        Table_repondre[4][0] = 4;
-        Table_repondre[5][0] = 5;
-        Table_repondre[6][0] = 6;
-        Table_repondre[7][0] = 7;
-        Table_repondre[8][0] = 8;
-        Table_repondre[9][0] = 9;
-        Table_repondre[10][0] = 10;
-        Table_repondre[11][0] = 11;
-        Table_repondre[12][0] = 12;
-
-
-        // lES ID POUR LES PROJETS
-        Table_repondre[0][1] = 1;
-        Table_repondre[0][2] = 2;
-        Table_repondre[0][3] = 3;
-        Table_repondre[0][4] = 4;
-        Table_repondre[0][5] = 5;
-
-        /*1 etudiant */
-        Table_repondre[1][1] = 4;
-        Table_repondre[1][2] = 3;
-        Table_repondre[1][3] = 1;
-        Table_repondre[1][4] = 2;
-        Table_repondre[1][5] = 5;
-
-        /*2 etudiant */
-        Table_repondre[2][1] = 2;
-        Table_repondre[2][2] = 3;
-        Table_repondre[2][3] = 4;
-        Table_repondre[2][4] = 1;
-        Table_repondre[2][5] = 5;
-
-        /*3 etudiant */
-        Table_repondre[3][1] = 3;
-        Table_repondre[3][2] = 2;
-        Table_repondre[3][3] = 1;
-        Table_repondre[3][4] = 4;
-        Table_repondre[3][5] = 5;
-
-        /*4 etudiant */
-        Table_repondre[4][1] = 1;
-        Table_repondre[4][2] = 4;
-        Table_repondre[4][3] = 3;
-        Table_repondre[4][4] = 2;
-        Table_repondre[4][5] = 5;
-
-        /*5 etudiant */
-        Table_repondre[5][1] = 3;
-        Table_repondre[5][2] = 4;
-        Table_repondre[5][3] = 1;
-        Table_repondre[5][4] = 2;
-        Table_repondre[5][5] = 5;
-
-        /*6 etudiant */
-        Table_repondre[6][1] = 2;
-        Table_repondre[6][2] = 3;
-        Table_repondre[6][3] = 1;
-        Table_repondre[6][4] = 4;
-        Table_repondre[6][5] = 5;
-
-        /*7 etudiant */
-        Table_repondre[7][1] = 4;
-        Table_repondre[7][2] = 1;
-        Table_repondre[7][3] = 3;
-        Table_repondre[7][4] = 2;
-        Table_repondre[7][5] = 5;
-
-        /*8 etudiant */
-        Table_repondre[8][1] = 2;
-        Table_repondre[8][2] = 3;
-        Table_repondre[8][3] = 1;
-        Table_repondre[8][4] = 4;
-        Table_repondre[8][5] = 5;
-
-        /*9 etudiant */
-        Table_repondre[9][1] = 3;
-        Table_repondre[9][2] = 4;
-        Table_repondre[9][3] = 1;
-        Table_repondre[9][4] = 2;
-        Table_repondre[9][5] = 5;
-
-        /*10 etudiant */
-        Table_repondre[10][1] = 4;
-        Table_repondre[10][2] = 3;
-        Table_repondre[10][3] = 1;
-        Table_repondre[10][4] = 2;
-        Table_repondre[10][5] = 5;
-
-        /*11 etudiant */
-        Table_repondre[11][1] = 4;
-        Table_repondre[11][2] = 1;
-        Table_repondre[11][3] = 3;
-        Table_repondre[11][4] = 2;
-        Table_repondre[11][5] = 5;
-
-        /*12 etudiant */
-        Table_repondre[11][1] = 4;
-        Table_repondre[11][2] = 5;
-        Table_repondre[11][3] = 3;
-        Table_repondre[11][4] = 2;
-        Table_repondre[12][5] = 1;
-
-
-		/*
-		// 1eme test pour v�rifier le tableau de repondre
-		for(int i = 0 ;i <nb_etudiant  ; i++) {
-
-			for(int j =0 ; j <= nb_choix ;j++) {
-
-				System.out.print("Tab_d["+i+"]["+j+"]="+Table_repondre[i][j]+" " );
-			}
-			System.out.println();
-		}
-		*/
-
-        /****	tableau de score 	***/
-        long[][] Table_score;
-        Table_score= new long [nb_choix+1][2];
-        for(int i = 0 ; i <= nb_choix ; i++)
-            for(int j = 0 ; j <= 1 ; j++) {
-                Table_score[i][j]= 0;
-            }
-
-        AlgoAffect algo=new AlgoAffect(nb_etudiant , nb_choix ,Table_repondre);
-        Table_score = algo.Calcul_Score( nb_etudiant , nb_choix , Table_repondre);
-
-		/*
-		 // 2eme test
-	    // pour afficher le tablaeau de repondre
-		for(int i = 0 ;i <=nb_etudiant  ; i++) {
-
-			for(int j =0 ; j <= nb_choix ;j++) {
-
-				System.out.print("Tab_repondre["+i+"]["+j+"]="+Table_repondre[i][j]+" " );
-			}
-			System.out.println();
-		}*/
-
-		/*
-		// 3eme test
-		// pour afficher le tableau score
-		for(int i = 0 ;i < nb_choix  ; i++) {
-
-			for(int j =0 ; j <= 1 ;j++) {
-
-				System.out.print("Tab_repondre["+i+"]["+j+"]="+Table_score[i][j]+" " );
-			}
-			System.out.println();
-		}
-		*/
-
-        /****************tableau de choix  ******************/
-
-        long[][] Table_option;
-        Table_option = new long [nb_choix][3];
-        for(int i = 0 ; i < nb_choix ; i++)
-            for(int j = 0 ; j <= 2 ; j++) {
-                Table_option[i][j]= 0;
-            }
-
-        // les ids pour les projets
-        Table_option[0][0]=1;
-        Table_option[1][0]=2;
-        Table_option[2][0]=3;
-        Table_option[3][0]=4;
-        Table_option[4][0]=5;
-
-        //capacit� min
-        Table_option[0][1]=2;
-        Table_option[1][1]=3;
-        Table_option[2][1]=4;
-        Table_option[3][1]=3;
-        Table_option[4][1]=3;
-
-        //capacit� max
-        Table_option[0][2]=6;
-        Table_option[1][2]=5;
-        Table_option[2][2]=6;
-        Table_option[3][2]=5;
-        Table_option[4][2]=4;
-
-		/*
-		//4eme test
-		for(int i = 0 ; i < nb_choix ; i++) {
-			for(int j = 0 ; j <= 2 ; j++) {
-				System.out.print("Tab_option["+i+"]["+j+"]="+Table_option[i][j]+" ");
-			}
-			System.out.println();
-		}
-		*/
-
-        long [][] T_res;
-        T_res= new long [nb_etudiant][2];
-
-
-
-
-        AlgoAffect algo1=new AlgoAffect(nb_etudiant , nb_choix ,Table_repondre);
-        T_res=algo1.affectation(nb_etudiant, nb_choix, Table_repondre,Table_option);
-
-        for(int i = 0 ;i < nb_etudiant  ; i++) {
-
-            for(int j =0 ; j <= 1 ;j++) {
-
-                System.out.print("Tab_d["+i+"]["+j+"]="+T_res[i][j]+" ");
-            }
-            System.out.println();
-        }
-
-
     }
 }
