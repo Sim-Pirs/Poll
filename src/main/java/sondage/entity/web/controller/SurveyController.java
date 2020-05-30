@@ -44,6 +44,13 @@ public class SurveyController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondage/repondre". A cette
+     * adresse on peux répondre à un sondage.
+     * @param token Token représentant le sondé.
+     * @param error Indique si la réponse au sondage possède une erreur.
+     * @return Renvoi la page de réponse à un sondage.
+     */
     @RequestMapping(value = "/repondre", method = RequestMethod.GET)
     public ModelAndView showSurvey(@RequestParam(value = "token") String token,
                                    @RequestParam(value = "error", required = false) boolean error){
@@ -90,6 +97,14 @@ public class SurveyController {
         return mv;
     }
 
+    /**
+     * Méthode qui vérifie et créer et stock les différents choix d'un
+     * sondé à un sondage.
+     * @param idRespondentString Identifiant du sondé sous forme de string.
+     * @param idItemsArray Tableau des différentes options du sondage auquel le sondé a attribué un score.
+     * @param scores Tableau des scores associés aux options.
+     * @return Si aucunes erreur, renvoi sur une page indiquant que les choix on bien été sauvegardés.
+     */
     @RequestMapping(value = "/repondre", method = RequestMethod.POST)
     public ModelAndView saveChoice(@RequestParam(value = "repondent_id") String idRespondentString,
                                    @RequestParam(value = "items_id") String[] idItemsArray,
@@ -139,6 +154,11 @@ public class SurveyController {
         return new ModelAndView("choices_saved");
     }
 
+    /**
+     * Renouvelle l'accès d'un sondé à un sondage.
+     * @param idRespondentString Identifiant du sondé.
+     * @return Renvoi sur l'index.
+     */
     @RequestMapping(value = "/renouvelerAcces", method = RequestMethod.GET)
     public ModelAndView sendNewAccess(@RequestParam(value = "id") String idRespondentString){
         long idRespondent = getLongFromString(idRespondentString);
@@ -153,6 +173,11 @@ public class SurveyController {
         return new ModelAndView("redirect:/");
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondage/liste". A cette
+     * adresse on y trouve la liste de nos sondages.
+     * @return Renvoi la page contenant la liste.
+     */
     @RequestMapping("/liste")
     public ModelAndView showList() {
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -165,6 +190,11 @@ public class SurveyController {
         return mv;
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondage/nouveau". A cette
+     * adresse on peux créer un sondage.
+     * @return Renvoi la page de création de sondage.
+     */
     @RequestMapping(value = "/nouveau", method = RequestMethod.GET)
     public ModelAndView showCreateSurveyForm(){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -172,6 +202,13 @@ public class SurveyController {
         return new ModelAndView("new_survey");
     }
 
+    /**
+     * Méthode réalisant la création d'un sondage.
+     * @param survey Objet correspondant au nouveau sondage.
+     * @param result Objets représentant les potentielles erreurs du nouveau sondage.
+     * @param nbOptionsString Nombre d'options du nouveau sondage.
+     * @return Renvoi à la page d'etidition du sondage en question.
+     */
     @RequestMapping(value = "/nouveau", method = RequestMethod.POST)
     public ModelAndView createSurvey(@ModelAttribute @Valid Survey survey, BindingResult result,
                                      @RequestParam(value = "nbOptions") String nbOptionsString){
@@ -212,6 +249,12 @@ public class SurveyController {
         return mv;
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondage/editer". A cette
+     * adresse on peux modifier un sondage.
+     * @param idSurveyString Identifiant du sondage à modifier.
+     * @return Renvoi la page de modofication du sondage.
+     */
     @RequestMapping(value = "/editer", method = RequestMethod.GET)
     public ModelAndView showEditSurveyForm(@RequestParam(name = "id") String idSurveyString){
         if(!user.isConnected())return new ModelAndView("redirect:/");
@@ -228,6 +271,12 @@ public class SurveyController {
         return mv;
     }
 
+    /**
+     * Méthode réalisant la modification d'un sondage.
+     * @param survey Sondage modifié.
+     * @param result Objets représentant les potentielles erreurs du sondage modifié.
+     * @return Renvoi sur la page listant les sondages.
+     */
     @RequestMapping(value = "/editer", method = RequestMethod.POST)
     public ModelAndView updateSurvey(@ModelAttribute @Valid Survey survey, BindingResult result){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -261,6 +310,11 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/liste");
     }
 
+    /**
+     * Méthode réalisant la suppression d'un sondage.
+     * @param idSurveyString Identifiant du sondage à supprimer.
+     * @return Renvoi sur la page listant les sondages.
+     */
     @RequestMapping(value = "/supprimer", method = RequestMethod.GET)
     public ModelAndView deleteSurvey(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -277,6 +331,11 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/liste");
     }
 
+    /**
+     * Méthode réalisant l'ajout d'une option à un sondage.
+     * @param idSurveyString Identifiant du sondage auquel l'option soit être rajouté.
+     * @return Renvoi sur la page d'étition du sondage.
+     */
     @RequestMapping(value = "/items/ajouter", method = RequestMethod.GET)
     public ModelAndView addItem(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -298,6 +357,11 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/editer?id=" + s.getId());
     }
 
+    /**
+     * Méthode réalisant la suppression d'une option d'un sondage.
+     * @param idItemString identifiant de l'option à supprimer.
+     * @return Renvoi sur la page d'étition du sondage.
+     */
     @RequestMapping(value = "/items/supprimer", method = RequestMethod.GET)
     public ModelAndView deleteItem(@RequestParam(value = "id") String idItemString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -319,6 +383,14 @@ public class SurveyController {
 
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondage/sondes/editer". A cette
+     * adresse on peux modifier les sondés d'un sondage.
+     * @param idSurveyString Identifiant du sondage.
+     * @param error Indique si la liste des sondés possède un erreur.
+     * @param success Indique si les sondés ont été correctement notifiés.
+     * @return Renvoi la page de modification des sondés.
+     */
     @RequestMapping(value = "/sondes/editer", method = RequestMethod.GET)
     public ModelAndView showSurveyRespondentsForm(@RequestParam(value = "id") String idSurveyString,
                                                   @RequestParam(value = "error", required = false) boolean error,
@@ -353,6 +425,12 @@ public class SurveyController {
         return mv;
     }
 
+    /**
+     * Méthode réalisant la modification des sondés d'un sondage.
+     * @param idSurveyString Identifiant du sondage.
+     * @param respondentsString Chaine de caractère représentant l'ensemble des sondés.
+     * @return Renvoi sur la page de modification des sondés.
+     */
     @Transactional
     @RequestMapping(value = "/sondes/editer", method = RequestMethod.POST)
     public ModelAndView updateSurveyRespondents(@RequestParam(value = "id_survey") String idSurveyString,
@@ -405,6 +483,11 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/sondes/editer?id=" + s.getId());
     }
 
+    /**
+     * Méthode permettant d'envoyer un mail contenant le lien d'accès à un sondage.
+     * @param idSurveyString Identifiant du sondage.
+     * @return Renvoi sur la page de modification des sondés.
+     */
     @RequestMapping(value = "/sondes/notifierAcces", method = RequestMethod.GET)
     public ModelAndView notifyAllRespondentsForAccess(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -423,6 +506,11 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/sondes/editer?id=" + idSurvey + "&success=" + true);
     }
 
+    /**
+     * Méthode permettant d'envoyer un mail contenant l'affectation final d'un sondé.
+     * @param idSurveyString Identifiant du sondage.
+     * @return Renvoi sur la page des résultats d'un sondage.
+     */
     @RequestMapping(value = "/sondes/notifierAffectation", method = RequestMethod.GET)
     public ModelAndView notifyAllRespondentsForFinalAffect(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -442,6 +530,11 @@ public class SurveyController {
         return new ModelAndView("redirect:/sondage/resultats?id=" + idSurvey + "&success=" + true);
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondage/resultats". A cette
+     * adresse on y trouve les résultats d'un sondage.
+     * @return Renvoi la page des résultats d'un sondage.
+     */
     @RequestMapping(value = "/resultats", method = RequestMethod.GET)
     public ModelAndView showResult(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -458,6 +551,12 @@ public class SurveyController {
         return mv;
     }
 
+    /**
+     * Méthode réalisant l'affectation des sondés au options d'un sondage. Cette
+     * méthode fais appel à l'algorythme de répartition.
+     * @param idSurveyString Identifiant du sondage.
+     * @return Renvoi la page des résultats d'un sondage.
+     */
     @RequestMapping(value = "/resultats", method = RequestMethod.POST)
     public ModelAndView getResult(@RequestParam(value = "id") String idSurveyString){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -488,6 +587,11 @@ public class SurveyController {
     }
 
 
+    /**
+     * Converti un String en long si possible.
+     * @param longString String à convertir.
+     * @return Long correspondant au string.
+     */
     private long getLongFromString(String longString){
         long number = -1;
         try{
@@ -499,6 +603,11 @@ public class SurveyController {
         return number;
     }
 
+    /**
+     * Converti un String en int si possible.
+     * @param intString String à convertir.
+     * @return Int correspondant au string.
+     */
     private int getIntFromString(String intString){
         int number = -1;
         try{
@@ -510,6 +619,11 @@ public class SurveyController {
         return number;
     }
 
+    /**
+     * Converti une chaine de caractères correspondant à des sondés en objets Respondent
+     * @param respondentsString Chaine de caractères correspondant à des sondés
+     * @return List de Respondent correspondente.
+     */
     private List<Respondent> getRespondentsFromCsvStringFormat(String respondentsString){
         /* TODO trouver une meilleur manière de gérer les sondés */
         List<Respondent> respondents = new ArrayList<>();

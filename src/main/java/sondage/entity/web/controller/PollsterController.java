@@ -39,6 +39,12 @@ public class PollsterController {
     @Autowired
     PollsterValidator pollsterValidator;
 
+    /**
+     * Méthode réalisant la connexion d'un utilisateur.
+     * @param email Email de l'utilsateur.
+     * @param pass Mot de passe de l'utilisateur.
+     * @return Renvoi le vue correspondante à la page "index".
+     */
     @RequestMapping(value = "/connexion", method = RequestMethod.POST)
     public ModelAndView login(@RequestParam(value = "email") String email,
                               @RequestParam(value = "password") String pass) {
@@ -50,6 +56,10 @@ public class PollsterController {
         return new ModelAndView("redirect:/");
     }
 
+    /**
+     * Méthode réalisant la déconnexion d'un utilisateur.
+     * @return Renvoi le vue correspondante à la page "index".
+     */
     @RequestMapping("/deconnexion")
     public ModelAndView logout() {
         manager.logout(user);
@@ -57,6 +67,11 @@ public class PollsterController {
         return new ModelAndView("redirect:/");
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondeur/profile". A cette
+     * adresse on peux consulter son profile.
+     * @return Renvoi le vue correspondante à la page "profile".
+     */
     @RequestMapping("/profile")
     public ModelAndView showProfil(){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -64,6 +79,12 @@ public class PollsterController {
         return new ModelAndView("profil");
     }
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/sondeur/nouveau". A cette
+     * adresse on peux créer un nouveau sondeur.
+     * @param success Indique si la création du sondeur s'est bien effectué ou non.
+     * @return Renvoi le vue permettant la création d'un nouveau sondeur.
+     */
     @RequestMapping(value = "/nouveau", method = RequestMethod.GET)
     public ModelAndView showCreatePollster(@RequestParam(value = "success", required = false) boolean success ){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -74,6 +95,12 @@ public class PollsterController {
         return mv;
     }
 
+    /**
+     * Méthode réalisant la création d'un nouveau sondeur.
+     * @param pollster Objet correspondant au nouveau sondeur.
+     * @param result Objet contenant les potentielles erreurs du nouveau sondeur.
+     * @return Renvoi la page de création de nouveaux sondeurs.
+     */
     @RequestMapping(value = "/nouveau", method = RequestMethod.POST)
     public ModelAndView createPollster(@ModelAttribute @Valid Pollster pollster, BindingResult result){
         if(!user.isConnected()) return new ModelAndView("redirect:/");
@@ -97,7 +124,12 @@ public class PollsterController {
         return new Pollster();
     }
 
-
+    /**
+     * Hash le mot de passe passé en paramètre.
+     * @param password Mot de passe à hasher.
+     * @param salt Chaine de caractère nécessaire au hashage.
+     * @return Mot de passe hashé.
+     */
     public static String generateSecurePassword(String password, String salt) {
         String returnValue = null;
         byte[] securePassword = hash(password.toCharArray(), salt.getBytes());
@@ -107,6 +139,12 @@ public class PollsterController {
         return returnValue;
     }
 
+    /**
+     * Hash le mot de passe passé en paramètre avec une instance de PBKDF2WithHmacSHA1.
+     * @param password Mot de passe à hasher sous forme de tableau d'octets.
+     * @param salt Chaine de caractère nécessaire au hashage sous forme de tableau d'octets.
+     * @return Tableau d'octets correspondant au mot de passe hashé.
+     */
     private static byte[] hash(char[] password, byte[] salt) {
         PBEKeySpec spec = new PBEKeySpec(password, salt, ITERATIONS, KEY_LENGTH);
         Arrays.fill(password, Character.MIN_VALUE);

@@ -20,13 +20,22 @@ public class IndexController {
     @Autowired
     User user;
 
+    /**
+     * Méthode réalisant le mapping de l'adresse "/".
+     * @param error Indique une erreur lors de la connexion.
+     * @return Renvoi le vue correspondante à la page "index".
+     */
     @RequestMapping(value = "")
     public ModelAndView index(@RequestParam(value = "error", required = false) boolean error){
         ModelAndView mv = new ModelAndView("index");
         mv.addObject("error", error);
         return mv;
     }
-    
+
+    /**
+     * Méthode réalisant le mapping de l'adresse "/apropos".
+     * @return Renvoi le vue correspondante à la page "a propos".
+     */
     @RequestMapping("/apropos")
     public ModelAndView about(){
     		return new  ModelAndView("about");
