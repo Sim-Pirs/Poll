@@ -16,6 +16,11 @@ public class AlgoAdapter {
     private List<Respondent> respondentsList;
     private List<SurveyItem> itemsList;
 
+    /*****consrtucteur****/
+    /**
+     *
+     * @param choices
+     */
     public AlgoAdapter(List<Choice> choices){
         this.choiceList = choices;
 
@@ -30,24 +35,17 @@ public class AlgoAdapter {
         this.itemsList = new ArrayList<>(items);
     }
 
+    /**
+     *
+     * @return le résultat final d'affectation
+     */
     public List<Choice> getResult(){
         long[][] result = AlgoAffect.affectation(getNbRespondents(), getNbItems(), getRespons(), getChoix());
-
-        for(int i=0; i<getNbRespondents(); i++ ) {
-            for(int j=0; j<getNbItems(); j++ ) {
-                System.err.print(result[i][j]);
-            }
-            System.err.println("");
-        }
-
-
 
         List<Choice> finalChoices = new ArrayList<>();
 
         for(int i = 0; i < getNbRespondents(); ++i){
             for(Choice c : choiceList){
-                //System.err.println("ITEM :" + c.getItem() + ": " + result[i][0]);
-                //System.err.println("RESPOND :" + c.getRespondent() + ": " + result[i][1]);
                 if(c.getItem().getId() != result[i][0]) continue;
                 if(c.getRespondent().getId() != result[i][1]) continue;
                 finalChoices.add(c);
@@ -55,15 +53,17 @@ public class AlgoAdapter {
             }
 
         }
-
-
         return finalChoices;
     }
 
-
+    /**
+     *
+     * @return un tableau qui contient les id items et les id respondents et l'ordre les choix des respondents de chaque projet
+     */
     private long[][] getRespons(){
         long[][] tableRespons = new long[getNbRespondents() + 1][getNbItems() +1];
 
+        /* pour récupérer les id repondents et les id items*/
         for(int i = 0; i < tableRespons.length; ++i){
             for(int j = 0; j < tableRespons[i].length; ++j){
                 if(i == 0 && j == 0) continue;
@@ -73,16 +73,7 @@ public class AlgoAdapter {
             }
         }
 
-        System.err.println("avant : ");
-        for(int i=0; i<getNbRespondents(); i++ ) {
-            for(int j=0; j<getNbItems(); j++ ) {
-                System.err.print(tableRespons[i][j]);
-            }
-            System.err.println("");
-        }
-
-        System.err.println("aprés : ");
-
+        /* pour récupérer  ordre les choix des respondents de chaque projet*/
         for(int i = 1; i < tableRespons.length; ++i){
             for(int j = 1; j < tableRespons[i].length; ++j){
                 long idResp = tableRespons[0][i];
@@ -98,11 +89,14 @@ public class AlgoAdapter {
         return tableRespons;
     }
 
+    /**
+     *
+     * @return un tableau qui contient les id items avec les capacités min et max de chaque item
+     */
     private long[][] getChoix(){
         long [][] tab = new long[getNbItems()][3];
 
         for(int i=0; i<tab.length; i++) {
-            //besoin de if ou pas pour selectionner le sondage
             for(int j=0; j<2; j++) {
                 if(j==0)tab[i][j] = this.itemsList.get(i).getId();
                 if(j==1)tab[i][j] = this.itemsList.get(j).getNbPersMin();
@@ -113,10 +107,18 @@ public class AlgoAdapter {
         return tab;
     }
 
+    /**
+     *
+     * @return le nombre des respondents
+     */
     public int getNbRespondents(){
         return this.respondentsList.size();
     }
 
+    /**
+     *
+     * @return le nombre des items
+     */
     private int getNbItems(){
         return this.itemsList.size();
     }
