@@ -6,11 +6,15 @@ import java.util.Comparator;
 public class AlgoAffect {
 
     /*************calculScore**************/
-    /* Entrée : nbRespondents (nombre total des respondents),
-     * 			nbItems(nombre total des items) ,
-     * 			tableRespons(table qui contient les reponses des respondents pour chaque item).
-     * Sortie : tableOrdonne (tableau qui contient des items dans l'ordre par rapport à l'item le plus demandé jusqu' à l'item  le moins demandé ).
-     * But : Calculer les scores pour les items */
+
+    /**
+     *
+     * @param nbRespondents (nombre total des respondents)
+     * @param nbItems (nombre total des items)
+     * @param tableRespons (tableau qui contient des items dans l'ordre par rapport à l'item le plus demandé jusqu' à l'item  le moins demandé )
+     * @return tableOrdonne (tableau qui contient des items dans l'ordre par rapport à l'item le plus demandé jusqu' à l'item  le moins demandé )
+     * But : Calculer les scores pour les items
+     */
 
     public static long [][] calculScore(int nbRespondents , int nbItems ,long[][] tableRespons){
         /*Initialiser le tableau ordonne*/
@@ -41,11 +45,14 @@ public class AlgoAffect {
 
 
     /*************getMin**************/
-    /* Entrée : item_id(identifiant de l'item),
-     * 			tableCapacite (tableau qui contient les identifiants des items avec la capacité min et max pour chaque item),
-     * 			nbItems (nombre total des items).
-     * Sortie : retourne la capacité min de l'identifiant de l'item(item_id).
-     * But: trouver la capacité min pour le item_id */
+    /**
+     *
+     * @param item_id (identifiant de l'item)
+     * @param tableCapacite (tableau qui contient les identifiants des items avec la capacité min et max pour chaque item)
+     * @param nbItems (nombre total des items)
+     * @return  retourne la capacité min de l'identifiant de l'item(item_id)
+     * But: trouver la capacité min pour le item_id
+     */
 
     private static long getMin(long item_id, long[][] tableCapacite,long nbItems) {
         for (int i = 0; i < nbItems; i++) {
@@ -58,11 +65,14 @@ public class AlgoAffect {
 
 
     /*************getMax**************/
-    /* Entrée : item_id (identifiant de l'item),
-     * 			tableCapacite (tableau qui contient les identifiants des items avec la capacité min et max pour chaque item),
-     * 			nbItems (nombre total des items)
-     * Sortie :  retourne la capacité max de identifiant de l'item(item_id).
-     * But: trouver la capacité max pour le item_id */
+    /**
+     *
+     * @param item_id (identifiant de l'item)
+     * @param tableCapacite (tableau qui contient les identifiants des items avec la capacité min et max pour chaque item)
+     * @param nbItems (nombre total des items)
+     * @return retourne la capacité max de identifiant de l'item(item_id)
+     * But: trouver la capacité max pour le item_id
+     */
 
     private static long getMax(long item_id, long[][] tableCapacite,long nbItems) {
         for (int i = 0; i < nbItems; i++) {
@@ -76,11 +86,14 @@ public class AlgoAffect {
 
 
     /*************notAffected**************/
-    /* Entrée :  respondent_id(identifiant du respondent),
-     * 			 tableResultTmp (tableau qui contient les resultat temporaire des affectations),
-     *		 	 nbRespondent (nombre total des respondents).
-     * Sortie : true si le respondent_id a déja pris un item false sinon.
-     * But: vérifier si le respondent a déja pris un item */
+    /**
+     *
+     * @param respondent_id (identifiant du respondent)
+     * @param tableResultTmp (tableau qui contient les resultat temporaire des affectations)
+     * @param nbRespondents (nombre total des respondents)
+     * @return true si le respondent_id a déja pris un item false sinon
+     * But: vérifier si le respondent a déja pris un item
+     */
 
     private static boolean notAffected(long respondent_id, long[][] tableResultTmp,long nbRespondents) {
         for (int i = 0; i < nbRespondents; i++) {
@@ -94,11 +107,14 @@ public class AlgoAffect {
 
 
     /*************getActual**************/
-    /* Entrée : item_id(identifiant de l'item),
-     * 			tableActual (tableau qui contient les id des items avec le nombre de réspondent qui se trouve dans chaque item),
-     * 			nbItems (nombre total des items)
-     * Sortie :  retourne l'item dans le tableActual
-     * But: trouver la item actual */
+    /**
+     *
+     * @param tableActual (tableau qui contient les id des items avec le nombre de réspondent qui se trouve dans chaque item)
+     * @param nbItems (nombre total des items)
+     * @param item_id (identifiant de l'item)
+     * @return l'item dans le tableActual
+     * But: trouver la item actual
+     */
 
     private static long getActual(long[][] tableActual, int nbItems, long item_id) {
         for (int i = 0; i < nbItems; i++)
@@ -109,12 +125,15 @@ public class AlgoAffect {
 
 
     /*************updateActual**************/
-    /* Entrée : item_id(identifiant de l'item),
-     * 			tableActual (tableau qui contient les id des items avec le nombre de réspondent qui se trouve dans chaque item),
-     * 			nbItems (nombre total des items)
-     * 			value : la répétation de chaque item
-     * Sortie : ...
-     * But: mise a jour de l'item actual dans le table*/
+
+    /**
+     *
+     * @param tableActual (tableau qui contient les id des items avec le nombre de réspondent qui se trouve dans chaque item)
+     * @param nbItems (nombre total des items)
+     * @param item_id (identifiant de l'item)
+     * @param value la répétation de chaque item
+     * But: mise a jour de l'item actual dans le table
+     */
 
     private static void updateActual(long[][] tableActual, int nbItems, long item_id, long value) {
         for (int i = 0; i < nbItems; i++)
@@ -124,12 +143,15 @@ public class AlgoAffect {
 
 
     /*************affectation**************/
-    /* Entrée : nbRespondents (nombre total des respondents),
-     * 			nbItems(nombre total des items) ,
-     *			tableRespons(table qui contient les reponses des respondents pour chaque item ),
-     *			tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item),
-     * Sortie : tableResultFinal (tableau qui contient les id items et les id respondents).
-     * But : chaque respondent a été affecté a un item*/
+    /**
+     *
+     * @param nbRespondents (nombre total des respondents)
+     * @param nbItems (nombre total des items)
+     * @param tableRespons (table qui contient les reponses des respondents pour chaque item)
+     * @param tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item)
+     * @return tableResultFinal (tableau qui contient les id items et les id respondents)
+     * But : chaque respondent a été affecté a un item
+     */
 
     public static long [][] affectation(int nbRespondents , int nbItems ,long[][] tableRespons , long[][] tableCapacite) {
 
@@ -202,15 +224,17 @@ public class AlgoAffect {
 
 
     /*************cancelProject**************/
-    /* Entrée : nbRespondents (nombre total des respondents),
-     * 			nbItems(nombre total des items) ,
-     *			tableRespons(table qui contient les reponses des respondents pour chaque item ),
-     *			tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item),
-     *			tableResultFinal (tableau qui contient les id items et les id respondents),
-     * 			tableActual (tableau qui contient les id des items avec la répétation de chaque item),
-     * 			item_id(identifiant de l'item).
-     * Sortie : ...
-     * But : supprimer les item qui ne sont pas acceptés par la capacité min */
+    /**
+     *
+     * @param nbRespondents (nombre total des respondents)
+     * @param nbItems (nombre total des items)
+     * @param tableRespons (table qui contient les reponses des respondents pour chaque item )
+     * @param tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item)
+     * @param tableResultFinal (tableau qui contient les id items et les id respondents)
+     * @param tableActual (tableau qui contient les id des items avec la répétation de chaque item)
+     * @param item_id (identifiant de l'item)
+     * But : supprimer les item qui ne sont pas acceptés par la capacité min
+     */
 
     private static void cancelProject(int nbRespondents, int nbItems, long[][] tableRespons, long[][] tableCapacite,
                                       long[][] tableResultFinal,long[][] tableActual, long item_id) {
@@ -223,16 +247,18 @@ public class AlgoAffect {
     }
 
     /*************moveStudentToNewProject**************/
-    /* Entrée : nbRespondents (nombre total des respondents),
-     * 			nbItems(nombre total des items) ,
-     *			tableRespons(table qui contient les reponses des respondents pour chaque item ),
-     *			tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item),
-     *			tableResultFinal (tableau qui contient les id items et les id respondents),
-     *			tableActual (tableau qui contient les id des items avec la répétation de chaque item),
-     * 			oldItem (l'item qui a été supprimé),
-     * 			idx (indice pour passer sur tous les respondents qui n'ont pas pris l'item)
-     * Sortie : ...
-     * But : déplacer les respondents qui étaient dans l'item qui doit être supprimé dans d'autres items*/
+    /**
+     *
+     * @param nbRespondents (nombre total des respondents)
+     * @param nbItems (nombre total des items)
+     * @param tableRespons (table qui contient les reponses des respondents pour chaque item )
+     * @param tableCapacite (tableau qui contient les id des items avec la capacité min et max pour chaque item)
+     * @param tableResultFinal (tableau qui contient les id items et les id respondents)
+     * @param tableActual (tableau qui contient les id des items avec la répétation de chaque item)
+     * @param oldItem (l'item qui a été supprimé)
+     * @param idx (indice pour passer sur tous les respondents qui n'ont pas pris l'item)
+     * But : déplacer les respondents qui étaient dans l'item qui doit être supprimé dans d'autres items
+     */
 
     private static void moveStudentToNewProject(int nbRespondents, int nbItems, long[][] tableRespons, long[][] tableCapacite,
                                                 long[][] tableResultFinal,long[][] tableActual, long oldItem,int idx) {
