@@ -76,8 +76,8 @@ public class AlgoAdapter {
         /* pour récupérer  ordre les choix des respondents de chaque projet*/
         for(int i = 1; i < tableRespons.length; ++i){
             for(int j = 1; j < tableRespons[i].length; ++j){
-                long idResp = tableRespons[0][i];
-                long idItem = tableRespons[j][0];
+                long idResp = tableRespons[i][0];
+                long idItem = tableRespons[0][j];
 
                 for(Choice c : this.choiceList){
                     if(c.getRespondent().getId() != idResp || c.getItem().getId() != idItem) continue;
@@ -97,10 +97,22 @@ public class AlgoAdapter {
         long [][] tab = new long[getNbItems()][3];
 
         for(int i=0; i<tab.length; i++) {
-            for(int j=0; j<2; j++) {
-                if(j==0)tab[i][j] = this.itemsList.get(i).getId();
-                if(j==1)tab[i][j] = this.itemsList.get(j).getNbPersMin();
-                if(j==2)tab[i][j] = this.itemsList.get(j).getNbPersMax();
+            for(int j=0; j<=2; j++) {
+                if(j==0) {
+                    tab[i][j] = this.itemsList.get(i).getId();
+                    continue;
+                }
+
+                if(j==1) {
+                    tab[i][j] = this.itemsList.get(i).getNbPersMin();
+                    continue;
+                }
+
+                if(j==2) {
+                    tab[i][j] = this.itemsList.get(i).getNbPersMax();
+                    continue;
+                }
+
             }
         }
 

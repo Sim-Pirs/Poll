@@ -212,12 +212,12 @@ public class AlgoAffect {
             }
         }
 
-        Arrays.sort(tableResultFinal , new Comparator<long[]>() {
+       /* Arrays.sort(tableResultFinal , new Comparator<long[]>() {
             @Override
             public int compare(long[] o2, long[] o1) {
                 return Long.compare(o2[0], o1[0]);
             }
-        });
+        }); */
 
         return tableResultFinal;
     }
