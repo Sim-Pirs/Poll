@@ -1,11 +1,9 @@
 package services;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Starter.class)
+@DataJpaTest
 public class RespondentDAOTest {
 
     @Autowired
@@ -36,72 +35,63 @@ public class RespondentDAOTest {
     @Autowired
     ISurveyDAO surveyDAO;
 
-    private static Pollster pollster;
-    private static Survey survey1;
-    private static Survey survey2;
 
-    @BeforeAll
-    public static void init(){
-        pollster = new Pollster();
-        pollster.setFirstName("Romain");
-        pollster.setLastName("Colonna");
-        pollster.setEmail("romain@gmail.com");
-        pollster.setPassword("coucoucou");
-
-        survey1 = new Survey();
-        survey1.setName("Sondage");
-        survey1.setDescription("Une description.");
-        survey1.setEndDate(new Date());
-        survey1.setPollster(pollster);
-
-        survey2 = new Survey();
-        survey2.setName("Sondage");
-        survey2.setDescription("Une description.");
-        survey2.setEndDate(new Date());
-        survey2.setPollster(pollster);
-    }
-
-    @BeforeEach
-    public void add(){
-        pollsterDAO.save(pollster);
-        surveyDAO.save(survey1);
-        surveyDAO.save(survey2);
-    }
-
-    @AfterEach
-    public void clear(){
-        respondentDAO.deleteAll();
-    }
 
     @Test
     public void testSave_GoodRespondent_NoExceptionsThrow(){
+        Pollster pollster = new Pollster();
+        pollster.setFirstName("Romain");
+        pollster.setLastName("Colonna");
+        pollster.setEmail("romain1@gmail.com");
+        pollster.setPassword("coucoucou");
+        pollsterDAO.save(pollster);
+
         HashSet<String> tags = new HashSet<>();
         tags.add("M1");
         tags.add("ILD");
 
         Respondent respondent = new Respondent();
-        respondent.setEmail("Romain@gmail.com");
+        respondent.setEmail("Romain1@gmail.com");
         respondent.setTags(tags);
-        respondent.setSurvey(survey1);
         respondent.setExpired(false);
 
+        Survey survey1 = new Survey();
+        survey1.setName("Sondage");
+        survey1.setDescription("Une description.");
+        survey1.setEndDate(new Date());
+        survey1.setPollster(pollster);
+        survey1.addRespondent(respondent);
+
         assertDoesNotThrow(() -> {
-            respondentDAO.save(respondent);
+            surveyDAO.save(survey1);
         });
     }
 
     @Test
     public void testSave_WithoutEmail_ThrowException(){
+        Pollster pollster = new Pollster();
+        pollster.setFirstName("Romain");
+        pollster.setLastName("Colonna");
+        pollster.setEmail("romain2@gmail.com");
+        pollster.setPassword("coucoucou");
+        pollsterDAO.save(pollster);
+
         HashSet<String> tags = new HashSet<>();
         tags.add("M1");
         tags.add("ILD");
 
         Respondent respondent = new Respondent();
         respondent.setTags(tags);
-        respondent.setSurvey(survey1);
+
+        Survey survey1 = new Survey();
+        survey1.setName("Sondage");
+        survey1.setDescription("Une description.");
+        survey1.setEndDate(new Date());
+        survey1.setPollster(pollster);
+        survey1.addRespondent(respondent);
 
         assertThrows(DataIntegrityViolationException.class, () ->{
-            respondentDAO.save(respondent);
+            surveyDAO.save(survey1);
         });
     }
 
@@ -122,25 +112,45 @@ public class RespondentDAOTest {
 
     @Test
     public void testSave_WithEmailAlreadyUsed_NoExceptionThrow(){
+        Pollster pollster = new Pollster();
+        pollster.setFirstName("Romain");
+        pollster.setLastName("Colonna");
+        pollster.setEmail("romain3@gmail.com");
+        pollster.setPassword("coucoucou");
+        pollsterDAO.save(pollster);
+
         HashSet<String> tags = new HashSet<>();
         tags.add("M1");
         tags.add("ILD");
 
         Respondent r1 = new Respondent();
-        r1.setEmail("Romain@gmail.com");
+        r1.setEmail("Romain2@gmail.com");
         r1.setTags(tags);
-        r1.setSurvey(survey1);
         r1.setExpired(false);
+
         Respondent r2 = new Respondent();
-        r2.setEmail("Romain@gmail.com");
+        r2.setEmail("Romain3@gmail.com");
         r2.setTags(tags);
-        r2.setSurvey(survey2);
         r2.setExpired(false);
 
-        respondentDAO.save(r1);
+        Survey survey1 = new Survey();
+        survey1.setName("Sondage");
+        survey1.setDescription("Une description.");
+        survey1.setEndDate(new Date());
+        survey1.setPollster(pollster);
+        survey1.addRespondent(r1);
+
+        Survey survey2 = new Survey();
+        survey2.setName("Sondage");
+        survey2.setDescription("Une description.");
+        survey2.setEndDate(new Date());
+        survey2.setPollster(pollster);
+        survey2.addRespondent(r2);
+
+        surveyDAO.save(survey1);
 
         assertDoesNotThrow(() -> {
-            respondentDAO.save(r2);
+            surveyDAO.save(survey2);
         });
     }
 }

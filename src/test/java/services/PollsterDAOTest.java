@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,14 +18,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Starter.class)
+@DataJpaTest
 public class PollsterDAOTest {
 
     @Autowired
     IPollsterDAO pollsterDAO;
 
 
+
     @Test
-    public void testSave_GoodPollster_ThrowException(){
+    public void testSave_GoodPollster_NoExceptionsThrow(){
         Pollster pollster = new Pollster();
         pollster.setFirstName("Romain");
         pollster.setLastName("Colonna");
